@@ -1,0 +1,44 @@
+
+> zk-api@0.1.0 stress:s10
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s10-concurrent-writes.ts
+
+
+[2026-10-13T22:18:32.842Z] === Máquina
+[2026-10-13T22:18:32.846Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T22:18:32.846Z] Memoria: 32 GiB
+[2026-10-13T22:18:32.865Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T22:18:32.882Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+[2026-10-13T22:18:33.918Z] zk-api (s10) escuchando en http://127.0.0.1:3071 · pid 49608
+[2026-10-13T22:18:33.919Z] ISSUER_WRITE_QUEUE_LIMIT=200 para que todas las escrituras de cada ronda entren a la vez en la cola
+
+[2026-10-13T22:18:33.919Z] === Ronda de 20 escrituras concurrentes: 10 activaciones y 10 revocaciones (cerrando la ventana)
+[2026-10-13T22:19:15.926Z] activaciones {"201":10}
+[2026-10-13T22:19:15.927Z] revocaciones {"200":10}
+[2026-10-13T22:19:15.927Z] tiempo total 41.6 s · latencia activación n=10 mean=32116.2 ms p50=30845.1 ms p95=41580.4 ms p99=41580.4 ms min=22699.8 ms max=41580.4 ms
+[2026-10-13T22:19:15.927Z] latencia revocación n=10 mean=11548.1 ms p50=10546.5 ms p95=20682.8 ms p99=20682.8 ms min=2366.5 ms max=20682.8 ms
+[2026-10-13T22:19:15.976Z] transacciones minadas 30 · esperadas 30 (10 publicaciones por activación, 10 por revocación, 10 invalidaciones) · eventos de hoja nuevos 20
+[2026-10-13T22:19:15.976Z] respuestas que mencionan el nonce: 0
+[2026-10-13T22:19:16.104Z] publicaciones de raíz de credenciales: 1230 · rupturas de la cadena de raíces 0 · transacciones distintas 1230 · bloques distintos 1230
+[2026-10-13T22:19:18.480Z] reconciliación tras la ronda de 20: matchesChain=true · eventos 1230 · hojas 1090 · faltan en BD 0 · faltan en cadena 0 · 2376.4 ms
+
+[2026-10-13T22:19:18.480Z] === Ronda de 100 escrituras concurrentes: 50 activaciones y 50 revocaciones (cerrando la ventana)
+[2026-10-13T22:22:43.194Z] activaciones {"201":50}
+[2026-10-13T22:22:43.195Z] revocaciones {"200":50}
+[2026-10-13T22:22:43.195Z] tiempo total 204.4 s · latencia activación n=50 mean=153431.6 ms p50=152084.5 ms p95=200139.8 ms p99=204376.3 ms min=103186.1 ms max=204376.3 ms
+[2026-10-13T22:22:43.195Z] latencia revocación n=50 mean=52041.1 ms p50=51429.7 ms p95=97197.0 ms p99=101236.3 ms min=2192.5 ms max=101236.3 ms
+[2026-10-13T22:22:43.249Z] transacciones minadas 150 · esperadas 150 (50 publicaciones por activación, 50 por revocación, 50 invalidaciones) · eventos de hoja nuevos 100
+[2026-10-13T22:22:43.250Z] respuestas que mencionan el nonce: 0
+[2026-10-13T22:22:43.275Z] publicaciones de raíz de credenciales: 1330 · rupturas de la cadena de raíces 0 · transacciones distintas 1330 · bloques distintos 1330
+[2026-10-13T22:22:45.964Z] reconciliación tras la ronda de 100: matchesChain=true · eventos 1330 · hojas 1090 · faltan en BD 0 · faltan en cadena 0 · 2689.3 ms
+
+[2026-10-13T22:22:45.964Z] === Cruce de bloqueos: 20 cambios de jurisdicción en activos distintos y 10 activaciones a la vez
+[2026-10-13T22:23:08.213Z] jurisdicciones {"200":20}
+[2026-10-13T22:23:08.214Z] activaciones {"201":10}
+[2026-10-13T22:23:08.214Z] tiempo total 22.2 s
+[2026-10-13T22:23:08.217Z] transacciones minadas 30 · escrituras con éxito 30
+[2026-10-13T22:23:08.217Z] respuestas que mencionan el nonce: 0
+[2026-10-13T22:23:08.244Z] publicaciones de raíz de credenciales: 1340 · rupturas de la cadena de raíces 0 · transacciones distintas 1340 · bloques distintos 1340
+[2026-10-13T22:23:11.194Z] reconciliación tras el cruce de bloqueos: matchesChain=true · eventos 1340 · hojas 1100 · faltan en BD 0 · faltan en cadena 0 · 2949.4 ms
+
+[2026-10-13T22:23:11.268Z] === Registro del servicio
+[2026-10-13T22:23:11.270Z] resumen {"lines":226,"byLevel":{"info":226},"errors":{},"statusCodes":{"200":84,"201":140}}

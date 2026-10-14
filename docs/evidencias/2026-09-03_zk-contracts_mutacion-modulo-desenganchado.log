@@ -1,0 +1,135 @@
+
+
+  Integración con la suite T-REX real
+    el despliegue
+      ✔ es la suite del estándar y no un doble
+      1) engancha el módulo ZK a la ModularCompliance del token, ligado al activo
+      ✔ los inversores están verificados por el estándar antes de que la capa diga nada
+    el ciclo, paso a paso
+      ✔ 1 · la emisión en dos tiempos no publica nada hasta que el titular aporta su hash
+      ✔ 2 · la activación exige la firma de posesión del titular, no la de la mesa
+      ✔ 3 · la raíz de jurisdicciones del activo está publicada y es la que la prueba usa
+      ✔ 4 · el titular presenta su prueba y obtiene atestación; nadie puede presentarla por él (858ms)
+      2) 5 · el token T-REX acuña al titular porque moduleCheck encuentra la atestación
+      ✔ 6 · una transferencia entre titulares atestados atraviesa el módulo y se completa (1351ms)
+      ✔ 7 · revocar la credencial cierra la emisión de atestaciones nuevas (1382ms)
+      3) 8 · cortar la atestación viva bloquea la entrega, y el rechazo es del módulo
+    el cumplimiento no se relaja
+      4) un titular sin atestación no recibe
+      5) un titular cuya atestación caducó tampoco recibe
+      6) una jurisdicción no admitida no llega ni a obtener atestación
+      7) una atestación no sustituye a la identidad verificada que exige el estándar
+      ✔ el módulo condiciona a quien recibe, no a quien envía (1329ms)
+    la prueba no se engaña a sí misma
+      8) desenganchar el módulo deja pasar lo que la suite afirma bloqueado
+      9) con el módulo enganchado y sin atestación, la misma operación no pasa
+      10) el módulo apuntado a otro activo deja de reconocer la atestación
+
+  Gas de las operaciones del ciclo
+  enganche · compliance.addModule                         137708
+  enganche · compliance.callModuleFunction(setAssetId)     97839
+  jurisdicciones · publishCountryRoot                      58963
+  emisión · publishCredentialRoot (activación)             59672
+  atestación · attest                                     336586
+  token T-REX · transfer                                  221401
+  revocación · publishCredentialRoot                       59636
+  revocación · invalidateCredentialRoot                    28005
+  atestación · revokeAttestation                           29484
+
+
+
+  9 passing (11s)
+  10 failing
+
+  1) Integración con la suite T-REX real
+       el despliegue
+         engancha el módulo ZK a la ModularCompliance del token, ligado al activo:
+     AssertionError: expected [] to deeply equal [ '0x7969c5eD335650692Bc04293B07F5BF2e7A673C0' ]
+      at Context.<anonymous> (test/integration-erc3643.test.ts:487:71)
+
+  2) Integración con la suite T-REX real
+       el ciclo, paso a paso
+         5 · el token T-REX acuña al titular porque moduleCheck encuentra la atestación:
+
+      AssertionError: expected true to equal false
+      + expected - actual
+
+      -true
+      +false
+      
+      at Context.<anonymous> (test/integration-erc3643.test.ts:580:102)
+
+  3) Integración con la suite T-REX real
+       el ciclo, paso a paso
+         8 · cortar la atestación viva bloquea la entrega, y el rechazo es del módulo:
+     AssertionError: el módulo ZK es el único módulo enganchado: expected [] to deeply equal [ '0x06b3244b086cecC40F1e5A826f736Ded68068a0F' ]
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:425:102)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:649:7)
+
+  4) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         un titular sin atestación no recibe:
+     AssertionError: el módulo ZK es el único módulo enganchado: expected [] to deeply equal [ '0xbf2ad38fd09F37f50f723E35dd84EEa1C282c5C9' ]
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:425:102)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:667:7)
+
+  5) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         un titular cuya atestación caducó tampoco recibe:
+     AssertionError: el módulo ZK es el único módulo enganchado: expected [] to deeply equal [ '0x01cf58e264d7578D4C67022c58A24CbC4C4a304E' ]
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:425:102)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:689:7)
+
+  6) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         una jurisdicción no admitida no llega ni a obtener atestación:
+     AssertionError: el módulo ZK es el único módulo enganchado: expected [] to deeply equal [ '0x408F924BAEC71cC3968614Cb2c58E155A35e6890' ]
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:425:102)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:713:7)
+
+  7) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         una atestación no sustituye a la identidad verificada que exige el estándar:
+     Error: VM Exception while processing transaction: reverted with reason string 'module not bound'
+    at <UnrecognizedContract>.<unknown> (0xa3f7bf5b0fa93176c260bba57cee85525de2baf4)
+    at <UnrecognizedContract>.<unknown> (0xa3f7bf5b0fa93176c260bba57cee85525de2baf4)
+    at EdrProviderWrapper.request (node_modules/hardhat/src/internal/hardhat-network/provider/provider.ts:452:41)
+    at async HardhatEthersSigner.sendTransaction (node_modules/@nomicfoundation/hardhat-ethers/src/signers.ts:185:18)
+    at async send (node_modules/ethers/src.ts/contract/contract.ts:313:20)
+    at async Proxy.removeModule (node_modules/ethers/src.ts/contract/contract.ts:352:16)
+    at async Context.<anonymous> (test/integration-erc3643.test.ts:737:7)
+  
+
+  8) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         desenganchar el módulo deja pasar lo que la suite afirma bloqueado:
+
+      AssertionError: expected true to equal false
+      + expected - actual
+
+      -true
+      +false
+      
+      at Context.<anonymous> (test/integration-erc3643.test.ts:764:103)
+
+  9) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         con el módulo enganchado y sin atestación, la misma operación no pasa:
+     AssertionError: expected [] to deeply equal [ '0xc4Fe39a1588807CfF8d8897050c39F065eBAb0B8' ]
+      at Context.<anonymous> (test/integration-erc3643.test.ts:778:60)
+
+  10) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         el módulo apuntado a otro activo deja de reconocer la atestación:
+     Error: VM Exception while processing transaction: reverted with reason string 'call only on bound module'
+    at <UnrecognizedContract>.<unknown> (0x55027d3dbbcea0327ef73efd74ba0af42a13a966)
+    at <UnrecognizedContract>.<unknown> (0x55027d3dbbcea0327ef73efd74ba0af42a13a966)
+    at EdrProviderWrapper.request (node_modules/hardhat/src/internal/hardhat-network/provider/provider.ts:452:41)
+    at async HardhatEthersSigner.sendTransaction (node_modules/@nomicfoundation/hardhat-ethers/src/signers.ts:185:18)
+    at async send (node_modules/ethers/src.ts/contract/contract.ts:313:20)
+    at async Proxy.callModuleFunction (node_modules/ethers/src.ts/contract/contract.ts:352:16)
+    at async Context.<anonymous> (test/integration-erc3643.test.ts:792:7)
+  
+
+
+

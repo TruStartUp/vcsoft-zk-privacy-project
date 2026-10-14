@@ -1,0 +1,26 @@
+
+
+  La frontera del verificador
+    el atestador no nombra ningún esquema
+      ✔ monta un verificador que declara el suyo, y no lo consulta para nada más (359ms)
+      ✔ la misma afirmación pública viaja en dos cuerpos de prueba distintos
+      ✔ un cuerpo de prueba de la longitud equivocada es sólo una prueba inválida
+      ✔ cada adaptador acepta lo que su verificador acepta, y sólo eso
+    sustituir el esquema sin redesplegar el atestador
+      ✔ sólo el administrador lo sustituye, y nunca por la dirección cero
+      ✔ deja constancia del esquema que entra y del verificador que sale
+      ✔ recorre la misma atestación completa con el adaptador de PLONK
+      ✔ bajo PLONK el atestador sigue imponiendo las mismas precondiciones
+      ✔ una prueba del esquema que salió deja de valer en el instante de la rotación
+      ✔ lo ya concedido y lo ya gastado sobreviven a la rotación
+    la señal fuera del campo, esquema a esquema
+      ✔ en Groth16 la rechaza el verificador generado, no el adaptador
+      ✔ en PLONK la rechaza el adaptador, porque su verificador no la mira
+      ✔ el atestador la rechaza igual, monte el esquema que monte
+    lo que cuesta cada esquema donde importa
+      atestación · groth16 343529 gas · plonk 398156 gas
+      ✔ mide la atestación completa con uno y con otro
+
+
+  14 passing (466ms)
+

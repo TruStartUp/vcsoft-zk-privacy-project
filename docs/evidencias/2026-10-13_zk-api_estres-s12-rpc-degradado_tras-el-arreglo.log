@@ -1,0 +1,39 @@
+
+> zk-api@0.1.0 stress:s12
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s12-degraded-rpc.ts
+
+
+[2026-10-13T22:39:22.672Z] === Máquina
+[2026-10-13T22:39:22.676Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T22:39:22.676Z] Memoria: 32 GiB
+[2026-10-13T22:39:22.696Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T22:39:22.711Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+[2026-10-13T22:39:22.721Z] el nodo local produce además un bloque por segundo, como una red viva, para que la espera de recibos siga sondeando
+[2026-10-13T22:39:22.724Z] fallos inyectados {"rateLimited":0.2,"latencyMs":[20,150],"receiptDelayMs":3000,"lostSendResponses":0.1,"logRangeCap":0,"revertNextEstimates":0}
+[2026-10-13T22:39:24.245Z] zk-api (s12) escuchando en http://127.0.0.1:3071 · pid 5121
+
+[2026-10-13T22:39:24.245Z] === 50 activaciones (concurrencia 5) con RPC degradado
+[2026-10-13T22:39:24.473Z] antes {"nonce":1678,"events":1463,"counts":{"credentials":1399,"activeInTree":1167,"rootPublications":1438,"proofVerifications":22216,"accessLog":487596,"lastSequence":487596}}
+[2026-10-13T22:46:05.232Z] estados {"201":50}
+[2026-10-13T22:46:05.233Z] 399.2 s · latencia n=50 mean=38339.2 ms p50=39147.7 ms p95=45405.7 ms p99=47150.8 ms min=9964.1 ms max=47150.8 ms
+[2026-10-13T22:46:05.233Z] peticiones al nodo por método {"eth_getCode":64,"eth_blockNumber":871,"eth_estimateGas":69,"eth_chainId":64,"eth_getTransactionCount":62,"eth_fillTransaction":1,"eth_getBlockByNumber":63,"eth_maxPriorityFeePerGas":64,"eth_sendRawTransaction":66,"eth_getTransactionReceipt":338,"eth_getTransactionByHash":9}
+[2026-10-13T22:46:05.233Z] fallos inyectados (recuento) {"429":358,"receiptDelayed":216,"lostSendResponse":6,"lostSendResponse:nodeAccepted":6,"resendAnswer:Nonce too low. Expected nonce to be 1684 but got 1683. Note that transactions ca":1,"resendAnswer:Nonce too low. Expected nonce to be 1699 but got 1698. Note that transactions ca":1,"resendAnswer:Nonce too low. Expected nonce to be 1705 but got 1704. Note that transactions ca":1,"resendAnswer:Nonce too low. Expected nonce to be 1708 but got 1707. Note that transactions ca":1,"resendAnswer:Nonce too low. Expected nonce to be 1711 but got 1710. Note that transactions ca":1,"resendAnswer:Nonce too low. Expected nonce to be 1726 but got 1725. Note that transactions ca":1}
+[2026-10-13T22:46:05.353Z] después {"nonce":1728,"events":1513,"counts":{"credentials":1449,"activeInTree":1217,"rootPublications":1488,"proofVerifications":22216,"accessLog":487696,"lastSequence":487696}}
+[2026-10-13T22:46:05.353Z] activaciones 201: 50 · transacciones minadas del emisor: 50 · eventos de hoja nuevos: 50 · credenciales activas nuevas en BD: 50
+[2026-10-13T22:46:05.353Z] posiciones asignadas 50, distintas 50
+[2026-10-13T22:46:08.485Z] reconciliación tras la carga degradada (proxy sin fallos): matchesChain=true · eventos 1513 · hojas 1217 · faltan en BD 0 · faltan en cadena 0 · 3079.1 ms
+
+[2026-10-13T22:46:08.485Z] === Un revert no se reintenta
+[2026-10-13T22:46:10.959Z] respuesta {"status":424,"code":"root_publication_reverted","revert":{"error":"execution reverted"}}
+[2026-10-13T22:46:10.959Z] eth_estimateGas enviados para esta activación: 1 · eth_sendRawTransaction: 0
+[2026-10-13T22:46:10.963Z] credencial tras el revert {"status":"PENDING","inTree":false,"commitment":null,"leafIndex":null}
+[2026-10-13T22:46:13.307Z] reintento sin fallo: 201 · posición 1337
+
+[2026-10-13T22:46:13.307Z] === Respuesta perdida tras aceptar la transacción (eth_sendRawTransaction → 502 con la transacción ya en el nodo)
+[2026-10-13T22:46:16.022Z] respuesta {"status":201,"leafIndex":1338}
+[2026-10-13T22:46:16.074Z] eventos en cadena con el compromiso de esta activación: 1
+[2026-10-13T22:46:16.113Z] transacciones minadas: 1 · eventos de hoja nuevos: 1 · estado en BD ACTIVE (inTree true)
+[2026-10-13T22:46:19.035Z] reconciliación tras la respuesta perdida: matchesChain=true · eventos 1515 · hojas 1219 · faltan en BD 0 · faltan en cadena 0 · 2922.2 ms
+
+[2026-10-13T22:46:19.090Z] === Registro del servicio
+[2026-10-13T22:46:19.092Z] resumen {"lines":111,"byLevel":{"info":110,"warn":1},"errors":{},"statusCodes":{"200":3,"201":104,"424":1}}

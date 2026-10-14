@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CredentialStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  REVOKED
+}
+
+enum TreeKind {
+  CREDENTIAL
+  JURISDICTION
+}
+
+enum DisclosureStatus {
+  PENDING
+  APPROVED
+  RELEASED
+  DENIED
+}
+
+enum PartnerStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+model Partner {
+  id           String        @id @default(uuid())
+  partnerKey   String        @unique
+  name         String
+  status       PartnerStatus @default(ACTIVE)
+  scopes       String[]
+  sealedSecret Bytes
+  secretNonce  Bytes
+  secretTag    Bytes
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  accessLog   AccessLogEntry[]
+  disclosures DisclosureRequest[] @relation("DisclosureRequester")
+  decisions   DisclosureRequest[] @relation("DisclosureDecider")
+
+  @@map("partners")
+}
+
+/// One row per credential, from the moment the identity check clears.
+///
+/// It is born PENDING: the bank's verdict fixes the jurisdiction, the expiry and
+/// the wallet that passed the check, and there is no commitment yet because the
+/// holder has not handed over `secretHash`. Activation supplies it and only then
+/// does the row get a commitment, a leaf position and a place in the tree.
+///
+/// `commitment` is Poseidon(secretHash, country, expiry) and is the only
+/// identifier that ever leaves this service. `secretHash` is unique on its own:
+/// the same wallet cannot back two credentials, whatever KYC identifiers were
+/// used to obtain them.
+model Credential {
+  id              String           @id @default(uuid())
+  commitment      String?          @unique
+  secretHash      String?          @unique
+  subjectRef      String
+  holderAddress   String
+  leafIndex       Int?             @unique
+  countryCode     Int
+  expiresAt       DateTime
+  status          CredentialStatus @default(PENDING)
+  inTree          Boolean          @default(false)
+  verificationRef String
+  issuedAt        DateTime         @default(now())
+  activatedAt     DateTime?
+  suspendedAt     DateTime?
+  revokedAt       DateTime?
+  updatedAt       DateTime         @updatedAt
+
+  envelope IdentityEnvelope?
+
+  /// One live credential per subject is a partial unique index --
+  /// `credentials_subjectRef_live_key`, over PENDING, ACTIVE and SUSPENDED --
+  /// which this schema language cannot express. It lives in the migration and
+  /// `prisma migrate dev` will read it as drift: keep it.
+  @@index([status])
+  @@index([subjectRef])
+  @@index([holderAddress])
+  @@map("credentials")
+}
+
+/// The holder's identity, sealed against a viewing key. The private half of that
+/// key is never stored here: it is read from configuration at open time.
+model IdentityEnvelope {
+  id                 String    @id @default(uuid())
+  credentialId       String    @unique
+  viewingKeyId       String
+  ephemeralPublicKey Bytes
+  nonce              Bytes
+  authTag            Bytes
+  ciphertext         Bytes
+  aad                Bytes
+  sealedAt           DateTime  @default(now())
+  resealedAt         DateTime?
+
+  credential Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+
+  @@index([viewingKeyId])
+  @@map("identity_envelopes")
+}
+
+/// Admitted jurisdictions of one asset. Leaves of the depth-8 tree whose root the
+/// registry publishes per asset.
+model JurisdictionLeaf {
+  id          String   @id @default(uuid())
+  assetId     String
+  leafIndex   Int
+  countryCode Int
+  admitted    Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([assetId, leafIndex])
+  @@unique([assetId, countryCode])
+  @@map("jurisdiction_leaves")
+}
+
+/// Every root this service published, so an operator can tie a root to the
+/// transaction that carried it without replaying the chain.
+///
+/// `invalidationRequested` with no `invalidatedAt` is a superseded root whose window
+/// the change asked to close and that is still open: the publication stands, and
+/// repeating the change retries the closure. `commitment` names the credential a
+/// credential publication added or removed.
+model RootPublication {
+  id                    String    @id @default(uuid())
+  kind                  TreeKind
+  assetId               String?
+  commitment            String?
+  root                  String
+  previousRoot          String?
+  leafCount             Int
+  txHash                String    @unique
+  blockNumber           BigInt?
+  publishedAt           DateTime  @default(now())
+  invalidationRequested Boolean   @default(false)
+  invalidatedAt         DateTime?
+  invalidationTxHash    String?
+
+  @@index([kind, assetId])
+  @@index([commitment])
+  @@map("root_publications")
+}
+
+/// Who decided comes from the authenticated request (`decidedByPartnerId`,
+/// `decidedByActor`); `decidedBy` is only what that partner declared. The check
+/// constraint `disclosure_requests_decider_is_not_requester` lives in the migration.
+model DisclosureRequest {
+  id                 String           @id @default(uuid())
+  partnerId          String
+  requesterRef       String
+  justification      String
+  legalBasis         String
+  scope              String[]
+  targetCommitment   String
+  status             DisclosureStatus @default(PENDING)
+  requestSignature   String
+  requestDigest      String
+  decidedBy          String?
+  decidedByPartnerId String?
+  decidedByActor     String?
+  decisionNote       String?
+  requestedAt        DateTime         @default(now())
+  decidedAt          DateTime?
+  releasedAt         DateTime?
+
+  partner Partner  @relation("DisclosureRequester", fields: [partnerId], references: [id])
+  decider Partner? @relation("DisclosureDecider", fields: [decidedByPartnerId], references: [id], onDelete: Restrict)
+
+  @@index([targetCommitment])
+  @@index([status])
+  @@map("disclosure_requests")
+}
+
+/// Result of validating a proof. Kept so a bank can ask later whether the proof
+/// it presented is still standing.
+model ProofVerification {
+  id             String   @id @default(uuid())
+  partnerId      String?
+  /// Proving scheme the verdict was reached under. Recorded because the deployment can
+  /// be rotated onto another one, and an old verdict is only readable next to it.
+  scheme         String   @default("groth16")
+  assetId        String
+  nullifier      String
+  epochEnd       BigInt
+  credentialRoot String
+  countryRoot    String
+  anchor         String
+  proofDigest    String
+  valid          Boolean
+  rejectionCode  String?
+  verifiedAt     DateTime @default(now())
+
+  @@index([nullifier])
+  @@index([assetId])
+  @@map("proof_verifications")
+}
+
+/// Append-only. Updates and deletes are refused by a database trigger; the hash
+/// chain makes a forged insert detectable.
+model AccessLogEntry {
+  id            String   @id @default(uuid())
+  sequence      BigInt   @unique
+  partnerId     String?
+  partnerKey    String
+  actorRef      String?
+  method        String
+  path          String
+  scope         String?
+  resourceType  String
+  resourceId    String?
+  outcome       String
+  statusCode    Int
+  requestDigest String
+  previousHash  String
+  entryHash     String   @unique
+  occurredAt    DateTime @default(now())
+
+  partner Partner? @relation(fields: [partnerId], references: [id])
+
+  @@index([partnerKey])
+  @@index([resourceType, resourceId])
+  @@map("access_log_entries")
+}
+
+/// Where the last state rebuild stopped, so a restart does not replay the chain
+/// from the deployment block every time.
+model IndexerCursor {
+  name      String   @id
+  lastBlock BigInt
+  updatedAt DateTime @updatedAt
+
+  @@map("indexer_cursors")
+}

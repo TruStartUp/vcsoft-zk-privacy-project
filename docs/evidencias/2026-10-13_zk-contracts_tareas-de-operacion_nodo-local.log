@@ -1,0 +1,95 @@
+## 2026-10-14T00:29:23Z · nodo: npx hardhat node --port 8565 (chainId 31337)
+
+$ npm run stress:deploy
+
+> zk-contracts@0.1.0 stress:deploy
+> hardhat run stress/deploy-local.ts --network localhost
+
+{
+  "network": "localhost",
+  "chainId": 31337,
+  "deploymentBlock": 0,
+  "rootValidityWindow": 900,
+  "epochLength": 2592000,
+  "admin": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "issuer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "credentialRegistry": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "groth16Verifier": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "groth16VerifierAdapter": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "complianceAttestor": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+  "scheme": "groth16"
+}
+
+$ npx hardhat run stress/out/seed-token.ts --network localhost   # temporary local seed: T-REX suite, one investor, 250 tokens
+{
+  "network": "localhost",
+  "token": "0xC7D34d0F863F86b1422f13626891F8F13330E3D7",
+  "agent": "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
+  "holder": "0x2546BcD3c84621e976D8185a91A922aE77ECEc30"
+}
+
+$ npx hardhat attestation:revoke --network localhost --attestor 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --asset 1 --subject 0x2546BcD3c84621e976D8185a91A922aE77ECEc30
+attestor 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 · asset 1 · subject 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 · operator 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+  no attestation: nothing to revoke
+exit 0
+
+$ npx hardhat attestation:revoke --network localhost --asset 1 --subject 0x2546BcD3c84621e976D8185a91A922aE77ECEc30
+An unexpected error occurred:
+
+Error: no complianceAttestor recorded for network localhost; pass --attestor
+exit 
+
+$ npx hardhat token:freeze --network localhost --token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 --holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 --dry-run
+token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 · holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 · operator 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  before: address frozen false, balance 250.0, frozen tokens 0.0
+  dry run: would send setAddressFrozen(true)
+exit 0
+
+$ npx hardhat token:freeze --network localhost --token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 --holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30
+token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 · holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 · operator 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  before: address frozen false, balance 250.0, frozen tokens 0.0
+  sent setAddressFrozen(true) tx 0xbc7990d1d9462f36c99cb88a0ba4d8491ea3babd3d51f0d2f081678fc460b6a8 from 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  confirmed in block 34, 61415 gas
+  after: address frozen true, balance 250.0, frozen tokens 0.0
+exit 0
+
+$ npx hardhat token:unfreeze --network localhost --token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 --holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30
+token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 · holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 · operator 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  before: address frozen true, balance 250.0, frozen tokens 0.0
+  sent setAddressFrozen(false) tx 0x563c379d6810cc49f35d2a08bfe685a49b7c6938880e26f1f5406e1a918ddb5a from 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  confirmed in block 35, 39503 gas
+  after: address frozen false, balance 250.0, frozen tokens 0.0
+exit 0
+
+$ npx hardhat token:freeze --network localhost --token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 --holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 --amount 100
+token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 · holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 · operator 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  before: address frozen false, balance 250.0, frozen tokens 0.0
+  sent freezePartialTokens(100) tx 0x50916548dfddbb5218f331974c857384ec8c10235831ce146903655735965180 from 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  confirmed in block 36, 63594 gas
+  after: address frozen false, balance 250.0, frozen tokens 100.0
+exit 0
+
+$ npx hardhat token:freeze --network localhost --token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 --holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 --amount 151
+Error: --amount 151 exceeds the unfrozen balance (150.0)
+exit 
+
+$ npx hardhat token:unfreeze --network localhost --token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 --holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 --amount 100
+token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 · holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 · operator 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  before: address frozen false, balance 250.0, frozen tokens 100.0
+  sent unfreezePartialTokens(100) tx 0x2c680e0cde46f7edf709af3cf85946d05ccf16ff9e22cb4578a6cc44a8328358 from 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  confirmed in block 37, 39385 gas
+  after: address frozen false, balance 250.0, frozen tokens 0.0
+exit 0
+
+## the two refusals again, without a pipe, for their exit codes
+
+$ npx hardhat attestation:revoke --network localhost --asset 1 --subject 0x2546BcD3c84621e976D8185a91A922aE77ECEc30
+Error: no complianceAttestor recorded for network localhost; pass --attestor
+exit 1
+
+$ npx hardhat token:freeze --network localhost --token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 --holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 --amount 251
+token 0xC7D34d0F863F86b1422f13626891F8F13330E3D7 · holder 0x2546BcD3c84621e976D8185a91A922aE77ECEc30 · operator 0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec
+  before: address frozen false, balance 250.0, frozen tokens 0.0
+An unexpected error occurred:
+Error: --amount 251 exceeds the unfrozen balance (250.0)
+exit 1

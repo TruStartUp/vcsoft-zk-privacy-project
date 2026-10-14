@@ -1,0 +1,214 @@
+{
+  "network": "baseSepolia",
+  "chainId": 84532,
+  "parameters": {
+    "salt": "ZKCONF-20261013",
+    "assetId": "84532001",
+    "tokenName": "ZK Confidential Test Asset",
+    "tokenSymbol": "ZKCTA",
+    "tokenDecimals": 18,
+    "rootValidityWindow": 900,
+    "epochLength": 2592000,
+    "claimTopics": [
+      1
+    ],
+    "deployer": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+    "platform": "0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337"
+  },
+  "external": {
+    "trexFactory": "0x599e0AC637FD3B598b13bbB1729EC4ed967875fF",
+    "trexImplementationAuthority": "0x13Ff944065646E8405aDD12EdDaBFd07bDaa6Fd8",
+    "claimIssuer": "0xD60B8E767c0f830b95Fc0cD87B71643c47aF9492"
+  },
+  "contracts": {
+    "groth16Verifier": {
+      "address": "0xD5417e562083DB6ef071489f2d1A8C0d8d36784d",
+      "txHash": "0x61fdef52cfb91b7f7b1dae692dd5de77dc5513fbb3d834d849ad99a2a8f79f26",
+      "block": 48076942
+    },
+    "groth16VerifierAdapter": {
+      "address": "0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA",
+      "txHash": "0xca69156573076ba612b484e9c43d95017fc50a15a3da8505c46d0b75608cf001",
+      "block": 48076951
+    },
+    "credentialRegistry": {
+      "address": "0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA",
+      "txHash": "0xb1a628e198247a140311056dcf3c3a2847f0092dec4460366ded4b07b064e38a",
+      "block": 48076954
+    },
+    "complianceAttestor": {
+      "address": "0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09",
+      "txHash": "0x0f089bcbc6894296f484b5a6cc7f901f881431fa3b2379256194315b8abb0239",
+      "block": 48076957
+    },
+    "zkComplianceModuleImplementation": {
+      "address": "0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf",
+      "txHash": "0x5de75140e61de803d135023851349bf35dbe29181b5f83befcd6fecfa7145577",
+      "block": 48076960
+    },
+    "zkComplianceModule": {
+      "address": "0x80929BFc966888fa24710F177F594F377A64A925",
+      "txHash": "0x98bb233d70cf59b6446b87d466141af46f67cb553dc91f6b3e69252169b8e5aa",
+      "block": 48076962
+    },
+    "token": {
+      "address": "0xFf6542a477300EEfD8F1BBFB32dB5e4213941CCa",
+      "txHash": "0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6",
+      "block": 48077701
+    },
+    "identityRegistry": {
+      "address": "0x24F8961FE7B61689767A21FC9Fc303611BcAdBd0",
+      "txHash": "0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6",
+      "block": 48077701
+    },
+    "identityRegistryStorage": {
+      "address": "0xd7c0621abF44b569AC15F77D018929eedA3A9C5b",
+      "txHash": "0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6",
+      "block": 48077701
+    },
+    "trustedIssuersRegistry": {
+      "address": "0x3C15F2CDE30e1A707E493afcE3fd27C8e7a20bEA",
+      "txHash": "0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6",
+      "block": 48077701
+    },
+    "claimTopicsRegistry": {
+      "address": "0xe98Cf55fFfe542429229eeacfBa5e453555aE78f",
+      "txHash": "0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6",
+      "block": 48077701
+    },
+    "modularCompliance": {
+      "address": "0x70a5c8351D632bFcAAb56772f0359B0652B8FCD2",
+      "txHash": "0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6",
+      "block": 48077701
+    }
+  },
+  "transactions": {
+    "deploy:groth16Verifier": {
+      "hash": "0x61fdef52cfb91b7f7b1dae692dd5de77dc5513fbb3d834d849ad99a2a8f79f26",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076942,
+      "gasUsed": "450287",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "1343",
+      "feeWei": "2701722001343",
+      "contractAddress": "0xD5417e562083DB6ef071489f2d1A8C0d8d36784d"
+    },
+    "deploy:groth16VerifierAdapter": {
+      "hash": "0xca69156573076ba612b484e9c43d95017fc50a15a3da8505c46d0b75608cf001",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076951,
+      "gasUsed": "316959",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "919",
+      "feeWei": "1901754000919",
+      "contractAddress": "0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA"
+    },
+    "deploy:credentialRegistry": {
+      "hash": "0xb1a628e198247a140311056dcf3c3a2847f0092dec4460366ded4b07b064e38a",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076954,
+      "gasUsed": "1189339",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "2961",
+      "feeWei": "7136034002961",
+      "contractAddress": "0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA"
+    },
+    "deploy:complianceAttestor": {
+      "hash": "0x0f089bcbc6894296f484b5a6cc7f901f881431fa3b2379256194315b8abb0239",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076957,
+      "gasUsed": "1456240",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "3804",
+      "feeWei": "8737440003804",
+      "contractAddress": "0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09"
+    },
+    "deploy:zkComplianceModuleImplementation": {
+      "hash": "0x5de75140e61de803d135023851349bf35dbe29181b5f83befcd6fecfa7145577",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076960,
+      "gasUsed": "1410208",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "3136",
+      "feeWei": "8461248003136",
+      "contractAddress": "0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf"
+    },
+    "deploy:zkComplianceModule": {
+      "hash": "0x98bb233d70cf59b6446b87d466141af46f67cb553dc91f6b3e69252169b8e5aa",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076962,
+      "gasUsed": "322783",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "1128",
+      "feeWei": "1936698001128",
+      "contractAddress": "0x80929BFc966888fa24710F177F594F377A64A925"
+    },
+    "role:registry.ISSUER_ROLE": {
+      "hash": "0x97ff3d84662144c0752e3d678e9606e9a94ae8069d12ec188eb4bf49141263fe",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076964,
+      "gasUsed": "51523",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "97",
+      "feeWei": "309138000097"
+    },
+    "role:registry.JURISDICTION_ROLE": {
+      "hash": "0xdbdab6ec42fdc9895df5c413458e1479321c13dc11bb437485716d5804b2f878",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076967,
+      "gasUsed": "51523",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "97",
+      "feeWei": "309138000097"
+    },
+    "role:attestor.ATTESTATION_MANAGER_ROLE": {
+      "hash": "0x6389a4f80d1497f527da6a6b27ebf6d86c38eccb6b6e5ec2bc242c934571cff5",
+      "from": "0xb44703b4D47Fd595f6383909aCF424cA6612A5C2",
+      "signer": "X",
+      "status": "confirmed",
+      "block": 48076970,
+      "gasUsed": "51429",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "97",
+      "feeWei": "308574000097"
+    },
+    "trex:deployTREXSuite": {
+      "hash": "0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6",
+      "from": "0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337",
+      "signer": "Y",
+      "status": "confirmed",
+      "block": 48077701,
+      "gasUsed": "3857517",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "299",
+      "feeWei": "23145102000299"
+    },
+    "token:unpause": {
+      "hash": "0xb670c7f8122c00cf59cf75aac69c2b63afafb5a8f3cc4a1ae084f6125c27619a",
+      "from": "0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337",
+      "signer": "Y",
+      "status": "confirmed",
+      "block": 48077704,
+      "gasUsed": "42678",
+      "effectiveGasPrice": "6000000",
+      "l1Fee": "94",
+      "feeWei": "256068000094"
+    }
+  }
+}

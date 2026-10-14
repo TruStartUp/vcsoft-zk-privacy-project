@@ -1,0 +1,167 @@
+Compiled 1 Solidity file successfully (evm target: london).
+
+
+  ComplianceAttestor
+    configuración
+      ✔ se despliega con la longitud de época documentada por defecto (420ms)
+      ✔ publica el fin del periodo corriente y el anclaje que cada remitente debe usar
+    camino feliz
+      atestación completa · 343529 gas
+      ✔ atestigua al remitente hasta el fin del periodo, gasta el nulificador y deja constancia
+      ✔ dos inversores distintos sobre el mismo activo se atestiguan por separado
+      ✔ la misma credencial en otro activo produce otro nulificador y otra atestación
+      ✔ la atestación es un permiso vigente, no un vale: dura todo el periodo
+    precondición: el periodo es el corriente o el siguiente
+      ✔ rechaza un periodo ya cerrado
+      ✔ rechaza un periodo demasiado lejano
+      ✔ rechaza un fin de periodo que no cae en la retícula de la época
+      ✔ renueva por adelantado sobre la misma credencial, sin ventana muerta
+      ✔ el periodo siguiente pasa a ser el corriente cuando llega su turno
+    precondición: la prueba está atada a quien la envía
+      ✔ rechaza a un tercero que copia la prueba del mempool
+      ✔ adelantarse ya no quema el nulificador de la víctima
+      ✔ rechaza la misma prueba en otro despliegue del atestador
+      ✔ el anclaje está atado dentro de la prueba, no sólo comprobado en el contrato
+    precondición: las raíces salen del estado del registro
+      ✔ acepta una raíz de credenciales sustituida dentro de la ventana
+      ✔ rechaza una raíz de credenciales fuera de la ventana
+      ✔ rechaza una raíz de credenciales invalidada aunque la ventana siga abierta
+      ✔ rechaza una raíz de credenciales que nunca se publicó
+      ✔ rechaza la raíz de jurisdicciones de otro activo
+      ✔ rechaza un activo sin raíz de jurisdicciones publicada
+      ✔ acepta una raíz de jurisdicciones sustituida dentro de la ventana
+      ✔ rechaza una raíz de jurisdicciones sustituida fuera de la ventana
+    precondición: el nulificador es de un solo uso por periodo
+      ✔ rechaza la reutilización del mismo nulificador
+      ✔ una prueba contra una raíz anterior no reabre un nulificador gastado
+      ✔ el gasto es atómico: una prueba inválida no deja el nulificador marcado
+    precondición: toda señal pública está en el campo
+      ✔ rechaza un nulificador desplazado por el orden del campo
+      ✔ comprueba las seis señales, no sólo el nulificador
+      ✔ rechaza antes de llegar al verificador, no porque el verificador vaya a rechazarlo
+    precondición: la prueba verifica
+      ✔ rechaza una prueba manipulada
+      ✔ rechaza el nulificador de otro inversor sobre una prueba ajena
+    la atestación no sobrevive a la credencial
+      ✔ una credencial que muere con el periodo lo atestigua entero y ni un segundo más
+      ✔ no existe prueba de renovación para ella: el circuito la rechaza antes de llegar aquí
+    vigencia y revocación
+      ✔ el gestor puede revocarla antes de que caduque, sin liberar el nulificador
+      ✔ sólo el gestor revoca, y sólo atestaciones existentes
+      ✔ la longitud de época es configurable y está acotada por los dos lados
+      ✔ acortar la época mueve todas las fronteras y caduca las pruebas ya construidas
+
+  CredentialRegistry
+    ✔ se despliega con la ventana de validez documentada por defecto
+    control de acceso
+      ✔ solo el emisor publica la raíz de credenciales
+      ✔ solo el administrador de jurisdicciones publica la raíz de países
+      ✔ solo el administrador cambia la ventana de validez
+    reconstrucción del árbol fuera de la cadena
+      ✔ emite cada hoja emitida y cada hoja revocada con su raíz
+      ✔ emite cada jurisdicción admitida o retirada con su raíz
+    ventana de validez de las raíces
+      ✔ la raíz vigente vale siempre, sin importar su antigüedad
+      ✔ una raíz sustituida sigue valiendo dentro de la ventana
+      ✔ una raíz sustituida deja de valer un segundo después de la ventana
+      ✔ acortar la ventana caduca al instante las raíces ya sustituidas
+      ✔ invalidar una raíz lleva la latencia de revocación a cero
+      ✔ no permite invalidar la raíz vigente ni una desconocida
+      ✔ la ventana está acotada por arriba
+    aislamiento entre activos
+      ✔ la raíz de jurisdicciones de un activo no vale para otro
+      ✔ un activo sin raíz publicada no admite ninguna raíz
+    saneamiento de entradas
+      ✔ rechaza raíces fuera del campo y raíces nulas
+      ✔ rechaza índices de hoja fuera de la profundidad del circuito
+      ✔ rechaza la hoja de relleno como código de país
+      ✔ rechaza compromisos nulos o fuera del campo
+
+  Integración con la suite T-REX real
+    el despliegue
+      ✔ es la suite del estándar y no un doble
+      ✔ engancha el módulo ZK a la ModularCompliance del token, ligado al activo
+      ✔ los inversores están verificados por el estándar antes de que la capa diga nada
+    el ciclo, paso a paso
+      ✔ 1 · la emisión en dos tiempos no publica nada hasta que el titular aporta su hash
+      ✔ 2 · la activación exige la firma de posesión del titular, no la de la mesa
+      ✔ 3 · la raíz de jurisdicciones del activo está publicada y es la que la prueba usa
+      ✔ 4 · el titular presenta su prueba y obtiene atestación; nadie puede presentarla por él (1003ms)
+      ✔ 5 · el token T-REX acuña al titular porque moduleCheck encuentra la atestación (748ms)
+      ✔ 6 · una transferencia entre titulares atestados atraviesa el módulo y se completa (1463ms)
+      ✔ 7 · revocar la credencial cierra la emisión de atestaciones nuevas (1486ms)
+      ✔ 8 · cortar la atestación viva bloquea la entrega, y el rechazo es del módulo (1613ms)
+    el cumplimiento no se relaja
+      ✔ un titular sin atestación no recibe
+      ✔ un titular cuya atestación caducó tampoco recibe (735ms)
+      ✔ una jurisdicción no admitida no llega ni a obtener atestación (68ms)
+      ✔ una atestación no sustituye a la identidad verificada que exige el estándar (702ms)
+      ✔ el módulo condiciona a quien recibe, no a quien envía (1490ms)
+    la prueba no se engaña a sí misma
+      ✔ desenganchar el módulo deja pasar lo que la suite afirma bloqueado
+      ✔ con el módulo enganchado y sin atestación, la misma operación no pasa
+      ✔ el módulo apuntado a otro activo deja de reconocer la atestación (715ms)
+
+  Gas de las operaciones del ciclo
+  enganche · compliance.addModule                         137708
+  enganche · compliance.callModuleFunction(setAssetId)     97839
+  jurisdicciones · publishCountryRoot                      58963
+  emisión · publishCredentialRoot (activación)             59672
+  atestación · attest                                     343541
+  token T-REX · mint                                      258122
+  token T-REX · transfer                                  246349
+  revocación · publishCredentialRoot                       59636
+  revocación · invalidateCredentialRoot                    28005
+  atestación · revokeAttestation                           29484
+
+
+  Comparación de esquemas de prueba
+      groth16 · verificar 249461 gas · desplegar 450287 gas
+    ✔ verifica una prueba Groth16 y mide su costo
+      plonk   · verificar 300256 gas · desplegar 1549560 gas
+    ✔ verifica una prueba PLONK y mide su costo
+    ✔ rechaza una prueba manipulada
+
+  La frontera del verificador
+    el atestador no nombra ningún esquema
+      ✔ monta un verificador que declara el suyo, y no lo consulta para nada más
+      ✔ la misma afirmación pública viaja en dos cuerpos de prueba distintos
+      ✔ un cuerpo de prueba de la longitud equivocada es sólo una prueba inválida
+      ✔ cada adaptador acepta lo que su verificador acepta, y sólo eso
+    sustituir el esquema sin redesplegar el atestador
+      ✔ sólo el administrador lo sustituye, y nunca por la dirección cero
+      ✔ deja constancia del esquema que entra y del verificador que sale
+      ✔ recorre la misma atestación completa con el adaptador de PLONK
+      ✔ bajo PLONK el atestador sigue imponiendo las mismas precondiciones
+      ✔ una prueba del esquema que salió deja de valer en el instante de la rotación
+      ✔ lo ya concedido y lo ya gastado sobreviven a la rotación
+    la señal fuera del campo, esquema a esquema
+      ✔ en Groth16 la rechaza el verificador generado, no el adaptador
+      ✔ en PLONK la rechaza el adaptador, porque su verificador no la mira
+      ✔ el atestador la rechaza igual, monte el esquema que monte
+    lo que cuesta cada esquema donde importa
+      atestación · groth16 343529 gas · plonk 398156 gas
+      ✔ mide la atestación completa con uno y con otro
+
+  ZKComplianceModule
+    configuración
+      ✔ declara su nombre y su naturaleza de módulo ERC-3643
+      ✔ liga el activo a la compliance que lo declara, y sólo ella
+      ✔ rechaza el activo cero, que es el valor de «sin configurar»
+      ✔ un activo ya ligado no lo puede reclamar otra compliance
+      ✔ una compliance que cambia de activo libera el que tenía
+      ✔ sólo el propietario libera un activo ligado, y sólo uno que lo esté
+      ✔ una atestación no se cuela de un activo a otro por reclamar su identificador
+      ✔ sólo el propietario puede rotar el atestador
+      ✔ las acciones de transferencia sólo las invoca una compliance ligada
+    moduleCheck consulta la atestación viva
+      ✔ deniega a una dirección sin atestación
+      ✔ admite al receptor una vez presentada la prueba
+      ✔ deniega cuando la atestación caduca
+      ✔ deniega cuando el gestor revoca la atestación
+      ✔ una atestación de un activo no sirve para otro
+      ✔ una compliance sin activo ligado no admite nada
+
+
+  107 passing (14s)
+

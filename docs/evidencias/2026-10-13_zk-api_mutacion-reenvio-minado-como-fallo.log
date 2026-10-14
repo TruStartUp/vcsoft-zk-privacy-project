@@ -1,0 +1,32 @@
+
+ RUN  v2.1.9 <repo>/zk-api
+
+ ❯ test/chain-rpc.test.ts (29 tests | 1 failed) 1471ms
+   × a write the node took, though the answer said otherwise > takes a resend answered 'nonce too low' as sent when the node has that very transaction 8ms
+     → publishCredentialRoot failed on chain
+   ✓ reading the event log in windows > rebuilds the same tree from a split log as from a whole one 440ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chain-rpc.test.ts > a write the node took, though the answer said otherwise > takes a resend answered 'nonce too low' as sent when the node has that very transaction
+Error: publishCredentialRoot failed on chain
+ ❯ Object.failedDependency src/lib/errors.ts:32:19
+     30|     decorate(Boom.tooManyRequests(message), code, details),
+     31|   failedDependency: (code: string, message: string, details?: ApiError…
+     32|     decorate(Boom.failedDependency(message), code, details),
+       |                   ^
+     33|   internal: (code: string, message: string, details?: ApiErrorDetails)…
+     34|     decorate(Boom.internal(message), code, details),
+ ❯ chainFailure src/services/registry.service.ts:109:19
+ ❯ writeFailure src/services/registry.service.ts:119:10
+ ❯ submit src/services/registry.service.ts:170:11
+ ❯ Module.publishCredentialRoot src/services/registry.service.ts:213:19
+ ❯ test/chain-rpc.test.ts:234:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 28 passed (29)
+   Start at  17:32:06
+   Duration  2.80s (transform 124ms, setup 385ms, collect 806ms, tests 1.47s, environment 0ms, prepare 28ms)
+

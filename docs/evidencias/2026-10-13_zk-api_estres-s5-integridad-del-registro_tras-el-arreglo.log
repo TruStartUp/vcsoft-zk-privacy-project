@@ -1,0 +1,30 @@
+
+> zk-api@0.1.0 stress:s5
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s5-integrity.ts
+
+
+[2026-10-13T22:54:56.453Z] === Máquina
+[2026-10-13T22:54:56.457Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T22:54:56.457Z] Memoria: 32 GiB
+[2026-10-13T22:54:56.476Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T22:54:56.491Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+[2026-10-13T22:54:57.264Z] zk-api (s5) escuchando en http://127.0.0.1:3071 · pid 59170
+
+[2026-10-13T22:54:57.264Z] === Estado acumulado tras S1–S4, S10 y S12
+[2026-10-13T22:54:57.398Z] filas {"credentials":1471,"activeInTree":1239,"rootPublications":1520,"proofVerifications":39083,"accessLog":504635,"lastSequence":504635}
+[2026-10-13T22:54:57.398Z] secuencia más alta 504635 · filas 504635 · huecos 0
+
+[2026-10-13T22:54:57.398Z] === Integridad del registro de accesos (tres lecturas)
+[2026-10-13T22:55:03.997Z] lectura 1: 200 · intact=true · entradas 504635 · comprobadas 504635 · rotura ninguna · 6598.7 ms
+[2026-10-13T22:55:03.997Z]   13.1 µs por entrada
+[2026-10-13T22:55:10.880Z] lectura 2: 200 · intact=true · entradas 504636 · comprobadas 504636 · rotura ninguna · 6883.2 ms
+[2026-10-13T22:55:10.880Z]   13.6 µs por entrada
+[2026-10-13T22:55:17.464Z] lectura 3: 200 · intact=true · entradas 504637 · comprobadas 504637 · rotura ninguna · 6583.6 ms
+[2026-10-13T22:55:17.464Z]   13.0 µs por entrada
+[2026-10-13T22:55:17.464Z] RSS máximo del servicio durante las lecturas 661 MiB
+
+[2026-10-13T22:55:17.464Z] === Reconciliación de credenciales
+[2026-10-13T22:55:20.708Z] estado final: matchesChain=true · eventos 1535 · hojas 1239 · faltan en BD 0 · faltan en cadena 0 · 3244.0 ms
+
+[2026-10-13T22:55:20.766Z] === Registro del servicio
+[2026-10-13T22:55:20.766Z] resumen {"lines":7,"byLevel":{"info":7},"errors":{},"statusCodes":{"200":5}}

@@ -1,0 +1,102 @@
+
+> zk-api@0.1.0 stress:setup
+> tsx stress/setup.ts
+
+
+[2026-10-13T21:29:29.403Z] === Máquina
+[2026-10-13T21:29:29.408Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T21:29:29.408Z] Memoria: 32 GiB
+[2026-10-13T21:29:29.428Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T21:29:29.446Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+
+[2026-10-13T21:29:29.446Z] === Contratos nuevos en el nodo local (puerto 8565)
+{
+  "network": "localhost",
+  "chainId": 31337,
+  "deploymentBlock": 85,
+  "rootValidityWindow": 900,
+  "epochLength": 2592000,
+  "admin": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "issuer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "credentialRegistry": "0x59b670e9fA9D0A427751Af201D676719a970857b",
+  "groth16Verifier": "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
+  "groth16VerifierAdapter": "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44",
+  "complianceAttestor": "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f",
+  "scheme": "groth16"
+}
+
+[2026-10-13T21:29:30.931Z] === Entorno .env.stress: base de datos zkapi_stress, Redis 2, claves nuevas
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "zkapi_stress", schema "public" at "127.0.0.1:5452"
+
+6 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+[2026-10-13T21:29:32.140Z] zkapi_stress vaciada y Redis 2 limpio
+
+[2026-10-13T21:29:32.140Z] === Socios de estrés
+[2026-10-13T21:29:32.145Z] socio platform: pk_a14efc388a6278d4734bb49b · credentials:issue credentials:activate credentials:revoke credentials:read credentials:opening jurisdictions:write
+[2026-10-13T21:29:32.147Z] socio bank: pk_600d5a0a26b5852f07688787 · proofs:verify proofs:read compliance:read credentials:read
+[2026-10-13T21:29:32.148Z] socio audit: pk_19db2c0e0f77230430639bcc · audit:read
+[2026-10-13T21:29:32.148Z] socio operator: pk_6a3f42f4a23e60e298477d13 · issuer:admin
+[2026-10-13T21:29:32.149Z] despliegue {"network":"localhost","chainId":31337,"deploymentBlock":85,"rootValidityWindow":900,"epochLength":2592000,"admin":"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266","issuer":"0x70997970C51812dc3A010C7d01b50e0d17dc79C8","credentialRegistry":"0x59b670e9fA9D0A427751Af201D676719a970857b","groth16Verifier":"0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1","groth16VerifierAdapter":"0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44","complianceAttestor":"0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f","scheme":"groth16"}
+
+> zk-api@0.1.0 stress:s4
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s4-issuance.ts
+
+
+[2026-10-13T21:29:33.153Z] === Máquina
+[2026-10-13T21:29:33.157Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T21:29:33.157Z] Memoria: 32 GiB
+[2026-10-13T21:29:33.177Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T21:29:33.194Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+[2026-10-13T21:29:34.224Z] zk-api (s4) escuchando en http://127.0.0.1:3071 · pid 29551
+
+[2026-10-13T21:29:34.225Z] === Jurisdicciones del activo 42
+[2026-10-13T21:29:34.581Z] PUT jurisdicciones → 200 en 355.9 ms
+
+[2026-10-13T21:29:34.581Z] === Fase 1 · emisión y activación en serie hasta 1000 hojas
+[2026-10-13T21:29:34.862Z] 1 hojas · últimas 1: alta n=1 mean=18.1 ms p50=18.1 ms p95=18.1 ms p99=18.1 ms min=18.1 ms max=18.1 ms | activación n=1 mean=31.7 ms p50=31.7 ms p95=31.7 ms p99=31.7 ms min=31.7 ms max=31.7 ms
+[2026-10-13T21:29:34.888Z] reconciliación con 1 hojas: matchesChain=true · eventos 1 · hojas 1 · faltan en BD 0 · faltan en cadena 0 · 25.8 ms
+[2026-10-13T21:29:48.048Z] 100 hojas · últimas 100: alta n=100 mean=7.4 ms p50=7.3 ms p95=9.3 ms p99=12.2 ms min=4.9 ms max=18.1 ms | activación n=100 mean=123.3 ms p50=121.4 ms p95=205.2 ms p99=212.3 ms min=27.1 ms max=218.5 ms
+[2026-10-13T21:29:48.247Z] reconciliación con 100 hojas: matchesChain=true · eventos 100 · hojas 100 · faltan en BD 0 · faltan en cadena 0 · 199.1 ms
+[2026-10-13T21:30:20.721Z] 200 hojas · últimas 100: alta n=100 mean=7.3 ms p50=7.3 ms p95=9.5 ms p99=10.8 ms min=5.1 ms max=13.1 ms | activación n=100 mean=316.2 ms p50=311.8 ms p95=396.5 ms p99=486.8 ms min=207.4 ms max=634.6 ms
+[2026-10-13T21:31:12.148Z] 300 hojas · últimas 100: alta n=100 mean=8.2 ms p50=7.5 ms p95=9.1 ms p99=34.1 ms min=5.0 ms max=44.4 ms | activación n=100 mean=504.8 ms p50=504.7 ms p95=590.3 ms p99=686.8 ms min=407.7 ms max=690.0 ms
+[2026-10-13T21:32:23.519Z] 400 hojas · últimas 100: alta n=100 mean=7.1 ms p50=7.2 ms p95=9.3 ms p99=11.6 ms min=4.7 ms max=11.9 ms | activación n=100 mean=705.3 ms p50=695.0 ms p95=802.5 ms p99=973.9 ms min=591.5 ms max=1020.8 ms
+[2026-10-13T21:33:53.082Z] 500 hojas · últimas 100: alta n=100 mean=7.2 ms p50=6.9 ms p95=9.6 ms p99=17.1 ms min=4.9 ms max=21.9 ms | activación n=100 mean=887.1 ms p50=891.6 ms p95=989.9 ms p99=1129.3 ms min=783.0 ms max=1211.0 ms
+[2026-10-13T21:35:39.908Z] 600 hojas · últimas 100: alta n=100 mean=7.0 ms p50=6.7 ms p95=8.9 ms p99=12.3 ms min=4.9 ms max=26.6 ms | activación n=100 mean=1060.1 ms p50=1061.9 ms p95=1137.0 ms p99=1348.3 ms min=956.1 ms max=1367.0 ms
+[2026-10-13T21:37:44.412Z] 700 hojas · últimas 100: alta n=100 mean=6.7 ms p50=6.6 ms p95=8.3 ms p99=10.0 ms min=4.8 ms max=12.5 ms | activación n=100 mean=1237.2 ms p50=1236.9 ms p95=1322.0 ms p99=1455.6 ms min=1127.5 ms max=1522.7 ms
+[2026-10-13T21:40:13.704Z] 800 hojas · últimas 100: alta n=100 mean=7.2 ms p50=6.9 ms p95=9.1 ms p99=12.3 ms min=5.1 ms max=25.8 ms | activación n=100 mean=1484.2 ms p50=1442.7 ms p95=1630.1 ms p99=1971.2 ms min=1323.5 ms max=3360.8 ms
+[2026-10-13T21:42:59.756Z] 900 hojas · últimas 100: alta n=100 mean=7.1 ms p50=7.1 ms p95=9.5 ms p99=10.1 ms min=5.0 ms max=11.2 ms | activación n=100 mean=1652.2 ms p50=1627.3 ms p95=1782.1 ms p99=1814.2 ms min=1548.4 ms max=1932.4 ms
+[2026-10-13T21:46:08.562Z] 1000 hojas · últimas 100: alta n=100 mean=8.6 ms p50=7.1 ms p95=12.4 ms p99=30.6 ms min=5.0 ms max=104.9 ms | activación n=100 mean=1878.2 ms p50=1852.3 ms p95=2092.5 ms p99=2286.6 ms min=1723.5 ms max=2417.9 ms
+[2026-10-13T21:46:10.563Z] reconciliación con 1000 hojas: matchesChain=true · eventos 1000 · hojas 1000 · faltan en BD 0 · faltan en cadena 0 · 2000.3 ms
+[2026-10-13T21:46:10.563Z] fase 1: 1000 activaciones en 995.9 s
+[2026-10-13T21:46:10.563Z] fallos fase 1 {}
+[2026-10-13T21:46:10.574Z] ajuste lineal de la activación frente a hojas: 19.9 ms + 1928.0 ms por cada 1000 hojas (R² 0.979)
+[2026-10-13T21:46:10.574Z]   alrededor de 1 hojas: activación n=3 mean=30.7 ms p50=31.7 ms p95=33.4 ms p99=33.4 ms min=27.1 ms max=33.4 ms
+[2026-10-13T21:46:10.574Z]   alrededor de 10 hojas: activación n=5 mean=47.5 ms p50=46.2 ms p95=63.3 ms p99=63.3 ms min=40.2 ms max=63.3 ms
+[2026-10-13T21:46:10.574Z]   alrededor de 100 hojas: activación n=5 mean=210.6 ms p50=210.8 ms p95=218.5 ms p99=218.5 ms min=203.9 ms max=218.5 ms
+[2026-10-13T21:46:10.574Z]   alrededor de 250 hojas: activación n=11 mean=500.5 ms p50=499.2 ms p95=515.9 ms p99=515.9 ms min=486.0 ms max=515.9 ms
+[2026-10-13T21:46:10.574Z]   alrededor de 500 hojas: activación n=21 mean=966.0 ms p50=964.2 ms p95=988.4 ms p99=1022.8 ms min=932.2 ms max=1022.8 ms
+[2026-10-13T21:46:10.575Z]   alrededor de 750 hojas: activación n=31 mean=1436.8 ms p50=1415.6 ms p95=1590.7 ms p99=1830.6 ms min=1390.2 ms max=1830.6 ms
+[2026-10-13T21:46:10.575Z]   alrededor de 1000 hojas: activación n=21 mean=1943.9 ms p50=1925.0 ms p95=2100.8 ms p99=2222.7 ms min=1847.3 ms max=2222.7 ms
+
+[2026-10-13T21:46:10.575Z] === Fase 2 · lote concurrente de 10 activaciones
+[2026-10-13T21:46:29.973Z] estados {"201":10}
+[2026-10-13T21:46:29.973Z] tiempo total del lote 19338.7 ms · 1933.9 ms por activación · latencia n=10 mean=10552.4 ms p50=9534.0 ms p95=19333.0 ms p99=19333.0 ms min=1922.3 ms max=19333.0 ms
+[2026-10-13T21:46:29.973Z] posiciones asignadas: 10, distintas: 10
+[2026-10-13T21:46:31.996Z] reconciliación tras el lote de 10: matchesChain=true · eventos 1010 · hojas 1010 · faltan en BD 0 · faltan en cadena 0 · 2019.6 ms
+
+[2026-10-13T21:46:31.996Z] === Fase 2 · lote concurrente de 50 activaciones
+[2026-10-13T21:47:48.950Z] estados {"201":38,"500 internal_error":12}
+[2026-10-13T21:47:48.950Z] tiempo total del lote 76691.5 ms · 1533.8 ms por activación · latencia n=50 mean=36364.0 ms p50=27547.0 ms p95=72611.3 ms p99=76669.5 ms min=2050.2 ms max=76669.5 ms
+[2026-10-13T21:47:48.950Z] posiciones asignadas: 38, distintas: 38
+[2026-10-13T21:47:50.977Z] reconciliación tras el lote de 50: matchesChain=true · eventos 1048 · hojas 1048 · faltan en BD 0 · faltan en cadena 0 · 2022.5 ms
+
+[2026-10-13T21:47:50.977Z] === Coste del árbol en el proceso (misma base de datos)
+[2026-10-13T21:48:01.653Z] buildCredentialTree con 1048 hojas: n=5 mean=2073.0 ms p50=2026.9 ms p95=2233.7 ms p99=2233.7 ms min=1978.0 ms max=2233.7 ms
+
+[2026-10-13T21:48:01.720Z] === Registro del servicio
+[2026-10-13T21:48:01.729Z] resumen {"lines":2153,"byLevel":{"info":2129,"error":24},"errors":{"access log entry could not be appended · P2028":12,"unhandled failure · P2024":12},"statusCodes":{"200":7,"201":2108,"500":12}}

@@ -1,0 +1,58 @@
+
+> zk-contracts@0.1.0 deploy:base-sepolia
+> hardhat run scripts/deploy.ts --network baseSepolia
+
+X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2 balance 0.049805848021301816 ETH
+Y 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337 balance 0.049911712248084237 ETH
+
+1. Confidentiality layer (signed by X)
+  skip groth16Verifier 0xD5417e562083DB6ef071489f2d1A8C0d8d36784d
+  skip groth16VerifierAdapter 0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA
+  skip credentialRegistry 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA
+  skip complianceAttestor 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09
+  skip zkComplianceModuleImplementation 0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf
+  skip zkComplianceModule 0x80929BFc966888fa24710F177F594F377A64A925
+
+2. Roles for the platform (signed by X)
+  skip role:registry.ISSUER_ROLE (tx 0x97ff3d84662144c0752e3d678e9606e9a94ae8069d12ec188eb4bf49141263fe)
+  skip role:registry.JURISDICTION_ROLE (tx 0xdbdab6ec42fdc9895df5c413458e1479321c13dc11bb437485716d5804b2f878)
+  skip role:attestor.ATTESTATION_MANAGER_ROLE (tx 0x6389a4f80d1497f527da6a6b27ebf6d86c38eccb6b6e5ec2bc242c934571cff5)
+
+3. T-REX suite through the shared factory (signed by Y)
+  sent trex:deployTREXSuite tx 0xa4eecff3d8b55456f7cb0bc345f93b94005dff13ffb1ade3a8ae3816705920f6 from Y 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337
+  confirmed trex:deployTREXSuite block 48077701 gas 3857517 fee 0.000023145102000299 ETH
+  token 0xFf6542a477300EEfD8F1BBFB32dB5e4213941CCa
+  identityRegistry 0x24F8961FE7B61689767A21FC9Fc303611BcAdBd0
+  identityRegistryStorage 0xd7c0621abF44b569AC15F77D018929eedA3A9C5b
+  trustedIssuersRegistry 0x3C15F2CDE30e1A707E493afcE3fd27C8e7a20bEA
+  claimTopicsRegistry 0xe98Cf55fFfe542429229eeacfBa5e453555aE78f
+  modularCompliance 0x70a5c8351D632bFcAAb56772f0359B0652B8FCD2
+  sent token:unpause tx 0xb670c7f8122c00cf59cf75aac69c2b63afafb5a8f3cc4a1ae084f6125c27619a from Y 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337
+  confirmed token:unpause block 48077704 gas 42678 fee 0.000000256068000094 ETH
+
+Contracts
+  groth16Verifier                    0xD5417e562083DB6ef071489f2d1A8C0d8d36784d  block 48076942
+  groth16VerifierAdapter             0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA  block 48076951
+  credentialRegistry                 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA  block 48076954
+  complianceAttestor                 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09  block 48076957
+  zkComplianceModuleImplementation   0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf  block 48076960
+  zkComplianceModule                 0x80929BFc966888fa24710F177F594F377A64A925  block 48076962
+  token                              0xFf6542a477300EEfD8F1BBFB32dB5e4213941CCa  block 48077701
+  identityRegistry                   0x24F8961FE7B61689767A21FC9Fc303611BcAdBd0  block 48077701
+  identityRegistryStorage            0xd7c0621abF44b569AC15F77D018929eedA3A9C5b  block 48077701
+  trustedIssuersRegistry             0x3C15F2CDE30e1A707E493afcE3fd27C8e7a20bEA  block 48077701
+  claimTopicsRegistry                0xe98Cf55fFfe542429229eeacfBa5e453555aE78f  block 48077701
+  modularCompliance                  0x70a5c8351D632bFcAAb56772f0359B0652B8FCD2  block 48077701
+
+REGISTRY_DEPLOYMENT_BLOCK=48076954
+ASSET_ID=84532001  salt ZKCONF-20261013
+
+Fees recorded per signer (all runs)
+  X 0.000031801746013582 ETH
+  Y 0.000023401170000393 ETH
+
+Balances (this run)
+  0xb44703b4D47Fd595f6383909aCF424cA6612A5C2 0.049805848021301816 -> 0.049805848021301816 ETH
+  0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337 0.049911712248084237 -> 0.049888311078083844 ETH
+
+Record: deployments/baseSepolia.json

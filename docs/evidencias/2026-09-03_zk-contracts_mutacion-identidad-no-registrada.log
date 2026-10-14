@@ -1,0 +1,91 @@
+Compiled 2 Solidity files successfully (evm target: london).
+
+
+  Integración con la suite T-REX real
+    el despliegue
+      ✔ es la suite del estándar y no un doble
+      ✔ engancha el módulo ZK a la ModularCompliance del token, ligado al activo
+      1) los inversores están verificados por el estándar antes de que la capa diga nada
+    el ciclo, paso a paso
+      ✔ 1 · la emisión en dos tiempos no publica nada hasta que el titular aporta su hash
+      ✔ 2 · la activación exige la firma de posesión del titular, no la de la mesa
+      ✔ 3 · la raíz de jurisdicciones del activo está publicada y es la que la prueba usa
+      ✔ 4 · el titular presenta su prueba y obtiene atestación; nadie puede presentarla por él (844ms)
+      ✔ 5 · el token T-REX acuña al titular porque moduleCheck encuentra la atestación (693ms)
+      ✔ 6 · una transferencia entre titulares atestados atraviesa el módulo y se completa (1328ms)
+      ✔ 7 · revocar la credencial cierra la emisión de atestaciones nuevas (1382ms)
+      ✔ 8 · cortar la atestación viva bloquea la entrega, y el rechazo es del módulo (1379ms)
+    el cumplimiento no se relaja
+      2) un titular sin atestación no recibe
+      ✔ un titular cuya atestación caducó tampoco recibe (686ms)
+      ✔ una jurisdicción no admitida no llega ni a obtener atestación (62ms)
+      ✔ una atestación no sustituye a la identidad verificada que exige el estándar (670ms)
+      ✔ el módulo condiciona a quien recibe, no a quien envía (1326ms)
+    la prueba no se engaña a sí misma
+      3) desenganchar el módulo deja pasar lo que la suite afirma bloqueado
+      4) con el módulo enganchado y sin atestación, la misma operación no pasa
+      ✔ el módulo apuntado a otro activo deja de reconocer la atestación (713ms)
+
+  Gas de las operaciones del ciclo
+  enganche · compliance.addModule                         137708
+  enganche · compliance.callModuleFunction(setAssetId)     97839
+  jurisdicciones · publishCountryRoot                      58963
+  emisión · publishCredentialRoot (activación)             59672
+  atestación · attest                                     336586
+  token T-REX · mint                                      258123
+  token T-REX · transfer                                  246350
+  revocación · publishCredentialRoot                       59636
+  revocación · invalidateCredentialRoot                    28005
+  atestación · revokeAttestation                           29484
+
+
+
+  15 passing (12s)
+  4 failing
+
+  1) Integración con la suite T-REX real
+       el despliegue
+         los inversores están verificados por el estándar antes de que la capa diga nada:
+
+      carmen
+      + expected - actual
+
+      -false
+      +true
+      
+      at Context.<anonymous> (test/integration-erc3643.test.ts:498:89)
+
+  2) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         un titular sin atestación no recibe:
+
+      el estándar da por verificado al receptor
+      + expected - actual
+
+      -false
+      +true
+      
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:414:97)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:666:7)
+
+  3) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         desenganchar el módulo deja pasar lo que la suite afirma bloqueado:
+     Error: VM Exception while processing transaction: reverted with reason string 'Identity is not verified.'
+    at <UnrecognizedContract>.<unknown> (0x6dcbc91229d812910b54df91b5c2b592572cd6b0)
+    at <UnrecognizedContract>.<unknown> (0x6dcbc91229d812910b54df91b5c2b592572cd6b0)
+    at EdrProviderWrapper.request (node_modules/hardhat/src/internal/hardhat-network/provider/provider.ts:452:41)
+    at async HardhatEthersSigner.sendTransaction (node_modules/@nomicfoundation/hardhat-ethers/src/signers.ts:185:18)
+    at async send (node_modules/ethers/src.ts/contract/contract.ts:313:20)
+    at async Proxy.mint (node_modules/ethers/src.ts/contract/contract.ts:352:16)
+    at async Context.<anonymous> (test/integration-erc3643.test.ts:769:7)
+  
+
+  4) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         con el módulo enganchado y sin atestación, la misma operación no pasa:
+     AssertionError: Expected transaction to be reverted with reason 'Compliance not followed', but it reverted with reason 'Identity is not verified.'
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:778:7)
+
+
+

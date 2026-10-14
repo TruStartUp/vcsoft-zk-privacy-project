@@ -1,0 +1,6 @@
+X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2 balance 0.049837649767315398 ETH
+Y 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337 balance 0.049911712248084237 ETH
+
+1. Confidentiality layer (signed by X)
+  sent deploy:groth16Verifier tx 0x61fdef52cfb91b7f7b1dae692dd5de77dc5513fbb3d834d849ad99a2a8f79f26 from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+Method 'HardhatEthersProvider.waitForTransaction' is not implemented

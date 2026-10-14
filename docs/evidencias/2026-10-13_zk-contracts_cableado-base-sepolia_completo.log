@@ -1,0 +1,60 @@
+
+> zk-contracts@0.1.0 check:base-sepolia
+> hardhat run scripts/check-wiring.ts --network baseSepolia
+
+Network: baseSepolia (chainId 84532)
+Block:   48077709
+X (deployer) 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+Y (platform) 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337
+
+Verifier and attestor
+PASS  adapter.verifier(): 0xD5417e562083DB6ef071489f2d1A8C0d8d36784d
+PASS  adapter.scheme(): groth16
+PASS  attestor.verifier(): 0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA
+PASS  attestor.registry(): 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA
+PASS  attestor.epochLength(): 2592000
+PASS  registry.rootValidityWindow(): 900
+
+Roles
+PASS  registry DEFAULT_ADMIN_ROLE held by X: true
+PASS  registry DEFAULT_ADMIN_ROLE held by Y: false
+PASS  registry ISSUER_ROLE held by Y: true
+PASS  registry ISSUER_ROLE held by X: false
+PASS  registry JURISDICTION_ROLE held by Y: true
+PASS  registry JURISDICTION_ROLE held by X: false
+PASS  attestor DEFAULT_ADMIN_ROLE held by X: true
+PASS  attestor DEFAULT_ADMIN_ROLE held by Y: false
+PASS  attestor ATTESTATION_MANAGER_ROLE held by Y: true
+PASS  attestor ATTESTATION_MANAGER_ROLE held by X: false
+
+Module proxy
+PASS  proxy implementation (ERC-1967 slot): 0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf
+PASS  module.attestor(): 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09
+PASS  module.owner(): 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+
+T-REX suite
+PASS  factory.getToken("ZKCONF-20261013"): 0xFf6542a477300EEfD8F1BBFB32dB5e4213941CCa
+PASS  token.name(): ZK Confidential Test Asset
+PASS  token.symbol(): ZKCTA
+PASS  token.decimals(): 18
+PASS  token.compliance(): 0x70a5c8351D632bFcAAb56772f0359B0652B8FCD2
+PASS  token.identityRegistry(): 0x24F8961FE7B61689767A21FC9Fc303611BcAdBd0
+PASS  token.paused(): false
+PASS  mc.getTokenBound(): 0xFf6542a477300EEfD8F1BBFB32dB5e4213941CCa
+PASS  mc.getModules(): [0x80929BFc966888fa24710F177F594F377A64A925]
+PASS  mc.isModuleBound(module): true
+PASS  module.isComplianceBound(mc): true
+PASS  module.assetIdOf(mc): 84532001
+PASS  module.complianceOfAsset(assetId): 0x70a5c8351D632bFcAAb56772f0359B0652B8FCD2
+PASS  ctr.getClaimTopics(): [1]
+PASS  tir.getTrustedIssuers(): [0xD60B8E767c0f830b95Fc0cD87B71643c47aF9492]
+PASS  tir.getTrustedIssuerClaimTopics(claimIssuer): [1]
+
+Owners and agents
+PASS  token.owner(): 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+PASS  mc.owner(): 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+PASS  ir.owner(): 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+PASS  token.isAgent(Y): true
+PASS  ir.isAgent(Y): true
+
+40 passed, 0 failed

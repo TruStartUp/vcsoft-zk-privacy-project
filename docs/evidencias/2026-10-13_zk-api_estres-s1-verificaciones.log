@@ -1,0 +1,54 @@
+
+> zk-api@0.1.0 stress:s1
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s1-verifications.ts
+
+
+[2026-10-13T21:56:21.315Z] === Máquina
+[2026-10-13T21:56:21.320Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T21:56:21.321Z] Memoria: 32 GiB
+[2026-10-13T21:56:21.340Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T21:56:21.356Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+
+[2026-10-13T21:56:21.377Z] === Prueba real del titular (hoja 0), Groth16 y PLONK sobre el mismo testigo
+[2026-10-13T21:56:22.410Z] zk-api (s1-groth16) escuchando en http://127.0.0.1:3071 · pid 91545
+[2026-10-13T21:56:25.951Z] prueba Groth16 generada en 988.7 ms
+[2026-10-13T21:56:38.628Z] prueba PLONK generada en 12676.0 ms
+[2026-10-13T21:56:38.935Z] filas antes {"credentials":1136,"activeInTree":1090,"rootPublications":1091,"proofVerifications":0,"accessLog":2271,"lastSequence":2271}
+[2026-10-13T21:56:39.220Z] comprobación previa (groth16) {"status":201,"valid":true,"rejectionCode":null,"ms":284.7304170000025}
+[2026-10-13T21:57:39.259Z] POST /v1/verifications (groth16) · c=1 · 60 s · 3889 respuestas · 64.8 rps · n=3889 mean=15.3 ms p50=14.7 ms p95=18.0 ms p99=27.5 ms min=13.3 ms max=126.2 ms
+[2026-10-13T21:57:39.259Z]   estados {"201":3889}
+[2026-10-13T21:57:39.260Z]   errores de conexión 0 · tiempos agotados 0
+[2026-10-13T21:57:39.260Z]   veredictos {"valid=true":3889}
+[2026-10-13T21:57:39.260Z]   RSS máximo del servicio 48 MiB
+[2026-10-13T21:58:41.308Z] POST /v1/verifications (groth16) · c=8 · 60 s · 6468 respuestas · 107.8 rps · n=6468 mean=74.1 ms p50=71.8 ms p95=84.5 ms p99=134.6 ms min=21.9 ms max=280.0 ms
+[2026-10-13T21:58:41.308Z]   estados {"201":6468}
+[2026-10-13T21:58:41.308Z]   errores de conexión 0 · tiempos agotados 0
+[2026-10-13T21:58:41.308Z]   veredictos {"valid=true":6468}
+[2026-10-13T21:58:41.309Z]   RSS máximo del servicio 37 MiB
+[2026-10-13T21:59:43.377Z] POST /v1/verifications (groth16) · c=32 · 60 s · 7018 respuestas · 117.0 rps · n=7018 mean=273.1 ms p50=264.6 ms p95=328.0 ms p99=470.7 ms min=80.1 ms max=570.5 ms
+[2026-10-13T21:59:43.377Z]   estados {"201":7018}
+[2026-10-13T21:59:43.377Z]   errores de conexión 0 · tiempos agotados 0
+[2026-10-13T21:59:43.377Z]   veredictos {"valid=true":7018}
+[2026-10-13T21:59:43.377Z]   RSS máximo del servicio 37 MiB
+[2026-10-13T21:59:45.535Z] registro del servicio (groth16) {"lines":17422,"byLevel":{"info":17422},"errors":{},"statusCodes":{"200":3,"201":17389,"null":28}}
+
+[2026-10-13T21:59:45.535Z] === Pasada PLONK: mismo servicio con PROOF_SCHEME=plonk y su clave
+[2026-10-13T21:59:46.554Z] zk-api (s1-plonk) escuchando en http://127.0.0.1:3071 · pid 2899
+[2026-10-13T21:59:46.874Z] comprobación previa (plonk) {"status":201,"valid":true,"rejectionCode":null,"ms":319.7468340000196}
+[2026-10-13T22:00:46.974Z] POST /v1/verifications (plonk) · c=8 · 60 s · 4790 respuestas · 79.8 rps · n=4790 mean=100.2 ms p50=98.6 ms p95=124.1 ms p99=149.0 ms min=22.0 ms max=284.3 ms
+[2026-10-13T22:00:46.974Z]   estados {"201":4790}
+[2026-10-13T22:00:46.974Z]   errores de conexión 0 · tiempos agotados 0
+[2026-10-13T22:00:46.974Z]   veredictos {"valid=true":4790}
+[2026-10-13T22:00:46.974Z]   RSS máximo del servicio 54 MiB
+[2026-10-13T22:00:49.093Z] registro del servicio (plonk) {"lines":4802,"byLevel":{"info":4802},"errors":{},"statusCodes":{"200":1,"201":4791,"null":8}}
+
+[2026-10-13T22:00:49.093Z] === Contabilidad: respuestas frente a filas escritas
+[2026-10-13T22:00:49.109Z] filas después {"credentials":1136,"activeInTree":1090,"rootPublications":1091,"proofVerifications":22216,"accessLog":24447,"lastSequence":24447}
+[2026-10-13T22:00:49.109Z] respuestas 22167 · 201 22167 · verificaciones nuevas en BD 22216
+[2026-10-13T22:00:49.109Z] entradas nuevas del registro de accesos 22176 (se esperan 22167)
+
+[2026-10-13T22:00:49.109Z] === Resumen S1
+[2026-10-13T22:00:49.109Z] POST /v1/verifications (groth16) c=1: 64.8 rps · p50 14.7 ms · p95 18.0 ms · p99 27.5 ms · 5xx 0
+[2026-10-13T22:00:49.109Z] POST /v1/verifications (groth16) c=8: 107.8 rps · p50 71.8 ms · p95 84.5 ms · p99 134.6 ms · 5xx 0
+[2026-10-13T22:00:49.109Z] POST /v1/verifications (groth16) c=32: 117.0 rps · p50 264.6 ms · p95 328.0 ms · p99 470.7 ms · 5xx 0
+[2026-10-13T22:00:49.109Z] POST /v1/verifications (plonk) c=8: 79.8 rps · p50 98.6 ms · p95 124.1 ms · p99 149.0 ms · 5xx 0

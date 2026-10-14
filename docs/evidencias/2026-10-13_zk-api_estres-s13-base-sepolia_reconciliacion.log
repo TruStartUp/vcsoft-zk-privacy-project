@@ -1,0 +1,19 @@
+
+> zk-api@0.1.0 stress:s13:reconcile
+> DOTENV_CONFIG_PATH=.env.testnet tsx stress/s13-reconcile.ts
+
+
+[2026-10-13T23:32:37.262Z] === Máquina
+[2026-10-13T23:32:37.266Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T23:32:37.266Z] Memoria: 32 GiB
+[2026-10-13T23:32:37.284Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T23:32:37.298Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+
+[2026-10-13T23:32:37.298Z] === Reconciliación de Base Sepolia tras S13
+[2026-10-13T23:32:37.299Z] ajustes {}
+[2026-10-13T23:32:38.078Z] zk-api (s13-reconcile) escuchando en http://127.0.0.1:3073 · pid 38850
+[2026-10-13T23:33:42.233Z] credenciales 200 en 64155.3 ms {"source":"chain-events","events":10,"leafCount":2,"replayedRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","onChainRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","matchesChain":true,"throughBlock":"48083035","missingFromDatabase":0,"missingFromChain":0}
+[2026-10-13T23:35:03.432Z] jurisdicciones 200 en 81199.0 ms {"source":"chain-events","events":5,"leafCount":5,"replayedRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","onChainRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","matchesChain":true,"throughBlock":"48083067"}
+[2026-10-13T23:35:03.457Z] registro de accesos 200 {"intact":true,"entries":123,"checked":123,"brokenAtSequence":null,"reason":null}
+
+[2026-10-13T23:35:03.505Z] registro del servicio {"lines":6,"byLevel":{"info":6},"errors":{},"statusCodes":{"200":4}}

@@ -1,0 +1,40 @@
+
+> zk-api@0.1.0 stress:s8
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s8-capacity.ts
+
+
+[2026-10-13T22:57:57.918Z] === Máquina
+[2026-10-13T22:57:57.923Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T22:57:57.923Z] Memoria: 32 GiB
+[2026-10-13T22:57:57.942Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T22:57:57.958Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+
+[2026-10-13T22:57:58.159Z] === Coste de construir el árbol de credenciales (profundidad 20) en memoria
+[2026-10-13T22:58:00.156Z] SparseMerkleTree.from con 1000 hojas: 1997.2 ms · 20020 llamadas a Poseidon · 99.8 µs por llamada · RSS del proceso 288 MiB
+[2026-10-13T22:58:20.530Z] SparseMerkleTree.from con 10000 hojas: 20395.3 ms · 200020 llamadas a Poseidon · 102.0 µs por llamada · RSS del proceso 258 MiB
+[2026-10-13T23:01:38.988Z] SparseMerkleTree.from con 100000 hojas: 198465.9 ms · 2000020 llamadas a Poseidon · 99.2 µs por llamada · RSS del proceso 283 MiB
+[2026-10-13T23:01:39.207Z] por niveles con 1000 hojas: 95.1 ms (+123.7 ms para calcular las hojas) · 1031 llamadas a Poseidon · raíz idéntica a SparseMerkleTree.from=true · RSS 283 MiB
+[2026-10-13T23:01:41.362Z] por niveles con 10000 hojas: 927.4 ms (+1228.2 ms para calcular las hojas) · 10031 llamadas a Poseidon · raíz idéntica a SparseMerkleTree.from=true · RSS 286 MiB
+[2026-10-13T23:02:02.947Z] por niveles con 100000 hojas: 9282.3 ms (+12302.7 ms para calcular las hojas) · 100029 llamadas a Poseidon · raíz idéntica a SparseMerkleTree.from=true · RSS 309 MiB
+[2026-10-13T23:05:55.697Z] por niveles con 1048576 hojas: 99801.5 ms (+132948.8 ms para calcular las hojas) · 1048595 llamadas a Poseidon · la última hoja es el compromiso de un titular de prueba · RSS 335 MiB
+
+[2026-10-13T23:05:55.697Z] === Prueba Groth16 con la hoja en el índice 2^20 − 1 = 1048575 de un árbol lleno
+[2026-10-13T23:05:55.701Z] la apertura recompone la raíz con la verificación del servicio: true · índices de camino todos 1: true
+[2026-10-13T23:05:56.791Z] prueba en 1077.9 ms · verifica: true · hoja de jurisdicción en la última posición (255) también
+
+[2026-10-13T23:05:56.993Z] === Agotamiento: activación con el árbol lleno (servicio real)
+[2026-10-13T23:05:58.020Z] zk-api (s8) escuchando en http://127.0.0.1:3071 · pid 84140
+[2026-10-13T23:05:58.116Z] fila centinela fuera del árbol ocupando la posición 1048575 (inTree=false: no cambia la raíz)
+[2026-10-13T23:05:58.698Z] activación con el árbol lleno {"status":409,"code":"credential_tree_full","details":{"capacity":1048576}}
+[2026-10-13T23:05:58.701Z] la credencial queda {"status":"PENDING","inTree":false,"leafIndex":null,"commitment":null}
+[2026-10-13T23:05:58.706Z] cancelación de la pendiente: 200
+[2026-10-13T23:05:58.709Z] fila centinela retirada
+
+[2026-10-13T23:05:58.709Z] === Árbol de jurisdicciones: 256 países y uno más
+[2026-10-13T23:05:59.103Z] 256 países en el activo 900839 {"status":200,"leafCount":256,"ms":394.1462500000489}
+[2026-10-13T23:05:59.109Z] 257 países {"status":400,"code":"validation_failed","issues":[{"path":"admitted","message":"\"admitted\" must contain less than or equal to 256 items"}]}
+[2026-10-13T23:05:59.330Z] reconstrucción del activo {"status":200,"matchesChain":true,"leafCount":256}
+[2026-10-13T23:06:02.339Z] reconciliación de credenciales {"matchesChain":true,"missingFromDatabase":0,"missingFromChain":0}
+
+[2026-10-13T23:06:02.390Z] === Registro del servicio
+[2026-10-13T23:06:02.390Z] resumen {"lines":12,"byLevel":{"info":10,"warn":2},"errors":{},"statusCodes":{"200":5,"201":1,"400":1,"409":1}}

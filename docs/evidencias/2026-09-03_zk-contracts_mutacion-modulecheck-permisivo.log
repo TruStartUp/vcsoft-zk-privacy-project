@@ -1,0 +1,147 @@
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> contracts/ZKComplianceModule.sol:77:35:
+   |
+77 |     function moduleCheck(address, address _to, uint256, address _compliance)
+   |                                   ^^^^^^^^^^^
+
+
+Compiled 2 Solidity files successfully (evm target: london).
+
+
+  Integración con la suite T-REX real
+    el despliegue
+      ✔ es la suite del estándar y no un doble
+      ✔ engancha el módulo ZK a la ModularCompliance del token, ligado al activo
+      ✔ los inversores están verificados por el estándar antes de que la capa diga nada
+    el ciclo, paso a paso
+      ✔ 1 · la emisión en dos tiempos no publica nada hasta que el titular aporta su hash
+      ✔ 2 · la activación exige la firma de posesión del titular, no la de la mesa
+      ✔ 3 · la raíz de jurisdicciones del activo está publicada y es la que la prueba usa
+      ✔ 4 · el titular presenta su prueba y obtiene atestación; nadie puede presentarla por él (858ms)
+      1) 5 · el token T-REX acuña al titular porque moduleCheck encuentra la atestación
+      ✔ 6 · una transferencia entre titulares atestados atraviesa el módulo y se completa (1336ms)
+      ✔ 7 · revocar la credencial cierra la emisión de atestaciones nuevas (1414ms)
+      2) 8 · cortar la atestación viva bloquea la entrega, y el rechazo es del módulo
+    el cumplimiento no se relaja
+      3) un titular sin atestación no recibe
+      4) un titular cuya atestación caducó tampoco recibe
+      5) una jurisdicción no admitida no llega ni a obtener atestación
+      ✔ una atestación no sustituye a la identidad verificada que exige el estándar (661ms)
+      ✔ el módulo condiciona a quien recibe, no a quien envía (1362ms)
+    la prueba no se engaña a sí misma
+      6) desenganchar el módulo deja pasar lo que la suite afirma bloqueado
+      7) con el módulo enganchado y sin atestación, la misma operación no pasa
+      8) el módulo apuntado a otro activo deja de reconocer la atestación
+
+  Gas de las operaciones del ciclo
+  enganche · compliance.addModule                         137696
+  enganche · compliance.callModuleFunction(setAssetId)     97827
+  jurisdicciones · publishCountryRoot                      58963
+  emisión · publishCredentialRoot (activación)             59672
+  atestación · attest                                     336598
+  token T-REX · transfer                                  238516
+  revocación · publishCredentialRoot                       59636
+  revocación · invalidateCredentialRoot                    28005
+  atestación · revokeAttestation                           29484
+
+
+
+  11 passing (11s)
+  8 failing
+
+  1) Integración con la suite T-REX real
+       el ciclo, paso a paso
+         5 · el token T-REX acuña al titular porque moduleCheck encuentra la atestación:
+
+      AssertionError: expected true to equal false
+      + expected - actual
+
+      -true
+      +false
+      
+      at Context.<anonymous> (test/integration-erc3643.test.ts:579:102)
+
+  2) Integración con la suite T-REX real
+       el ciclo, paso a paso
+         8 · cortar la atestación viva bloquea la entrega, y el rechazo es del módulo:
+
+      el módulo ZK deniega
+      + expected - actual
+
+      -true
+      +false
+      
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:427:112)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:648:7)
+
+  3) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         un titular sin atestación no recibe:
+
+      el módulo ZK deniega
+      + expected - actual
+
+      -true
+      +false
+      
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:427:112)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:666:7)
+
+  4) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         un titular cuya atestación caducó tampoco recibe:
+
+      el módulo ZK deniega
+      + expected - actual
+
+      -true
+      +false
+      
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:427:112)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:688:7)
+
+  5) Integración con la suite T-REX real
+       el cumplimiento no se relaja
+         una jurisdicción no admitida no llega ni a obtener atestación:
+
+      el módulo ZK deniega
+      + expected - actual
+
+      -true
+      +false
+      
+      at refusalIsTheZkModules (test/integration-erc3643.test.ts:427:112)
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:712:7)
+
+  6) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         desenganchar el módulo deja pasar lo que la suite afirma bloqueado:
+
+      AssertionError: expected true to equal false
+      + expected - actual
+
+      -true
+      +false
+      
+      at Context.<anonymous> (test/integration-erc3643.test.ts:763:103)
+
+  7) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         con el módulo enganchado y sin atestación, la misma operación no pasa:
+     AssertionError: Expected transaction to be reverted with reason 'Compliance not followed', but it didn't revert
+      at async Context.<anonymous> (test/integration-erc3643.test.ts:778:7)
+
+  8) Integración con la suite T-REX real
+       la prueba no se engaña a sí misma
+         el módulo apuntado a otro activo deja de reconocer la atestación:
+
+      AssertionError: expected true to equal false
+      + expected - actual
+
+      -true
+      +false
+      
+      at Context.<anonymous> (test/integration-erc3643.test.ts:796:102)
+
+
+

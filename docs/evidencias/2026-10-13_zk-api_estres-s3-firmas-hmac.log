@@ -1,0 +1,58 @@
+
+> zk-api@0.1.0 stress:s3
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s3-signatures.ts
+
+
+[2026-10-13T22:12:14.562Z] === Máquina
+[2026-10-13T22:12:14.568Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T22:12:14.568Z] Memoria: 32 GiB
+[2026-10-13T22:12:14.591Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T22:12:14.610Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+[2026-10-13T22:12:15.640Z] zk-api (s3) escuchando en http://127.0.0.1:3071 · pid 34981
+
+[2026-10-13T22:12:15.787Z] === 10000 peticiones firmadas válidas (c=16)
+[2026-10-13T22:12:19.563Z] 10000/10000 aceptadas en 3.8 s · 2653 rps · n=10000 mean=6.0 ms p50=5.5 ms p95=9.3 ms p99=13.5 ms min=3.0 ms max=64.6 ms
+[2026-10-13T22:12:19.565Z] estados {"200":10000}
+
+[2026-10-13T22:12:19.565Z] === Mezcla de peticiones inválidas (250 de cada tipo)
+[2026-10-13T22:12:20.166Z]   marca de tiempo no numérica: 250/250 con el código esperado · {"401 malformed_timestamp":250}
+[2026-10-13T22:12:20.166Z]   consulta cambiada tras firmar: 250/250 con el código esperado · {"401 invalid_signature":250}
+[2026-10-13T22:12:20.166Z]   firma inventada: 250/250 con el código esperado · {"401 invalid_signature":250}
+[2026-10-13T22:12:20.166Z]   firmada con otro secreto: 250/250 con el código esperado · {"401 invalid_signature":250}
+[2026-10-13T22:12:20.166Z]   sin cabeceras de firma: 250/250 con el código esperado · {"401 missing_partner_credentials":250}
+[2026-10-13T22:12:20.166Z]   alcance que el socio no tiene: 250/250 con el código esperado · {"403 insufficient_scope":250}
+[2026-10-13T22:12:20.166Z]   marca de tiempo futura (+310 s): 250/250 con el código esperado · {"401 signature_window_expired":250}
+[2026-10-13T22:12:20.166Z]   nonce demasiado corto: 250/250 con el código esperado · {"401 malformed_nonce":250}
+[2026-10-13T22:12:20.166Z]   marca de tiempo vencida (−310 s): 250/250 con el código esperado · {"401 signature_window_expired":250}
+[2026-10-13T22:12:20.166Z]   socio desconocido: 250/250 con el código esperado · {"401 unknown_partner":250}
+[2026-10-13T22:12:20.166Z] 2500/2500 rechazos correctos (100.00 %) en 0.6 s
+
+[2026-10-13T22:12:20.166Z] === Repetición inmediata: 250 peticiones válidas reenviadas tal cual
+[2026-10-13T22:12:20.330Z] originales aceptadas 250/250 · repeticiones rechazadas con replayed_nonce 250/250
+
+[2026-10-13T22:12:20.330Z] === Carrera por el nonce: 200 clientes concurrentes con el mismo nonce, 20 rondas
+[2026-10-13T22:12:20.379Z]   ronda 1 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.418Z]   ronda 2 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.454Z]   ronda 3 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.494Z]   ronda 4 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.528Z]   ronda 5 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.566Z]   ronda 6 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.603Z]   ronda 7 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.644Z]   ronda 8 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.679Z]   ronda 9 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.715Z]   ronda 10 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.752Z]   ronda 11 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.793Z]   ronda 12 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.825Z]   ronda 13 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.862Z]   ronda 14 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.896Z]   ronda 15 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.929Z]   ronda 16 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:20.974Z]   ronda 17 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:21.013Z]   ronda 18 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:21.048Z]   ronda 19 (petición idéntica): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:21.084Z]   ronda 20 (50 rutas distintas): aceptadas 1 · replayed_nonce 199 · otras 0
+[2026-10-13T22:12:21.084Z] rondas con exactamente una aceptada: 20/20
+
+[2026-10-13T22:12:21.146Z] === Registro del servicio
+[2026-10-13T22:12:21.194Z] resumen {"lines":23733,"byLevel":{"info":17003,"warn":6730},"errors":{},"statusCodes":{"200":10271,"401":6480,"403":250}}
+[2026-10-13T22:12:21.229Z] peticiones enviadas 17000 · entradas nuevas del registro de accesos 17000

@@ -1,0 +1,33 @@
+Network: baseSepolia (chainId 84532)
+Block:   48077036
+X (deployer) 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+Y (platform) 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337
+
+Verifier and attestor
+PASS  adapter.verifier(): 0xD5417e562083DB6ef071489f2d1A8C0d8d36784d
+PASS  adapter.scheme(): groth16
+PASS  attestor.verifier(): 0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA
+PASS  attestor.registry(): 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA
+PASS  attestor.epochLength(): 2592000
+PASS  registry.rootValidityWindow(): 900
+
+Roles
+PASS  registry DEFAULT_ADMIN_ROLE held by X: true
+PASS  registry DEFAULT_ADMIN_ROLE held by Y: false
+PASS  registry ISSUER_ROLE held by Y: true
+PASS  registry ISSUER_ROLE held by X: false
+PASS  registry JURISDICTION_ROLE held by Y: true
+PASS  registry JURISDICTION_ROLE held by X: false
+PASS  attestor DEFAULT_ADMIN_ROLE held by X: true
+PASS  attestor DEFAULT_ADMIN_ROLE held by Y: false
+PASS  attestor ATTESTATION_MANAGER_ROLE held by Y: true
+PASS  attestor ATTESTATION_MANAGER_ROLE held by X: false
+
+Module proxy
+PASS  proxy implementation (ERC-1967 slot): 0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf
+PASS  module.attestor(): 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09
+PASS  module.owner(): 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+
+T-REX suite: not deployed yet, suite checks skipped
+
+19 passed, 0 failed

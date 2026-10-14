@@ -1,0 +1,41 @@
+
+> zk-api@0.1.0 stress:s6
+> tsx stress/s6-prover.ts
+
+
+[2026-10-13T23:06:24.956Z] === Máquina
+[2026-10-13T23:06:24.963Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T23:06:24.963Z] Memoria: 32 GiB
+[2026-10-13T23:06:24.983Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T23:06:24.999Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+[2026-10-13T23:06:24.999Z] RUNS=30 · paralelo 4/8 con 3 rondas · un proceso, el reparto en hilos es el de snarkjs
+
+[2026-10-13T23:06:25.000Z] === groth16: 30 pruebas en serie
+[2026-10-13T23:06:45.818Z] generar: n=30 mean=682.9 ms p50=672.8 ms p95=723.4 ms p99=986.9 ms min=638.5 ms max=986.9 ms
+[2026-10-13T23:06:45.818Z] verificar en JS: n=30 mean=11.0 ms p50=11.0 ms p95=12.1 ms p99=12.2 ms min=9.8 ms max=12.2 ms
+[2026-10-13T23:06:45.818Z] RSS máximo 1030 MiB
+
+[2026-10-13T23:06:45.818Z] === groth16: 4 pruebas a la vez, 3 rondas
+[2026-10-13T23:06:52.399Z] latencia de cada prueba: n=12 mean=1988.4 ms p50=1932.8 ms p95=2203.2 ms p99=2203.2 ms min=1752.9 ms max=2203.2 ms
+[2026-10-13T23:06:52.399Z] ronda completa: mediana 2202.2 ms · 1.82 pruebas/s frente a 1.49 en serie
+[2026-10-13T23:06:52.399Z] RSS máximo 1326 MiB
+
+[2026-10-13T23:06:52.399Z] === groth16: 8 pruebas a la vez, 3 rondas
+[2026-10-13T23:07:06.744Z] latencia de cada prueba: n=24 mean=4224.1 ms p50=4204.0 ms p95=4801.0 ms p99=4805.0 ms min=3607.1 ms max=4805.0 ms
+[2026-10-13T23:07:06.744Z] ronda completa: mediana 4801.2 ms · 1.67 pruebas/s frente a 1.49 en serie
+[2026-10-13T23:07:06.744Z] RSS máximo 1550 MiB
+
+[2026-10-13T23:07:06.744Z] === plonk: 30 pruebas en serie
+[2026-10-13T23:13:15.206Z] generar: n=30 mean=12268.2 ms p50=12165.8 ms p95=12824.0 ms p99=13014.9 ms min=12055.5 ms max=13014.9 ms
+[2026-10-13T23:13:15.207Z] verificar en JS: n=30 mean=13.9 ms p50=13.6 ms p95=14.1 ms p99=23.1 ms min=13.3 ms max=23.1 ms
+[2026-10-13T23:13:15.207Z] RSS máximo 1581 MiB
+
+[2026-10-13T23:13:15.207Z] === plonk: 4 pruebas a la vez, 3 rondas
+[2026-10-13T23:15:37.265Z] latencia de cada prueba: n=12 mean=46856.4 ms p50=46899.5 ms p95=47457.6 ms p99=47457.6 ms min=45875.5 ms max=47457.6 ms
+[2026-10-13T23:15:37.266Z] ronda completa: mediana 47378.4 ms · 0.08 pruebas/s frente a 0.08 en serie
+[2026-10-13T23:15:37.266Z] RSS máximo 1605 MiB
+
+[2026-10-13T23:15:37.266Z] === plonk: 8 pruebas a la vez, 3 rondas
+[2026-10-13T23:20:20.877Z] latencia de cada prueba: n=24 mean=93657.8 ms p50=93727.0 ms p95=95110.9 ms p99=95229.1 ms min=92012.0 ms max=95229.1 ms
+[2026-10-13T23:20:20.878Z] ronda completa: mediana 94324.5 ms · 0.08 pruebas/s frente a 0.08 en serie
+[2026-10-13T23:20:20.878Z] RSS máximo 2275 MiB

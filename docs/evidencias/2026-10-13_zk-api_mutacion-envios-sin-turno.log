@@ -1,0 +1,66 @@
+
+ RUN  v2.1.9 <repo>/zk-api
+
+ ❯ test/chain-rpc.test.ts (26 tests | 2 failed) 1387ms
+   × writes to different trees at the same time > hands each concurrent write its own nonce 15ms
+     → expected [ +0, +0, +0, +0 ] to deeply equal [ +0, 1, 2, 3 ]
+   × writes to different trees at the same time > leaves no gap when one of them fails to send 7ms
+     → expected [ +0, +0, 1 ] to deeply equal [ +0, 1, 2 ]
+   ✓ reading the event log in windows > rebuilds the same tree from a split log as from a whole one 447ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chain-rpc.test.ts > writes to different trees at the same time > hands each concurrent write its own nonce
+AssertionError: expected [ +0, +0, +0, +0 ] to deeply equal [ +0, 1, 2, 3 ]
+
+- Expected
++ Received
+
+  Array [
+    0,
+-   1,
+-   2,
+-   3,
++   0,
++   0,
++   0,
+  ]
+
+ ❯ test/chain-rpc.test.ts:228:20
+    226| 
+    227|     const nonces = node.sent.map((sent) => parseTransaction(sent.raw).…
+    228|     expect(nonces).toEqual([0, 1, 2, 3]);
+       |                    ^
+    229|   });
+    230| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/chain-rpc.test.ts > writes to different trees at the same time > leaves no gap when one of them fails to send
+AssertionError: expected [ +0, +0, 1 ] to deeply equal [ +0, 1, 2 ]
+
+- Expected
++ Received
+
+  Array [
+    0,
++   0,
+    1,
+-   2,
+  ]
+
+ ❯ test/chain-rpc.test.ts:242:20
+    240|     await publishCountryRoot(4n, 75n, [{ leafIndex: 0n, countryCode: 1…
+    241|     const nonces = node.sent.map((sent) => parseTransaction(sent.raw).…
+    242|     expect(nonces).toEqual([0, 1, 2]);
+       |                    ^
+    243|   });
+    244| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 24 passed (26)
+   Start at  17:18:22
+   Duration  1.97s (transform 69ms, setup 118ms, collect 315ms, tests 1.39s, environment 0ms, prepare 29ms)
+

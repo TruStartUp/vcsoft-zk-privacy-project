@@ -1,0 +1,299 @@
+
+> zk-circuits@0.1.0 pretest
+> npm run build
+
+
+> zk-circuits@0.1.0 build
+> circom2 circuits/compliance.circom --r1cs --wasm --sym --output build -l node_modules -l circuits
+
+[32mtemplate instances[0m: 219
+non-linear constraints: 7843
+linear constraints: 8560
+public inputs: 6
+private inputs: 59
+public outputs: 0
+wires: 16433
+labels: 24500
+[32mWritten successfully:[0m build/compliance.r1cs
+[32mWritten successfully:[0m build/compliance.sym
+[32mWritten successfully:[0m build/compliance_js/compliance.wasm
+[32mEverything went okay[0m
+
+> zk-circuits@0.1.0 test
+> node --test test/*.test.mjs
+
+TAP version 13
+# Subtest: happy path
+    # Subtest: a live credential from an admitted jurisdiction satisfies the four predicates
+    ok 1 - a live credential from an admitted jurisdiction satisfies the four predicates
+      ---
+      duration_ms: 301.127708
+      ...
+    # Subtest: the position of the credential in the registry does not matter
+    ok 2 - the position of the credential in the registry does not matter
+      ---
+      duration_ms: 538.493083
+      ...
+    # Subtest: a credential running out exactly at the end of the period is still live
+    ok 3 - a credential running out exactly at the end of the period is still live
+      ---
+      duration_ms: 168.028417
+      ...
+    # Subtest: any anchor is admissible, its value is the contract's to impose
+    ok 4 - any anchor is admissible, its value is the contract's to impose
+      ---
+      duration_ms: 502.103375
+      ...
+    1..4
+ok 1 - happy path
+  ---
+  duration_ms: 1510.605334
+  type: 'suite'
+  ...
+# Subtest: the secret is the holder's and the issuer only ever sees its hash
+    # Subtest: the leaf the circuit recomputes is Poseidon(Poseidon(secret), country, expiry)
+    ok 1 - the leaf the circuit recomputes is Poseidon(Poseidon(secret), country, expiry)
+      ---
+      duration_ms: 168.331375
+      ...
+    # Subtest: a leaf built on the raw secret, as the issuer used to build it, no longer proves membership
+    ok 2 - a leaf built on the raw secret, as the issuer used to build it, no longer proves membership
+      ---
+      duration_ms: 40.9225
+      ...
+    # Subtest: holding the hash instead of the secret does not let anyone stand in for the holder
+    ok 3 - holding the hash instead of the secret does not let anyone stand in for the holder
+      ---
+      duration_ms: 41.784541
+      ...
+    # Subtest: the nullifier the issuer could compute from what it holds is not the one the circuit accepts
+    ok 4 - the nullifier the issuer could compute from what it holds is not the one the circuit accepts
+      ---
+      duration_ms: 43.210417
+      ...
+    1..4
+ok 2 - the secret is the holder's and the issuer only ever sees its hash
+  ---
+  duration_ms: 294.738166
+  type: 'suite'
+  ...
+# Subtest: each predicate rejected on its own
+    # Subtest: the commitment is not in the issuer's registry (revocation)
+    ok 1 - the commitment is not in the issuer's registry (revocation)
+      ---
+      duration_ms: 43.934458
+      ...
+    # Subtest: the credential runs out one second before the period ends
+    ok 2 - the credential runs out one second before the period ends
+      ---
+      duration_ms: 46.576125
+      ...
+    # Subtest: the jurisdiction is not admitted by the asset
+    ok 3 - the jurisdiction is not admitted by the asset
+      ---
+      duration_ms: 45.780875
+      ...
+    # Subtest: the nullifier does not derive from the credential
+    ok 4 - the nullifier does not derive from the credential
+      ---
+      duration_ms: 45.337584
+      ...
+    1..4
+ok 3 - each predicate rejected on its own
+  ---
+  duration_ms: 182.104
+  type: 'suite'
+  ...
+# Subtest: an attestation cannot outlive the credential behind it
+    # Subtest: a credential that only reaches this period cannot claim the next one
+    ok 1 - a credential that only reaches this period cannot claim the next one
+      ---
+      duration_ms: 224.705333
+      ...
+    # Subtest: a credential that ran out long ago proves nothing at all
+    ok 2 - a credential that ran out long ago proves nothing at all
+      ---
+      duration_ms: 40.363417
+      ...
+    1..2
+ok 4 - an attestation cannot outlive the credential behind it
+  ---
+  duration_ms: 265.214375
+  type: 'suite'
+  ...
+# Subtest: the nullifier is per credential, asset and period
+    # Subtest: the same credential, asset and period always give the same nullifier
+    ok 1 - the same credential, asset and period always give the same nullifier
+      ---
+      duration_ms: 348.245083
+      ...
+    # Subtest: different assets give different nullifiers
+    ok 2 - different assets give different nullifiers
+      ---
+      duration_ms: 168.870833
+      ...
+    # Subtest: the next period renews the same credential with a fresh nullifier
+    ok 3 - the next period renews the same credential with a fresh nullifier
+      ---
+      duration_ms: 169.806584
+      ...
+    # Subtest: a nullifier minted for another period does not pass for this one
+    ok 4 - a nullifier minted for another period does not pass for this one
+      ---
+      duration_ms: 43.350666
+      ...
+    # Subtest: a nullifier minted for another asset does not pass for this one
+    ok 5 - a nullifier minted for another asset does not pass for this one
+      ---
+      duration_ms: 43.192042
+      ...
+    # Subtest: different credentials give different nullifiers for the same asset and period
+    ok 6 - different credentials give different nullifiers for the same asset and period
+      ---
+      duration_ms: 0.39775
+      ...
+    1..6
+ok 5 - the nullifier is per credential, asset and period
+  ---
+  duration_ms: 774.255
+  type: 'suite'
+  ...
+# Subtest: the anchor is part of the constraint system
+    # Subtest: the compiler keeps the signal instead of folding it away
+    ok 1 - the compiler keeps the signal instead of folding it away
+      ---
+      duration_ms: 303.2665
+      ...
+    # Subtest: it sits on both sides of a quadratic constraint, never as a dangling input
+    ok 2 - it sits on both sides of a quadratic constraint, never as a dangling input
+      ---
+      duration_ms: 310.380416
+      ...
+    # Subtest: changing the anchor changes the witness
+    ok 3 - changing the anchor changes the witness
+      ---
+      duration_ms: 368.631458
+      ...
+    1..3
+ok 6 - the anchor is part of the constraint system
+  ---
+  duration_ms: 982.560667
+  type: 'suite'
+  ...
+# Subtest: forged Merkle openings
+    # Subtest: a tampered sibling in the registry path
+    ok 1 - a tampered sibling in the registry path
+      ---
+      duration_ms: 75.949958
+      ...
+    # Subtest: a tampered sibling in the jurisdiction path
+    ok 2 - a tampered sibling in the jurisdiction path
+      ---
+      duration_ms: 60.399417
+      ...
+    # Subtest: a registry path index outside {0, 1}
+    ok 3 - a registry path index outside {0, 1}
+      ---
+      duration_ms: 33.82175
+      ...
+    # Subtest: a jurisdiction path index outside {0, 1}
+    ok 4 - a jurisdiction path index outside {0, 1}
+      ---
+      duration_ms: 43.106291
+      ...
+    # Subtest: a path index of -1, which is not a bit either
+    ok 5 - a path index of -1, which is not a bit either
+      ---
+      duration_ms: 41.603333
+      ...
+    1..5
+ok 7 - forged Merkle openings
+  ---
+  duration_ms: 255.224666
+  type: 'suite'
+  ...
+# Subtest: out of range operands
+    # Subtest: an expiry above 2^64
+    ok 1 - an expiry above 2^64
+      ---
+      duration_ms: 18.126917
+      ...
+    # Subtest: an expiry supplied as -1, which the field reads as p-1
+    ok 2 - an expiry supplied as -1, which the field reads as p-1
+      ---
+      duration_ms: 18.939458
+      ...
+    # Subtest: a period end near the field order no longer defeats the comparator
+    ok 3 - a period end near the field order no longer defeats the comparator
+      ---
+      duration_ms: 18.202
+      ...
+    # Subtest: a country code above 2^16
+    ok 4 - a country code above 2^16
+      ---
+      duration_ms: 17.672
+      ...
+    1..4
+ok 8 - out of range operands
+  ---
+  duration_ms: 73.166584
+  type: 'suite'
+  ...
+# Subtest: domain separation between the two trees
+    # Subtest: a credential commitment cannot be replayed as a jurisdiction leaf
+    ok 1 - a credential commitment cannot be replayed as a jurisdiction leaf
+      ---
+      duration_ms: 18.091208
+      ...
+    # Subtest: an inner node of the jurisdiction tree cannot be replayed as a leaf
+    ok 2 - an inner node of the jurisdiction tree cannot be replayed as a leaf
+      ---
+      duration_ms: 18.80625
+      ...
+    # Subtest: the padding leaf of an unfilled jurisdiction tree is not a country
+    ok 3 - the padding leaf of an unfilled jurisdiction tree is not a country
+      ---
+      duration_ms: 19.538458
+      ...
+    # Subtest: a country that is in the tree but not the one inside the credential
+    ok 4 - a country that is in the tree but not the one inside the credential
+      ---
+      duration_ms: 47.057209
+      ...
+    1..4
+ok 9 - domain separation between the two trees
+  ---
+  duration_ms: 103.745417
+  type: 'suite'
+  ...
+# Subtest: field aliasing
+    # Subtest: operands congruent modulo the field order are the same operand
+    ok 1 - operands congruent modulo the field order are the same operand
+      ---
+      duration_ms: 413.294041
+      ...
+    # Subtest: a secret congruent modulo the field order keeps the same nullifier
+    ok 2 - a secret congruent modulo the field order keeps the same nullifier
+      ---
+      duration_ms: 0.470875
+      ...
+    # Subtest: a period end congruent modulo the field order is the same period
+    ok 3 - a period end congruent modulo the field order is the same period
+      ---
+      duration_ms: 378.236541
+      ...
+    1..3
+ok 10 - field aliasing
+  ---
+  duration_ms: 792.256667
+  type: 'suite'
+  ...
+1..10
+# tests 39
+# suites 10
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5954.082875

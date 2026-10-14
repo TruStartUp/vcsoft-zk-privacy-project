@@ -1,0 +1,41 @@
+
+> zk-api@0.1.0 stress:s4
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s4-issuance.ts
+
+
+[2026-10-13T21:54:29.040Z] === Máquina
+[2026-10-13T21:54:29.046Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T21:54:29.046Z] Memoria: 32 GiB
+[2026-10-13T21:54:29.071Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T21:54:29.089Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+[2026-10-13T21:54:30.114Z] zk-api (s4) escuchando en http://127.0.0.1:3071 · pid 87323
+
+[2026-10-13T21:54:30.117Z] === Fase 1 · emisión y activación en serie hasta 0 hojas
+[2026-10-13T21:54:30.117Z] fase 1: 0 activaciones en 0.0 s
+[2026-10-13T21:54:30.117Z] fallos fase 1 {}
+[2026-10-13T21:54:30.117Z] ajuste lineal de la activación frente a hojas: NaN ms + NaN ms por cada 1000 hojas (R² NaN)
+
+[2026-10-13T21:54:30.117Z] === Fase 2 · lote concurrente de 10 activaciones
+[2026-10-13T21:54:50.894Z] estados {"201":10}
+[2026-10-13T21:54:50.894Z] tiempo total del lote 20372.6 ms · 2037.3 ms por activación · latencia n=10 mean=11413.4 ms p50=10466.5 ms p95=20361.4 ms p99=20361.4 ms min=2352.7 ms max=20361.4 ms
+[2026-10-13T21:54:50.894Z] posiciones asignadas: 10, distintas: 10
+[2026-10-13T21:54:52.913Z] reconciliación tras el lote de 10: matchesChain=true · eventos 1058 · hojas 1058 · faltan en BD 0 · faltan en cadena 0 · 2016.2 ms
+
+[2026-10-13T21:54:52.913Z] === Fase 2 · lote concurrente de 16 activaciones
+[2026-10-13T21:55:25.401Z] estados {"201":16}
+[2026-10-13T21:55:25.401Z] tiempo total del lote 32397.0 ms · 2024.8 ms por activación · latencia n=16 mean=17186.9 ms p50=16313.3 ms p95=32386.3 ms p99=32386.3 ms min=2026.4 ms max=32386.3 ms
+[2026-10-13T21:55:25.401Z] posiciones asignadas: 16, distintas: 16
+[2026-10-13T21:55:27.493Z] reconciliación tras el lote de 16: matchesChain=true · eventos 1074 · hojas 1074 · faltan en BD 0 · faltan en cadena 0 · 2089.1 ms
+
+[2026-10-13T21:55:27.493Z] === Fase 2 · lote concurrente de 50 activaciones
+[2026-10-13T21:56:00.559Z] estados {"201":16,"503 service_busy":34}
+[2026-10-13T21:56:00.560Z] ejemplo de rechazo por capacidad {"status":503,"code":"service_busy","details":{"reason":"issuer_write_queue_full","queued":16,"retryAfterSeconds":5}}
+[2026-10-13T21:56:00.560Z] tiempo total del lote 32780.2 ms · 655.6 ms por activación · latencia n=50 mean=6381.2 ms p50=2103.0 ms p95=28575.4 ms p99=32756.6 ms min=71.7 ms max=32756.6 ms
+[2026-10-13T21:56:00.560Z] posiciones asignadas: 16, distintas: 16
+[2026-10-13T21:56:02.646Z] reconciliación tras el lote de 50: matchesChain=true · eventos 1090 · hojas 1090 · faltan en BD 0 · faltan en cadena 0 · 2083.3 ms
+
+[2026-10-13T21:56:02.646Z] === Coste del árbol en el proceso (misma base de datos)
+[2026-10-13T21:56:13.674Z] buildCredentialTree con 1090 hojas: n=5 mean=2145.5 ms p50=2128.3 ms p95=2269.0 ms p99=2269.0 ms min=2042.7 ms max=2269.0 ms
+
+[2026-10-13T21:56:13.734Z] === Registro del servicio
+[2026-10-13T21:56:13.736Z] resumen {"lines":192,"byLevel":{"info":158,"warn":34},"errors":{},"statusCodes":{"200":4,"201":118,"503":34}}

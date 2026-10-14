@@ -1,0 +1,346 @@
+
+[2026-10-13T21:03:21.953Z] ##### corrida E2E en Base Sepolia · id 4a4df531 · desde el principio
+
+[2026-10-13T21:03:21.953Z] === 0 · Comprobaciones previas (solo lectura)
+[2026-10-13T21:03:22.356Z] zk-api /health {"status":"ok","service":"zk-api"}
+[2026-10-13T21:03:23.544Z] hechos {"registry.ISSUER_ROLE(Y)":true,"registry.JURISDICTION_ROLE(Y)":true,"attestor.ATTESTATION_MANAGER_ROLE(Y)":true,"IR.isAgent(Y)":true,"token.isAgent(Y)":true,"IdFactory.owner == Y":true,"ClaimIssuer: Y con propósito CLAIM (3)":true,"MC.getModules == [módulo ZK]":true}
+[2026-10-13T21:03:24.251Z] saldos de partida {"X":"0.049805848021301816 ETH","Y":"0.049888311078083844 ETH","A":"0 ETH","B":"0 ETH","C":"0 ETH"}
+[2026-10-13T21:03:24.368Z] precio del gas 6000000 wei · bloque 48078558
+[2026-10-13T21:03:24.369Z] inversor A: 0xCD724691C8de3C3962925BFEa34d95d1A8F64C96 (EOA nueva, país 170)
+[2026-10-13T21:03:24.369Z] inversor B: 0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0 (EOA nueva, país 484)
+[2026-10-13T21:03:24.369Z] inversor C: 0x546fed1362A9fc69aE4666a3375859AeeAebfA15 (EOA nueva, país 840)
+
+[2026-10-13T21:03:24.370Z] === 1 · Socios con alcances separados (operador, npm run partner:create)
+[2026-10-13T21:03:25.093Z] socio platform: pk_98636202571b4c85bbfce1f3 · e2e-4a4df531-platform · alcances credentials:issue credentials:activate credentials:revoke credentials:read credentials:opening jurisdictions:write
+[2026-10-13T21:03:25.603Z] socio bank: pk_5d0247a904164aa6afc8dc79 · e2e-4a4df531-bank · alcances proofs:verify proofs:read compliance:read disclosures:request disclosures:read disclosures:approve
+[2026-10-13T21:03:26.123Z] socio compliance: pk_2ec591630b275b4b7d586ade · e2e-4a4df531-compliance · alcances disclosures:approve disclosures:read
+[2026-10-13T21:03:26.650Z] socio audit: pk_a1e7150ddba290eb1b4a32aa · e2e-4a4df531-audit · alcances audit:read
+[2026-10-13T21:03:27.205Z] socio operator: pk_d357198ae5cedb1137c262f7 · e2e-4a4df531-operator · alcances issuer:admin
+[2026-10-13T21:03:27.205Z] nota: el banco lleva también disclosures:approve a propósito, para que la separación de partes la imponga el código y no el reparto de alcances
+
+[2026-10-13T21:03:27.205Z] === 2 · Inversores A y B: ONCHAINID, claim KYC (tópico 1) e IR del activo ZK
+[2026-10-13T21:03:27.205Z] — inversor A (0xCD724691C8de3C3962925BFEa34d95d1A8F64C96)
+[2026-10-13T21:03:32.906Z] tx identidad A · IdFactory.createIdentityWithManagementKeys · firma Y (orquestador) · success · bloque 48078561 · gas 451825 · coste 0.00000271095000017 ETH · https://sepolia.basescan.org/tx/0xc1d94697e228f994b428631849f8ffea735dcc7acc474cefa10e9af898d78d7d
+[2026-10-13T21:03:33.235Z] ONCHAINID de A: 0x0e41F772cd5E705AA3cf005e444990eB4728fdEE
+[2026-10-13T21:03:39.020Z] tx identidad A · addKey(ClaimIssuer, CLAIM) · firma Y (orquestador) · success · bloque 48078564 · gas 179071 · coste 0.000001074426000161 ETH · https://sepolia.basescan.org/tx/0x25e1205cd20db2a141ee6c625673dd5e99201f9bca89154d5f1cbbfc1ff16e1e
+[2026-10-13T21:03:44.674Z] tx identidad A · addClaim(tópico 1, firmado por Y) · firma Y (orquestador) · success · bloque 48078567 · gas 299779 · coste 0.000001798674000161 ETH · https://sepolia.basescan.org/tx/0x8cc51729f4c470496520f41f3022040bcb1b0248b6aee645a08804da027588ea
+[2026-10-13T21:03:50.551Z] tx IR del activo ZK · registerIdentity(A, país 170) · firma Y (orquestador) · success · bloque 48078570 · gas 79566 · coste 0.000000477396000199 ETH · https://sepolia.basescan.org/tx/0x02b686cad524eec71816a262d04774107a1600fda736a3af854b1d537f5c22af
+[2026-10-13T21:03:50.959Z] IR.isVerified(A) = true · país en el IR 170
+[2026-10-13T21:03:50.961Z] — inversor B (0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0)
+[2026-10-13T21:03:56.615Z] tx identidad B · IdFactory.createIdentityWithManagementKeys · firma Y (orquestador) · success · bloque 48078573 · gas 451825 · coste 0.000002710950000211 ETH · https://sepolia.basescan.org/tx/0xda5a170d9d5aa0bd34486293c526c3c79a71cdd189476928ba8289ba2e552a71
+[2026-10-13T21:03:56.915Z] ONCHAINID de B: 0xC49a11180B0A8E79EDb44F09Ec8dc32963c82799
+[2026-10-13T21:04:02.639Z] tx identidad B · addKey(ClaimIssuer, CLAIM) · firma Y (orquestador) · success · bloque 48078576 · gas 179071 · coste 0.000001074426000243 ETH · https://sepolia.basescan.org/tx/0xf5c2ed16654c3596c674d66651be7d084495e3a5f06c99b668b0a173e66f39a6
+[2026-10-13T21:04:08.386Z] tx identidad B · addClaim(tópico 1, firmado por Y) · firma Y (orquestador) · success · bloque 48078579 · gas 299779 · coste 0.000001798674001083 ETH · https://sepolia.basescan.org/tx/0x0284fd19982d81666088651ac1445297b1a33f9ce039a23ac637fd7dd338c6ef
+[2026-10-13T21:04:14.124Z] tx IR del activo ZK · registerIdentity(B, país 484) · firma Y (orquestador) · success · bloque 48078582 · gas 79590 · coste 0.000000477540000095 ETH · https://sepolia.basescan.org/tx/0x56777fdae228a080f3ec347203498f6b0e6ea3d1f30116ce669cb2cb7473d48d
+[2026-10-13T21:04:14.331Z] IR.isVerified(B) = true · país en el IR 484
+
+[2026-10-13T21:04:14.332Z] === 3 · Jurisdicciones admitidas del activo 84532001
+[2026-10-13T21:04:14.332Z] → PUT /v1/assets/84532001/jurisdictions · socio platform (pk_98636202571b4c85bbfce1f3) · {"admitted":[170,484,604,152,724]}
+[2026-10-13T21:04:20.559Z] ← 200 {"assetId":"84532001","admitted":[170,484,604,152,724],"countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","txHash":"0x6ceceaa18656faac676a133076547ab1f2ff59c315e12e591cf2761c21d767ea","leafCount":5}
+[2026-10-13T21:04:20.984Z] tx registro · publishCountryRoot (conjunto admitido) · firma Y (zk-api) · success · bloque 48078585 · gas 69478 · coste 0.000000416868000162 ETH · https://sepolia.basescan.org/tx/0x6ceceaa18656faac676a133076547ab1f2ff59c315e12e591cf2761c21d767ea
+[2026-10-13T21:04:21.289Z] countryRootOf(84532001) en cadena = 17917868276453248930753297139309830143269488785609370659796505931645401306751 · coincide con la API: true
+
+[2026-10-13T21:04:21.290Z] === 4 · Emisión en dos tiempos de las credenciales de A y B
+[2026-10-13T21:04:21.291Z] — credencial de A
+[2026-10-13T21:04:21.291Z] → POST /v1/credentials · socio platform (pk_98636202571b4c85bbfce1f3) · {"kycSubjectId":"e2e-testnet-4a4df531-A","holderAddress":"0xCD724691C8de3C3962925BFEa34d95d1A8F64C96","verification":{"approved":true,"countryCode":170,"expiresAt":"2027-02-10T21:04:21.000Z","reference":"e2e-verif-4a4df531-A"},"identity":{"legalName":"PRUEBA E2E - Inversor A (persona ficticia)","documentType":"TEST-ID","documentNumber":"E2E-TEST-A-0001","countryCode":170,"dateOfBirth":"1990-01-01","residenceAddress":"Calle de Prueba 1, ciudad ficticia","kycProvider":"proveedor-ficticio-e2e","kycReference":"e2e-kyc-4a4df531-A"}}
+[2026-10-13T21:04:21.316Z] ← 201 {"credentialId":"910e8fce-6e4d-476b-94f7-2bf1de37e276","status":"PENDING","countryCode":170,"expiresAt":"2027-02-10T21:04:21.000Z","holderAddress":"0xCD724691C8de3C3962925BFEa34d95d1A8F64C96","activation":"[mensajes EIP-712 para la billetera]"}
+[2026-10-13T21:04:21.316Z] el dominio EIP-712 que entrega la API coincide con el que el cliente reimplementa
+[2026-10-13T21:04:21.463Z] titular A: secreto generado en local (muestreo uniforme en el campo) y sellado en una copia scrypt + AES-256-GCM
+[2026-10-13T21:04:21.833Z] titular A: copia de seguridad abierta de nuevo con su frase · secretHash = 21175185620555753888112644667700555244222993924892424269271426872894122829472 · compromiso esperado 4909290743775095966793100020215821252707789850463999103689859617026846923382
+[2026-10-13T21:04:21.834Z] → GET /v1/credentials/4909290743775095966793100020215821252707789850463999103689859617026846923382 · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:04:21.847Z] ← 404 {"statusCode":404,"error":"Not Found","message":"no credential holds that commitment","code":"credential_not_found","details":{"commitment":"4909290743775095966793100020215821252707789850463999103689859617026846923382"}}
+[2026-10-13T21:04:21.852Z] titular A: firma de posesión EIP-712 CredentialActivation (sin transacción) · se recupera a 0xCD724691C8de3C3962925BFEa34d95d1A8F64C96
+[2026-10-13T21:04:21.852Z] → POST /v1/credentials/910e8fce-6e4d-476b-94f7-2bf1de37e276/activation · socio platform (pk_98636202571b4c85bbfce1f3) · {"secretHash":"21175185620555753888112644667700555244222993924892424269271426872894122829472","signature":"0x8661cc3807371bea4f72315d72c7fedf90eedb6fe10a2c3755e6441d6bf598023fb48991859712551cdd18072d6d5853a0e09cfb22aec575ae8870ef2e7cad371b"}
+[2026-10-13T21:04:26.397Z] ← 201 {"credentialId":"910e8fce-6e4d-476b-94f7-2bf1de37e276","commitment":"4909290743775095966793100020215821252707789850463999103689859617026846923382","leafIndex":0,"countryCode":170,"expiresAt":"2027-02-10T21:04:21.000Z","status":"ACTIVE","credentialRoot":"19319072868006401781310166955404232152636336044047624639151224212538397617612","txHash":"0x65b826b092e18403bcb298c22b7465eb8708839698228eb574f0aff2ba9475a0"}
+[2026-10-13T21:04:26.398Z] el compromiso que publicó el emisor coincide con el que calculó el titular: 4909290743775095966793100020215821252707789850463999103689859617026846923382
+[2026-10-13T21:04:26.804Z] tx registro · publishCredentialRoot (activación A) · firma Y (zk-api) · success · bloque 48078588 · gas 54553 · coste 0.000000327318000127 ETH · https://sepolia.basescan.org/tx/0x65b826b092e18403bcb298c22b7465eb8708839698228eb574f0aff2ba9475a0
+[2026-10-13T21:04:26.805Z] — credencial de B
+[2026-10-13T21:04:26.806Z] → POST /v1/credentials · socio platform (pk_98636202571b4c85bbfce1f3) · {"kycSubjectId":"e2e-testnet-4a4df531-B","holderAddress":"0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0","verification":{"approved":true,"countryCode":484,"expiresAt":"2027-02-10T21:04:26.000Z","reference":"e2e-verif-4a4df531-B"},"identity":{"legalName":"PRUEBA E2E - Inversor B (persona ficticia)","documentType":"TEST-ID","documentNumber":"E2E-TEST-B-0001","countryCode":484,"dateOfBirth":"1990-01-01","residenceAddress":"Calle de Prueba 2, ciudad ficticia","kycProvider":"proveedor-ficticio-e2e","kycReference":"e2e-kyc-4a4df531-B"}}
+[2026-10-13T21:04:26.824Z] ← 201 {"credentialId":"7dc4ba06-0a1c-4a06-979a-18a5a2291c02","status":"PENDING","countryCode":484,"expiresAt":"2027-02-10T21:04:26.000Z","holderAddress":"0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0","activation":"[mensajes EIP-712 para la billetera]"}
+[2026-10-13T21:04:26.824Z] el dominio EIP-712 que entrega la API coincide con el que el cliente reimplementa
+[2026-10-13T21:04:26.971Z] titular B: secreto generado en local (muestreo uniforme en el campo) y sellado en una copia scrypt + AES-256-GCM
+[2026-10-13T21:04:27.091Z] titular B: copia de seguridad abierta de nuevo con su frase · secretHash = 20055728667874272975860772944758835532981023060422295640536244839342419255438 · compromiso esperado 14694157361066596026676520750575274925916296702631749571175839153375358019825
+[2026-10-13T21:04:27.091Z] → GET /v1/credentials/14694157361066596026676520750575274925916296702631749571175839153375358019825 · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:04:27.097Z] ← 404 {"statusCode":404,"error":"Not Found","message":"no credential holds that commitment","code":"credential_not_found","details":{"commitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825"}}
+[2026-10-13T21:04:27.100Z] titular B: firma de posesión EIP-712 CredentialActivation (sin transacción) · se recupera a 0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0
+[2026-10-13T21:04:27.101Z] → POST /v1/credentials/7dc4ba06-0a1c-4a06-979a-18a5a2291c02/activation · socio platform (pk_98636202571b4c85bbfce1f3) · {"secretHash":"20055728667874272975860772944758835532981023060422295640536244839342419255438","signature":"0x33e70783d46bbadaa82cc7725220e9830c846a7229d0efd1257c7b02be6e79ed53c36371c8d0d180b6143e1421e0c5d0790736d2eecbcbbe3de9bc7b671d7d671c"}
+[2026-10-13T21:04:32.850Z] ← 201 {"credentialId":"7dc4ba06-0a1c-4a06-979a-18a5a2291c02","commitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","leafIndex":1,"countryCode":484,"expiresAt":"2027-02-10T21:04:26.000Z","status":"ACTIVE","credentialRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","txHash":"0xa53d59a6d36833df1b959691730eac5a9fe655b101b4009c0e191ed2211612cf"}
+[2026-10-13T21:04:32.851Z] el compromiso que publicó el emisor coincide con el que calculó el titular: 14694157361066596026676520750575274925916296702631749571175839153375358019825
+[2026-10-13T21:04:33.292Z] tx registro · publishCredentialRoot (activación B) · firma Y (zk-api) · success · bloque 48078591 · gas 59672 · coste 0.00000035803200013 ETH · https://sepolia.basescan.org/tx/0xa53d59a6d36833df1b959691730eac5a9fe655b101b4009c0e191ed2211612cf
+
+[2026-10-13T21:04:33.295Z] === 5 · El titular prueba en local; el banco comprueba antes de presentar
+[2026-10-13T21:04:33.296Z] — prueba de A
+[2026-10-13T21:04:33.452Z] → GET /v1/credentials/4909290743775095966793100020215821252707789850463999103689859617026846923382/opening · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:04:33.465Z] ← 200 {"commitment":"4909290743775095966793100020215821252707789850463999103689859617026846923382","leafIndex":0,"credentialRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","opening":"[20 niveles]"}
+[2026-10-13T21:04:33.465Z] → GET /v1/assets/84532001/jurisdictions/170/opening · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:04:33.487Z] ← 200 {"assetId":"84532001","countryCode":170,"leafIndex":0,"countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","opening":"[8 niveles]"}
+[2026-10-13T21:04:33.798Z] contexto en cadena (bloque 48078592) {"currentEpochEnd":"1793664000","epochLength":"2592000","epochEndReclamado":"1796256000","anchorFor":"12666463943099818666312315997819823565020685665814923478663218136558011135575"}
+[2026-10-13T21:04:34.858Z] prueba Groth16 generada en local en 1053 ms · verifica contra groth16.vkey.json: true
+[2026-10-13T21:04:34.858Z] señales públicas {"credentialRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","assetId":"84532001","epochEnd":"1796256000","nullifier":"6757649214243505450888514770094393076923876437469832868933686474334788973162","anchor":"12666463943099818666312315997819823565020685665814923478663218136558011135575"}
+[2026-10-13T21:04:34.858Z] → POST /v1/verifications · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:04:36.008Z] ← 201 {"id":"d999e3c4-fe31-4728-b9ef-45301d5ed66a","scheme":"groth16","valid":true,"rejectionCode":null,"publicSignals":{"credentialRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","assetId":"84532001","epochEnd":"1796256000","nullifier":"6757649214243505450888514770094393076923876437469832868933686474334788973162","anchor":"12666463943099818666312315997819823565020685665814923478663218136558011135575"},"proofDigest":"59bea7241809e1246a6519742ba897909949a480376bfde2d7747016af755e8b","verifiedAt":"2026-10-13T21:04:35.995Z"}
+[2026-10-13T21:04:36.010Z] — prueba de B
+[2026-10-13T21:04:36.169Z] → GET /v1/credentials/14694157361066596026676520750575274925916296702631749571175839153375358019825/opening · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:04:36.186Z] ← 200 {"commitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","leafIndex":1,"credentialRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","opening":"[20 niveles]"}
+[2026-10-13T21:04:36.186Z] → GET /v1/assets/84532001/jurisdictions/484/opening · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:04:36.196Z] ← 200 {"assetId":"84532001","countryCode":484,"leafIndex":1,"countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","opening":"[8 niveles]"}
+[2026-10-13T21:04:36.597Z] contexto en cadena (bloque 48078594) {"currentEpochEnd":"1793664000","epochLength":"2592000","epochEndReclamado":"1796256000","anchorFor":"3735053210826316095046754971243180912638467846021314104746521502609471109882"}
+[2026-10-13T21:04:37.368Z] prueba Groth16 generada en local en 758 ms · verifica contra groth16.vkey.json: true
+[2026-10-13T21:04:37.368Z] señales públicas {"credentialRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","assetId":"84532001","epochEnd":"1796256000","nullifier":"21568778806198464786589768535209913421722918433725829926679031671940118579566","anchor":"3735053210826316095046754971243180912638467846021314104746521502609471109882"}
+[2026-10-13T21:04:37.369Z] → POST /v1/verifications · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:04:38.037Z] ← 201 {"id":"8ccd2c5b-e750-4e6a-a8b3-9a42ae0f7621","scheme":"groth16","valid":true,"rejectionCode":null,"publicSignals":{"credentialRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","assetId":"84532001","epochEnd":"1796256000","nullifier":"21568778806198464786589768535209913421722918433725829926679031671940118579566","anchor":"3735053210826316095046754971243180912638467846021314104746521502609471109882"},"proofDigest":"0714d591781cc3eaa907294b89e11f66cc3b4282b643d1824a056df2dcd482f7","verifiedAt":"2026-10-13T21:04:38.030Z"}
+
+[2026-10-13T21:04:38.039Z] === 6 · Y presenta con attestFor y paga el gas
+[2026-10-13T21:04:38.404Z] A antes de atestiguar: nonce 0 · saldo 0 ETH
+[2026-10-13T21:04:42.999Z] tx atestador · attestFor(A) · firma Y (orquestador (plataforma)) · success · bloque 48078596 · gas 345229 · coste 0.000002071374000426 ETH · https://sepolia.basescan.org/tx/0xcee4d8adf46e97a74e4c4028eb88a6ff75d59b1a99bf87d89be2d227b62b9860
+[2026-10-13T21:04:43.003Z] ComplianceAttested: sujeto 0xCD724691C8de3C3962925BFEa34d95d1A8F64C96 · nulificador 6757649214243505450888514770094393076923876437469832868933686474334788973162 · caduca 1796256000 · remitente de la transacción 0xbddd8970657eb2b08f6e6bc78abb3f5c2b8d4337
+[2026-10-13T21:04:43.004Z] DETENIDO: comprobación fallida: el evento no nombra al titular o no lo envió Y
+[2026-10-13T21:04:43.004Z] estado guardado para retomar · pasos completos: partners, investors, jurisdictions, credentials, proofs
+
+[2026-10-13T21:05:00.844Z] ##### corrida E2E en Base Sepolia · id 4a4df531 · retoma tras: partners, investors, jurisdictions, credentials, proofs
+
+[2026-10-13T21:05:00.844Z] === 0 · Comprobaciones previas (solo lectura)
+[2026-10-13T21:05:01.177Z] zk-api /health {"status":"ok","service":"zk-api"}
+[2026-10-13T21:05:02.165Z] hechos {"registry.ISSUER_ROLE(Y)":true,"registry.JURISDICTION_ROLE(Y)":true,"attestor.ATTESTATION_MANAGER_ROLE(Y)":true,"IR.isAgent(Y)":true,"token.isAgent(Y)":true,"IdFactory.owner == Y":true,"ClaimIssuer: Y con propósito CLAIM (3)":true,"MC.getModules == [módulo ZK]":true}
+[2026-10-13T21:05:02.166Z] saldos de partida {"X":"0.049805848021301816 ETH","Y":"0.049888311078083844 ETH","A":"0 ETH","B":"0 ETH","C":"0 ETH"}
+[2026-10-13T21:05:02.359Z] precio del gas 6000000 wei · bloque 48078607
+[2026-10-13T21:05:02.359Z] inversor A: 0xCD724691C8de3C3962925BFEa34d95d1A8F64C96 (EOA nueva, país 170)
+[2026-10-13T21:05:02.359Z] inversor B: 0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0 (EOA nueva, país 484)
+[2026-10-13T21:05:02.360Z] inversor C: 0x546fed1362A9fc69aE4666a3375859AeeAebfA15 (EOA nueva, país 840)
+[2026-10-13T21:05:02.360Z] 1 · socios ya registrados (se retoma)
+
+[2026-10-13T21:05:02.360Z] === 6 · Y presenta con attestFor y paga el gas
+[2026-10-13T21:05:02.589Z] A antes de atestiguar: nonce 0 · saldo 0 ETH
+[2026-10-13T21:05:03.286Z] presentación de A resuelta sin transacción nueva {"status":"already_attested","nullifier":"6757649214243505450888514770094393076923876437469832868933686474334788973162"}
+[2026-10-13T21:05:03.588Z] A después de atestiguar: nonce 0 · saldo 0 ETH · A no envió ninguna transacción ni pagó gas
+[2026-10-13T21:05:03.784Z] B antes de atestiguar: nonce 0 · saldo 0 ETH
+[2026-10-13T21:05:08.404Z] tx atestador · attestFor(B) · firma Y (orquestador (plataforma)) · success · bloque 48078609 · gas 345229 · coste 0.00000207137400072 ETH · https://sepolia.basescan.org/tx/0x3becdb531aa7784db689368f906874eca5253e9f2e493054189b201ad4c037f0
+[2026-10-13T21:05:08.406Z] ComplianceAttested: sujeto 0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0 · nulificador 21568778806198464786589768535209913421722918433725829926679031671940118579566 · caduca 1796256000 · remitente de la transacción 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337
+[2026-10-13T21:05:08.701Z] B después de atestiguar: nonce 0 · saldo 0 ETH · B no envió ninguna transacción ni pagó gas
+
+[2026-10-13T21:05:08.708Z] === 7 · Estado de cumplimiento (banco)
+[2026-10-13T21:05:08.708Z] → GET /v1/compliance/assets/84532001/subjects/0xCD724691C8de3C3962925BFEa34d95d1A8F64C96 · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:09.609Z] ← 200 {"assetId":"84532001","subject":"0xCD724691C8de3C3962925BFEa34d95d1A8F64C96","compliant":true,"attestation":{"issuedAt":"2026-10-13T21:04:40.000Z","expiresAt":"2026-12-03T00:00:00.000Z","nullifier":"6757649214243505450888514770094393076923876437469832868933686474334788973162"},"epoch":{"currentEpochEnd":"1793664000","epochLength":"2592000"},"checkedAt":"2026-10-13T21:05:09.607Z"}
+[2026-10-13T21:05:09.609Z] → GET /v1/compliance/assets/84532001/subjects/0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0 · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:09.929Z] ← 200 {"assetId":"84532001","subject":"0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0","compliant":true,"attestation":{"issuedAt":"2026-10-13T21:05:06.000Z","expiresAt":"2026-12-03T00:00:00.000Z","nullifier":"21568778806198464786589768535209913421722918433725829926679031671940118579566"},"epoch":{"currentEpochEnd":"1793664000","epochLength":"2592000"},"checkedAt":"2026-10-13T21:05:09.928Z"}
+
+[2026-10-13T21:05:09.930Z] === 8 · Y acuña a A como agente; A transfiere a B
+[2026-10-13T21:05:14.268Z] tx token · mint(A, 1000 ZKCTA) por Y (agente) · firma Y (orquestador) · success · bloque 48078612 · gas 263773 · coste 0.000001582638000095 ETH · https://sepolia.basescan.org/tx/0x8374d95335ec5199dd63087ed1a31a81edd645c838f0fb51ed5a80c284ff7869
+[2026-10-13T21:05:14.368Z] saldo de A: 1000000000000000000000 (unidades con 18 decimales)
+[2026-10-13T21:05:14.675Z] fondeo mínimo de A para dos transferencias: 2 × (350894 gas × 14000000 wei) + 2 × 10000000000 wei de tarifa L1 = 0.000009845032 ETH
+[2026-10-13T21:05:18.879Z] tx fondeo · Y → A (ETH para el gas de A) · firma Y (orquestador) · success · bloque 48078614 · gas 21000 · coste 0.000000126000000586 ETH · https://sepolia.basescan.org/tx/0x679ab99aef0624f5c541d1976e1f0cd71522db5b355f68b1c07fa5aa3136994a
+[2026-10-13T21:05:22.586Z] tx token · transfer(A → B, 250 ZKCTA) · firma A (billetera de A) · success · bloque 48078616 · gas 252000 · coste 0.000001512000000095 ETH · https://sepolia.basescan.org/tx/0x652e8f9f7c968f12c7d3e75d15b09295deffe18faa01cea0d89a5b39e8c4a983
+[2026-10-13T21:05:22.783Z] saldos tras la transferencia: A 750000000000000000000 · B 250000000000000000000
+
+[2026-10-13T21:05:22.786Z] === 9 · Revocación de la credencial de B (API) y de su atestación (Y)
+[2026-10-13T21:05:22.786Z] → POST /v1/credentials/14694157361066596026676520750575274925916296702631749571175839153375358019825/revocation · socio platform (pk_98636202571b4c85bbfce1f3) · {"closeRootWindow":true}
+[2026-10-13T21:05:32.822Z] ← 200 {"commitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","status":"REVOKED","previousRoot":"5832946777301156583521189510093573518134988306151972451959401840608094312940","credentialRoot":"19319072868006401781310166955404232152636336044047624639151224212538397617612","txHash":"0xaa9f2c42324665a09824321cbd2935dc7844a8329b5316d7a3b7e262dd3364f6","previousRootInvalidated":true}
+[2026-10-13T21:05:33.256Z] tx registro · publishCredentialRoot (revocación de B, hoja retirada) · firma Y (zk-api) · success · bloque 48078619 · gas 57660 · coste 0.000000345960000129 ETH · https://sepolia.basescan.org/tx/0xaa9f2c42324665a09824321cbd2935dc7844a8329b5316d7a3b7e262dd3364f6
+[2026-10-13T21:05:33.758Z] tx registro · invalidateCredentialRoot (cierra la ventana de la raíz anterior) · firma Y (zk-api) · success · bloque 48078621 · gas 28005 · coste 0.000000168030000095 ETH · https://sepolia.basescan.org/tx/0x784c1d5e1e0b6887bc98744fb00f21a8f814c80c3146f635a984415856cb0fc8
+[2026-10-13T21:05:33.857Z] raíz anterior 5832946777301156583521189510093573518134988306151972451959401840608094312940 sigue válida: false
+[2026-10-13T21:05:38.322Z] tx atestador · revokeAttestation(84532001, B) · firma Y (orquestador) · success · bloque 48078624 · gas 29476 · coste 0.000000176856000161 ETH · https://sepolia.basescan.org/tx/0xe3549ccbb30a3ba6c5bb32c46f58617a9bb3b2e22b59c463a74c9376845e5b3b
+[2026-10-13T21:05:38.323Z] → GET /v1/credentials/14694157361066596026676520750575274925916296702631749571175839153375358019825 · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:05:38.957Z] ← 200 {"commitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","status":"REVOKED","inRegistry":false,"issuedAt":"2026-10-13T21:04:26.817Z","expiresAt":"2027-02-10T21:04:26.000Z","suspendedAt":null,"revokedAt":"2026-10-13T21:05:22.803Z","credentialRoot":"19319072868006401781310166955404232152636336044047624639151224212538397617612"}
+[2026-10-13T21:05:38.960Z] → GET /v1/compliance/assets/84532001/subjects/0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0 · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:39.498Z] ← 200 {"assetId":"84532001","subject":"0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0","compliant":false,"attestation":{"issuedAt":null,"expiresAt":null,"nullifier":null},"epoch":{"currentEpochEnd":"1793664000","epochLength":"2592000"},"checkedAt":"2026-10-13T21:05:39.496Z"}
+[2026-10-13T21:05:39.498Z] → GET /v1/compliance/assets/84532001/subjects/0xCD724691C8de3C3962925BFEa34d95d1A8F64C96 · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:39.827Z] ← 200 {"assetId":"84532001","subject":"0xCD724691C8de3C3962925BFEa34d95d1A8F64C96","compliant":true,"attestation":{"issuedAt":"2026-10-13T21:04:40.000Z","expiresAt":"2026-12-03T00:00:00.000Z","nullifier":"6757649214243505450888514770094393076923876437469832868933686474334788973162"},"epoch":{"currentEpochEnd":"1793664000","epochLength":"2592000"},"checkedAt":"2026-10-13T21:05:39.826Z"}
+[2026-10-13T21:05:39.828Z] B ya no es conforme; A sigue siéndolo
+[2026-10-13T21:05:39.829Z] — una transferencia de A a B se rechaza, y el rechazo es del módulo ZK
+[2026-10-13T21:05:41.191Z] atribución {"IR.isVerified(B)":true,"IR.isVerified(A)":true,"token.paused()":false,"token.isFrozen(A)":false,"token.isFrozen(B)":false,"token.getFrozenTokens(A)":"0","saldo de A >= importe":true,"MC.getModules()":["0x80929BFc966888fa24710F177F594F377A64A925"],"attestor.isAttested(B)":false,"module.moduleCheck(A, B)":false,"MC.canTransfer(A, B)":false}
+[2026-10-13T21:05:41.296Z] simulación de transfer(A → B, 100 ZKCTA): revierte con "Error"
+[2026-10-13T21:05:46.368Z] tx token · transfer(A → B, 100 ZKCTA) rechazada · firma A (billetera de A) · reverted · bloque 48078628 · gas 214984 · coste 0.000001289904001143 ETH · https://sepolia.basescan.org/tx/0xa59b8ff33ea41ba500a90c579fd4da80378073681b03b45058eb00cfb95ad2b6
+[2026-10-13T21:05:46.776Z] saldos sin cambios: A 750000000000000000000 · B 250000000000000000000
+[2026-10-13T21:05:46.777Z] — vigencia de las verificaciones que el banco hizo antes de presentar
+[2026-10-13T21:05:46.777Z] → GET /v1/verifications/d999e3c4-fe31-4728-b9ef-45301d5ed66a · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:47.414Z] ← 200 {"id":"d999e3c4-fe31-4728-b9ef-45301d5ed66a","scheme":"groth16","valid":true,"rejectionCode":null,"verifiedAt":"2026-10-13T21:04:35.995Z","assetId":"84532001","nullifier":"6757649214243505450888514770094393076923876437469832868933686474334788973162","epochEnd":"1796256000","standing":"superseded_root","credentialRootStillValid":false,"nullifierSpent":true,"epochEndsAt":"2026-12-03T00:00:00.000Z"}
+[2026-10-13T21:05:47.414Z] → GET /v1/verifications/8ccd2c5b-e750-4e6a-a8b3-9a42ae0f7621 · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:47.623Z] ← 200 {"id":"8ccd2c5b-e750-4e6a-a8b3-9a42ae0f7621","scheme":"groth16","valid":true,"rejectionCode":null,"verifiedAt":"2026-10-13T21:04:38.030Z","assetId":"84532001","nullifier":"21568778806198464786589768535209913421722918433725829926679031671940118579566","epochEnd":"1796256000","standing":"superseded_root","credentialRootStillValid":false,"nullifierSpent":true,"epochEndsAt":"2026-12-03T00:00:00.000Z"}
+
+[2026-10-13T21:05:47.625Z] === 10 · Divulgación autorizada con separación de partes
+[2026-10-13T21:05:47.625Z] → POST /v1/disclosures · socio bank (pk_5d0247a904164aa6afc8dc79) · {"targetCommitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","requesterRef":"banco-prueba/caso-e2e-4a4df531","justification":"Prueba de punta a punta: revisión de una credencial revocada en la red de pruebas.","legalBasis":"Ejercicio de prueba sin efectos jurídicos (datos ficticios)","scope":["identity.legalName","identity.countryCode"]}
+[2026-10-13T21:05:47.638Z] ← 201 {"id":"1a0a1aef-cd48-4b67-ac38-7fe0a57afb82","status":"PENDING","requesterRef":"banco-prueba/caso-e2e-4a4df531","justification":"Prueba de punta a punta: revisión de una credencial revocada en la red de pruebas.","legalBasis":"Ejercicio de prueba sin efectos jurídicos (datos ficticios)","scope":["identity.legalName","identity.countryCode"],"targetCommitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","requestDigest":"c65c1b10d479becd5fb3c193bc1a536e078dbea358ae443ab1d3444f2533f131","requestedAt":"2026-10-13T21:05:47.634Z","decidedAt":null,"decidedBy":null,"decidedByPartnerKey":null,"decidedByActor":null,"releasedAt":null}
+[2026-10-13T21:05:47.639Z] → POST /v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82/decision · socio bank (pk_5d0247a904164aa6afc8dc79) · {"decision":"APPROVED","decidedBy":"el propio banco"}
+[2026-10-13T21:05:47.645Z] ← 403 {"statusCode":403,"error":"Forbidden","message":"a request is decided by a party other than the one that made it","code":"disclosure_self_decision","details":{"disclosureId":"1a0a1aef-cd48-4b67-ac38-7fe0a57afb82"}}
+[2026-10-13T21:05:47.645Z] → POST /v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82/decision · socio compliance (pk_2ec591630b275b4b7d586ade) · {"decision":"APPROVED","decidedBy":"Oficial de cumplimiento (prueba)","note":"Aprobada para la prueba de punta a punta"}
+[2026-10-13T21:05:47.655Z] ← 200 {"id":"1a0a1aef-cd48-4b67-ac38-7fe0a57afb82","status":"APPROVED","requesterRef":"banco-prueba/caso-e2e-4a4df531","justification":"Prueba de punta a punta: revisión de una credencial revocada en la red de pruebas.","legalBasis":"Ejercicio de prueba sin efectos jurídicos (datos ficticios)","scope":["identity.legalName","identity.countryCode"],"targetCommitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","requestDigest":"c65c1b10d479becd5fb3c193bc1a536e078dbea358ae443ab1d3444f2533f131","requestedAt":"2026-10-13T21:05:47.634Z","decidedAt":"2026-10-13T21:05:47.649Z","decidedBy":"Oficial de cumplimiento (prueba)","decidedByPartnerKey":"pk_2ec591630b275b4b7d586ade","decidedByActor":"e2e:oficial-cumplimiento","releasedAt":null}
+[2026-10-13T21:05:47.656Z] → POST /v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82/release · socio compliance (pk_2ec591630b275b4b7d586ade)
+[2026-10-13T21:05:47.660Z] ← 403 {"statusCode":403,"error":"Forbidden","message":"only the partner that made the request can release it","code":"disclosure_not_requester","details":{"disclosureId":"1a0a1aef-cd48-4b67-ac38-7fe0a57afb82"}}
+[2026-10-13T21:05:47.660Z] → POST /v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82/release · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:47.669Z] ← 200 {"scope":["identity.legalName","identity.countryCode"],"released":{"legalName":"PRUEBA E2E - Inversor B (persona ficticia)","countryCode":484},"releasedAt":"2026-10-13T21:05:47.664Z"}
+[2026-10-13T21:05:47.670Z] atributos liberados: countryCode, legalName · alcance aprobado: identity.legalName, identity.countryCode
+[2026-10-13T21:05:47.670Z] → POST /v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82/release · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:47.673Z] ← 403 {"statusCode":403,"error":"Forbidden","message":"this request has not been approved","code":"disclosure_not_approved","details":{"status":"RELEASED"}}
+[2026-10-13T21:05:47.673Z] → GET /v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82 · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:05:47.676Z] ← 200 {"id":"1a0a1aef-cd48-4b67-ac38-7fe0a57afb82","status":"RELEASED","requesterRef":"banco-prueba/caso-e2e-4a4df531","justification":"Prueba de punta a punta: revisión de una credencial revocada en la red de pruebas.","legalBasis":"Ejercicio de prueba sin efectos jurídicos (datos ficticios)","scope":["identity.legalName","identity.countryCode"],"targetCommitment":"14694157361066596026676520750575274925916296702631749571175839153375358019825","requestDigest":"c65c1b10d479becd5fb3c193bc1a536e078dbea358ae443ab1d3444f2533f131","requestedAt":"2026-10-13T21:05:47.634Z","decidedAt":"2026-10-13T21:05:47.649Z","decidedBy":"Oficial de cumplimiento (prueba)","decidedByPartnerKey":"pk_2ec591630b275b4b7d586ade","decidedByActor":"e2e:oficial-cumplimiento","releasedAt":"2026-10-13T21:05:47.664Z"}
+
+[2026-10-13T21:05:47.678Z] === 11 · Reconstrucción desde la cadena e integridad del registro de accesos
+[2026-10-13T21:05:47.678Z] → POST /v1/issuer/state/rebuild · socio operator (pk_d357198ae5cedb1137c262f7)
+[2026-10-13T21:06:18.598Z] ← 200 {"source":"chain-events","events":3,"leafCount":1,"replayedRoot":"19319072868006401781310166955404232152636336044047624639151224212538397617612","onChainRoot":"19319072868006401781310166955404232152636336044047624639151224212538397617612","matchesChain":true,"throughBlock":"48078629","missingFromDatabase":[],"missingFromChain":[]}
+[2026-10-13T21:06:18.599Z] → POST /v1/issuer/assets/84532001/state/rebuild · socio operator (pk_d357198ae5cedb1137c262f7)
+[2026-10-13T21:06:49.225Z] ← 200 {"source":"chain-events","events":5,"leafCount":5,"replayedRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","onChainRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","matchesChain":true,"throughBlock":"48078645"}
+[2026-10-13T21:06:49.227Z] → GET /v1/access-log/integrity · socio audit (pk_a1e7150ddba290eb1b4a32aa)
+[2026-10-13T21:06:49.241Z] ← 200 {"intact":true,"entries":30,"checked":30,"brokenAtSequence":null,"reason":null}
+[2026-10-13T21:06:49.242Z] → GET /v1/access-log?limit=5 · socio audit (pk_a1e7150ddba290eb1b4a32aa)
+[2026-10-13T21:06:49.248Z] ← 200 {"entries":[{"sequence":"31","occurredAt":"2026-10-13T21:06:49.244Z","partnerKey":"pk_a1e7150ddba290eb1b4a32aa","actorRef":"e2e:auditor","method":"GET","path":"/v1/access-log/integrity","scope":"audit:read","resourceType":"access_log","resourceId":null,"outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"fe0b08af0db5f72b87e2b52963471b7e0a90e4806ab36b28c4ccf3d25aa353e9","entryHash":"fe75f331ec56623f5333bbf403ddcab193fbdf22721b3fe63f6e9773c23161dd"},{"sequence":"30","occurredAt":"2026-10-13T21:06:49.233Z","partnerKey":"pk_d357198ae5cedb1137c262f7","actorRef":"e2e:operador","method":"POST","path":"/v1/issuer/assets/84532001/state/rebuild","scope":"issuer:admin","resourceType":"issuer_state","resourceId":"84532001","outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"4e9bdb5bc22539b9a24dadd0ba011fdcc750ce790539dacd48b39ddb087ecb7e","entryHash":"fe0b08af0db5f72b87e2b52963471b7e0a90e4806ab36b28c4ccf3d25aa353e9"},{"sequence":"29","occurredAt":"2026-10-13T21:06:18.598Z","partnerKey":"pk_d357198ae5cedb1137c262f7","actorRef":"e2e:operador","method":"POST","path":"/v1/issuer/state/rebuild","scope":"issuer:admin","resourceType":"issuer_state","resourceId":null,"outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"fda9c5a4536be586b6d7a21d5ffd63b9a69f78aaf7546d0c8b5c955058d9507f","entryHash":"4e9bdb5bc22539b9a24dadd0ba011fdcc750ce790539dacd48b39ddb087ecb7e"},{"sequence":"28","occurredAt":"2026-10-13T21:05:47.678Z","partnerKey":"pk_5d0247a904164aa6afc8dc79","actorRef":"e2e:analista-banco","method":"GET","path":"/v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82","scope":"disclosures:read","resourceType":"disclosure_request","resourceId":"1a0a1aef-cd48-4b67-ac38-7fe0a57afb82","outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"d4a0ed05e480fc7cabf2fc565e0f337688c7d2da77ecc3201f49e0eb9a7416bb","entryHash":"fda9c5a4536be586b6d7a21d5ffd63b9a69f78aaf7546d0c8b5c955058d9507f"},{"sequence":"27","occurredAt":"2026-10-13T21:05:47.675Z","partnerKey":"pk_5d0247a904164aa6afc8dc79","actorRef":"e2e:analista-banco","method":"POST","path":"/v1/disclosures/1a0a1aef-cd48-4b67-ac38-7fe0a57afb82/release","scope":"disclosures:read","resourceType":"disclosure_release","resourceId":null,"outcome":"refused","statusCode":403,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"c60b9a5dd267cd03548a2fdebf80694d3effbe197e35eb7e997625ecce4184e8","entryHash":"d4a0ed05e480fc7cabf2fc565e0f337688c7d2da77ecc3201f49e0eb9a7416bb"}],"nextCursor":"27"}
+[2026-10-13T21:06:49.248Z] → GET /v1/access-log/integrity · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:06:49.252Z] ← 403 {"statusCode":403,"error":"Forbidden","message":"this partner does not hold the scope this route needs","code":"insufficient_scope","details":{"required":"audit:read","granted":["proofs:verify","proofs:read","compliance:read","disclosures:request","disclosures:read","disclosures:approve"]}}
+
+[2026-10-13T21:06:49.254Z] === 12a · Inversor C: ONCHAINID, claim KYC e IR con país 840
+[2026-10-13T21:06:49.255Z] — inversor C (0x546fed1362A9fc69aE4666a3375859AeeAebfA15)
+[2026-10-13T21:06:54.215Z] tx identidad C · IdFactory.createIdentityWithManagementKeys · firma Y (orquestador) · success · bloque 48078662 · gas 451825 · coste 0.000002710950000384 ETH · https://sepolia.basescan.org/tx/0x80b2e0715715e9880a5dc7df9833702b41d14eb7bf5b7b9389fca177234c31a2
+[2026-10-13T21:06:54.316Z] ONCHAINID de C: 0xbCe7231F0CE0497275115F45b6C489A79288153C
+[2026-10-13T21:06:58.894Z] tx identidad C · addKey(ClaimIssuer, CLAIM) · firma Y (orquestador) · success · bloque 48078664 · gas 179071 · coste 0.000001074426000095 ETH · https://sepolia.basescan.org/tx/0xc0fdb054cf40791ad757a6cb2038636445bd44764a4f22b33004e620a68c799a
+[2026-10-13T21:07:04.416Z] tx identidad C · addClaim(tópico 1, firmado por Y) · firma Y (orquestador) · success · bloque 48078667 · gas 299779 · coste 0.000001798674000095 ETH · https://sepolia.basescan.org/tx/0xd0b3e602d9c3d21cb0c0077a5c194b2c88e0cd1403cde183b4851f8c7b8374b0
+[2026-10-13T21:07:10.313Z] tx IR del activo ZK · registerIdentity(C, país 840) · firma Y (orquestador) · success · bloque 48078670 · gas 79590 · coste 0.00000047754000054 ETH · https://sepolia.basescan.org/tx/0xa2cfcb78f744a7630ec307fc230768ec1de595d9b88f75cb36310619da605683
+[2026-10-13T21:07:10.729Z] IR.isVerified(C) = true · país en el IR 840
+
+[2026-10-13T21:07:10.732Z] === 12b · Credencial de C (país 840, que el activo no admite)
+[2026-10-13T21:07:10.733Z] — credencial de C
+[2026-10-13T21:07:10.734Z] → POST /v1/credentials · socio platform (pk_98636202571b4c85bbfce1f3) · {"kycSubjectId":"e2e-testnet-4a4df531-C","holderAddress":"0x546fed1362A9fc69aE4666a3375859AeeAebfA15","verification":{"approved":true,"countryCode":840,"expiresAt":"2027-02-10T21:07:10.000Z","reference":"e2e-verif-4a4df531-C"},"identity":{"legalName":"PRUEBA E2E - Inversor C (persona ficticia)","documentType":"TEST-ID","documentNumber":"E2E-TEST-C-0001","countryCode":840,"dateOfBirth":"1990-01-01","residenceAddress":"Calle de Prueba 3, ciudad ficticia","kycProvider":"proveedor-ficticio-e2e","kycReference":"e2e-kyc-4a4df531-C"}}
+[2026-10-13T21:07:10.771Z] ← 201 {"credentialId":"aa58e907-3970-4bfc-8f30-71274c5b8ed5","status":"PENDING","countryCode":840,"expiresAt":"2027-02-10T21:07:10.000Z","holderAddress":"0x546fed1362A9fc69aE4666a3375859AeeAebfA15","activation":"[mensajes EIP-712 para la billetera]"}
+[2026-10-13T21:07:10.772Z] el dominio EIP-712 que entrega la API coincide con el que el cliente reimplementa
+[2026-10-13T21:07:10.921Z] titular C: secreto generado en local (muestreo uniforme en el campo) y sellado en una copia scrypt + AES-256-GCM
+[2026-10-13T21:07:11.248Z] titular C: copia de seguridad abierta de nuevo con su frase · secretHash = 6481710967904582222400827889217646548109758141923927150666271500484033459262 · compromiso esperado 15289891793814393119523616158275399416986462821794746875228139766336277957609
+[2026-10-13T21:07:11.249Z] → GET /v1/credentials/15289891793814393119523616158275399416986462821794746875228139766336277957609 · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:07:11.255Z] ← 404 {"statusCode":404,"error":"Not Found","message":"no credential holds that commitment","code":"credential_not_found","details":{"commitment":"15289891793814393119523616158275399416986462821794746875228139766336277957609"}}
+[2026-10-13T21:07:11.260Z] titular C: firma de posesión EIP-712 CredentialActivation (sin transacción) · se recupera a 0x546fed1362A9fc69aE4666a3375859AeeAebfA15
+[2026-10-13T21:07:11.260Z] → POST /v1/credentials/aa58e907-3970-4bfc-8f30-71274c5b8ed5/activation · socio platform (pk_98636202571b4c85bbfce1f3) · {"secretHash":"6481710967904582222400827889217646548109758141923927150666271500484033459262","signature":"0xc94ba6443d780cc0f923a5cb7f5347db9dab062e532b4b701de0148b4156be675d2a1f0dab4f6bf8c1c5d2605e4b204f5b36857a86d52848fde5975c40b6a62e1b"}
+[2026-10-13T21:07:15.980Z] ← 201 {"credentialId":"aa58e907-3970-4bfc-8f30-71274c5b8ed5","commitment":"15289891793814393119523616158275399416986462821794746875228139766336277957609","leafIndex":2,"countryCode":840,"expiresAt":"2027-02-10T21:07:10.000Z","status":"ACTIVE","credentialRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","txHash":"0x145a2b0479edac75ed56000b53ea2f1287c639a9a8c22f9c0c773019bfd1fb95"}
+[2026-10-13T21:07:15.981Z] el compromiso que publicó el emisor coincide con el que calculó el titular: 15289891793814393119523616158275399416986462821794746875228139766336277957609
+[2026-10-13T21:07:16.390Z] tx registro · publishCredentialRoot (activación C) · firma Y (zk-api) · success · bloque 48078673 · gas 59672 · coste 0.000000358032000219 ETH · https://sepolia.basescan.org/tx/0x145a2b0479edac75ed56000b53ea2f1287c639a9a8c22f9c0c773019bfd1fb95
+
+[2026-10-13T21:07:16.392Z] === 12 · C, con un país no admitido (840), no puede obtener una prueba válida
+[2026-10-13T21:07:16.534Z] → GET /v1/assets/84532001/jurisdictions/840/opening · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:07:16.539Z] ← 404 {"statusCode":404,"error":"Not Found","message":"this asset does not admit that jurisdiction","code":"jurisdiction_not_admitted","details":{"assetId":"84532001","countryCode":840}}
+[2026-10-13T21:07:16.540Z] → GET /v1/credentials/15289891793814393119523616158275399416986462821794746875228139766336277957609/opening · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:07:16.552Z] ← 200 {"commitment":"15289891793814393119523616158275399416986462821794746875228139766336277957609","leafIndex":2,"credentialRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","opening":"[20 niveles]"}
+[2026-10-13T21:07:16.552Z] → GET /v1/assets/84532001/jurisdictions/170/opening · socio platform (pk_98636202571b4c85bbfce1f3)
+[2026-10-13T21:07:16.561Z] ← 200 {"assetId":"84532001","countryCode":170,"leafIndex":0,"countryRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","opening":"[8 niveles]"}
+[2026-10-13T21:07:16.870Z] intento 1 · país real 840 con la única apertura que existe (la de 170): el cliente lo rechaza antes de probar (jurisdiction_mismatch)
+[2026-10-13T21:07:16.920Z] intento 2 · país real 840 con la apertura de 170, sin las comprobaciones del cliente: el circuito no tiene testigo → Error: Assert Failed. Error in template Compliance_218 line: 109
+[2026-10-13T21:07:16.957Z] intento 3 · declarar 170 en vez de 840: el circuito no tiene testigo → Error: Assert Failed. Error in template Compliance_218 line: 94
+[2026-10-13T21:07:16.957Z] intento 2 falla en la pertenencia de la jurisdicción (la hoja 840 no está en el árbol del activo); intento 3 falla en la pertenencia de la credencial (el compromiso publicado fija 840)
+[2026-10-13T21:07:17.156Z] C está verificado por el estándar (IR.isVerified = true) y aun así MC.canTransfer(0, C) = false
+[2026-10-13T21:07:17.257Z] simulación de mint(C) por Y: revierte con "Error" (no se envía)
+[2026-10-13T21:07:17.257Z] → GET /v1/compliance/assets/84532001/subjects/0x546fed1362A9fc69aE4666a3375859AeeAebfA15 · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:07:17.944Z] ← 200 {"assetId":"84532001","subject":"0x546fed1362A9fc69aE4666a3375859AeeAebfA15","compliant":false,"attestation":{"issuedAt":null,"expiresAt":null,"nullifier":null},"epoch":{"currentEpochEnd":"1793664000","epochLength":"2592000"},"checkedAt":"2026-10-13T21:07:17.943Z"}
+
+[2026-10-13T21:07:17.946Z] === Cierre · reconciliación final tras el paso de C
+[2026-10-13T21:07:17.946Z] → POST /v1/issuer/state/rebuild · socio operator (pk_d357198ae5cedb1137c262f7)
+[2026-10-13T21:07:45.243Z] ← 200 {"source":"chain-events","events":4,"leafCount":2,"replayedRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","onChainRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","matchesChain":true,"throughBlock":"48078675","missingFromDatabase":[],"missingFromChain":[]}
+[2026-10-13T21:07:45.244Z] → POST /v1/issuer/assets/84532001/state/rebuild · socio operator (pk_d357198ae5cedb1137c262f7)
+[2026-10-13T21:07:52.123Z] ← 424 {"statusCode":424,"error":"Failed Dependency","message":"CountryLeafUpdated logs failed on chain","code":"chain_call_failed","details":{"reason":"RPC Request failed."}}
+[2026-10-13T21:07:52.124Z] DETENIDO: comprobación fallida: el árbol de jurisdicciones no coincide con la cadena
+[2026-10-13T21:07:52.124Z] estado guardado para retomar · pasos completos: partners, investors, jurisdictions, credentials, proofs, attestations, compliance, transfer, revocation, disclosure, rebuild, outsider-setup, outsider
+
+[2026-10-13T21:09:24.789Z] ##### corrida E2E en Base Sepolia · id 4a4df531 · retoma tras: partners, investors, jurisdictions, credentials, proofs, attestations, compliance, transfer, revocation, disclosure, rebuild, outsider-setup, outsider
+
+[2026-10-13T21:09:24.789Z] === 0 · Comprobaciones previas (solo lectura)
+[2026-10-13T21:09:25.119Z] zk-api /health {"status":"ok","service":"zk-api"}
+[2026-10-13T21:09:26.118Z] hechos {"registry.ISSUER_ROLE(Y)":true,"registry.JURISDICTION_ROLE(Y)":true,"attestor.ATTESTATION_MANAGER_ROLE(Y)":true,"IR.isAgent(Y)":true,"token.isAgent(Y)":true,"IdFactory.owner == Y":true,"ClaimIssuer: Y con propósito CLAIM (3)":true,"MC.getModules == [módulo ZK]":true}
+[2026-10-13T21:09:26.119Z] saldos de partida {"X":"0.049805848021301816 ETH","Y":"0.049888311078083844 ETH","A":"0 ETH","B":"0 ETH","C":"0 ETH"}
+[2026-10-13T21:09:26.310Z] precio del gas 6000000 wei · bloque 48078739
+[2026-10-13T21:09:26.311Z] inversor A: 0xCD724691C8de3C3962925BFEa34d95d1A8F64C96 (EOA nueva, país 170)
+[2026-10-13T21:09:26.311Z] inversor B: 0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0 (EOA nueva, país 484)
+[2026-10-13T21:09:26.311Z] inversor C: 0x546fed1362A9fc69aE4666a3375859AeeAebfA15 (EOA nueva, país 840)
+[2026-10-13T21:09:26.312Z] 1 · socios ya registrados (se retoma)
+
+[2026-10-13T21:09:26.312Z] === Cierre · motivo de los rechazos, leído del contrato (simulación, sin enviar)
+[2026-10-13T21:09:26.408Z] transfer(A → B, 100 ZKCTA) desde A: revierte con "Transfer not possible"
+[2026-10-13T21:09:26.500Z] mint(C, 1000 ZKCTA) por Y: revierte con "Compliance not followed"
+[2026-10-13T21:09:26.591Z] transfer(A → C, 100 ZKCTA) desde A: revierte con "Transfer not possible"
+[2026-10-13T21:09:26.970Z] B: isVerified true · isAttested false · moduleCheck(A, B) false · canTransfer(A, B) false
+[2026-10-13T21:09:27.348Z] C: isVerified true · isAttested false · moduleCheck(A, C) false · canTransfer(A, C) false
+
+[2026-10-13T21:09:27.349Z] === Cierre · reconciliación final tras el paso de C
+[2026-10-13T21:09:27.349Z] → POST /v1/issuer/state/rebuild · socio operator (pk_d357198ae5cedb1137c262f7)
+[2026-10-13T21:09:46.133Z] ← 200 {"source":"chain-events","events":4,"leafCount":2,"replayedRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","onChainRoot":"7208672313522052172843198596638459991231161367798002031906339693434691325872","matchesChain":true,"throughBlock":"48078739","missingFromDatabase":[],"missingFromChain":[]}
+[2026-10-13T21:09:46.133Z] → POST /v1/issuer/assets/84532001/state/rebuild · socio operator (pk_d357198ae5cedb1137c262f7)
+[2026-10-13T21:10:04.296Z] ← 200 {"source":"chain-events","events":5,"leafCount":5,"replayedRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","onChainRoot":"17917868276453248930753297139309830143269488785609370659796505931645401306751","matchesChain":true,"throughBlock":"48078749"}
+[2026-10-13T21:10:04.298Z] → GET /v1/access-log/integrity · socio audit (pk_a1e7150ddba290eb1b4a32aa)
+[2026-10-13T21:10:04.315Z] ← 200 {"intact":true,"entries":44,"checked":44,"brokenAtSequence":null,"reason":null}
+[2026-10-13T21:10:04.316Z] → GET /v1/access-log?limit=5 · socio audit (pk_a1e7150ddba290eb1b4a32aa)
+[2026-10-13T21:10:04.325Z] ← 200 {"entries":[{"sequence":"44","occurredAt":"2026-10-13T21:10:04.305Z","partnerKey":"pk_d357198ae5cedb1137c262f7","actorRef":"e2e:operador","method":"POST","path":"/v1/issuer/assets/84532001/state/rebuild","scope":"issuer:admin","resourceType":"issuer_state","resourceId":"84532001","outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"d406cc249720d59bd7e87441742b8788d844c15d2e836f5055c10bb947ded6cc","entryHash":"c9f6afc6a633072fb982a5c4ca707bb7eb4fbcc3e7606ff1a47613d67eb7dbd1"},{"sequence":"43","occurredAt":"2026-10-13T21:09:46.147Z","partnerKey":"pk_d357198ae5cedb1137c262f7","actorRef":"e2e:operador","method":"POST","path":"/v1/issuer/state/rebuild","scope":"issuer:admin","resourceType":"issuer_state","resourceId":null,"outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"e9c5fbc27380caf961cd1d2395efa5f01a55f3ac05354e2d35eb620a8b6b4065","entryHash":"d406cc249720d59bd7e87441742b8788d844c15d2e836f5055c10bb947ded6cc"},{"sequence":"42","occurredAt":"2026-10-13T21:07:52.129Z","partnerKey":"pk_d357198ae5cedb1137c262f7","actorRef":"e2e:operador","method":"POST","path":"/v1/issuer/assets/84532001/state/rebuild","scope":"issuer:admin","resourceType":"issuer_state","resourceId":null,"outcome":"refused","statusCode":424,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"e7b50aa71264d521cc8edacf729683aae2199bad488c34de3a926c01be14b63b","entryHash":"e9c5fbc27380caf961cd1d2395efa5f01a55f3ac05354e2d35eb620a8b6b4065"},{"sequence":"41","occurredAt":"2026-10-13T21:07:45.242Z","partnerKey":"pk_d357198ae5cedb1137c262f7","actorRef":"e2e:operador","method":"POST","path":"/v1/issuer/state/rebuild","scope":"issuer:admin","resourceType":"issuer_state","resourceId":null,"outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"423cd815d7ec3348132fe4e12310171b02138f46827804be31f96774be3e3015","entryHash":"e7b50aa71264d521cc8edacf729683aae2199bad488c34de3a926c01be14b63b"},{"sequence":"40","occurredAt":"2026-10-13T21:07:17.950Z","partnerKey":"pk_5d0247a904164aa6afc8dc79","actorRef":"e2e:analista-banco","method":"GET","path":"/v1/compliance/assets/84532001/subjects/0x546fed1362A9fc69aE4666a3375859AeeAebfA15","scope":"compliance:read","resourceType":"compliance_state","resourceId":"84532001/0x546fed1362A9fc69aE4666a3375859AeeAebfA15","outcome":"granted","statusCode":200,"requestDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","previousHash":"c803eea9d8e995be43a43e04212c121af9e61620e62497d45f28f032e6c7bd74","entryHash":"423cd815d7ec3348132fe4e12310171b02138f46827804be31f96774be3e3015"}],"nextCursor":"40"}
+[2026-10-13T21:10:04.326Z] → GET /v1/access-log/integrity · socio bank (pk_5d0247a904164aa6afc8dc79)
+[2026-10-13T21:10:04.331Z] ← 403 {"statusCode":403,"error":"Forbidden","message":"this partner does not hold the scope this route needs","code":"insufficient_scope","details":{"required":"audit:read","granted":["proofs:verify","proofs:read","compliance:read","disclosures:request","disclosures:read","disclosures:approve"]}}
+
+[2026-10-13T21:10:04.333Z] === Resumen de gasto
+[2026-10-13T21:10:05.314Z] X: saldo 0.049805848021301816 ETH → 0.049805848021301816 ETH · diferencia 0 ETH · comisiones de sus transacciones 0 ETH
+[2026-10-13T21:10:05.314Z] Y: saldo 0.049888311078083844 ETH → 0.049852278938079214 ETH · diferencia 0.00003603214000463 ETH · comisiones de sus transacciones 0.000026187108006287 ETH
+[2026-10-13T21:10:05.315Z] A: saldo 0 ETH → 0.000007043127999744 ETH · diferencia -0.000007043127999744 ETH · comisiones de sus transacciones 0.000002801904001238 ETH
+[2026-10-13T21:10:05.315Z] B: saldo 0 ETH → 0 ETH · diferencia 0 ETH · comisiones de sus transacciones 0 ETH
+[2026-10-13T21:10:05.315Z] C: saldo 0 ETH → 0 ETH · diferencia 0 ETH · comisiones de sus transacciones 0 ETH
+[2026-10-13T21:10:05.315Z] transacciones registradas: 25
+[2026-10-13T21:10:05.315Z]   Y · identidad A · IdFactory.createIdentityWithManagementKeys · success · gas 451825 · 0.00000271095000017 ETH · 0xc1d94697e228f994b428631849f8ffea735dcc7acc474cefa10e9af898d78d7d
+[2026-10-13T21:10:05.316Z]   Y · identidad A · addKey(ClaimIssuer, CLAIM) · success · gas 179071 · 0.000001074426000161 ETH · 0x25e1205cd20db2a141ee6c625673dd5e99201f9bca89154d5f1cbbfc1ff16e1e
+[2026-10-13T21:10:05.316Z]   Y · identidad A · addClaim(tópico 1, firmado por Y) · success · gas 299779 · 0.000001798674000161 ETH · 0x8cc51729f4c470496520f41f3022040bcb1b0248b6aee645a08804da027588ea
+[2026-10-13T21:10:05.316Z]   Y · IR del activo ZK · registerIdentity(A, país 170) · success · gas 79566 · 0.000000477396000199 ETH · 0x02b686cad524eec71816a262d04774107a1600fda736a3af854b1d537f5c22af
+[2026-10-13T21:10:05.316Z]   Y · identidad B · IdFactory.createIdentityWithManagementKeys · success · gas 451825 · 0.000002710950000211 ETH · 0xda5a170d9d5aa0bd34486293c526c3c79a71cdd189476928ba8289ba2e552a71
+[2026-10-13T21:10:05.316Z]   Y · identidad B · addKey(ClaimIssuer, CLAIM) · success · gas 179071 · 0.000001074426000243 ETH · 0xf5c2ed16654c3596c674d66651be7d084495e3a5f06c99b668b0a173e66f39a6
+[2026-10-13T21:10:05.316Z]   Y · identidad B · addClaim(tópico 1, firmado por Y) · success · gas 299779 · 0.000001798674001083 ETH · 0x0284fd19982d81666088651ac1445297b1a33f9ce039a23ac637fd7dd338c6ef
+[2026-10-13T21:10:05.316Z]   Y · IR del activo ZK · registerIdentity(B, país 484) · success · gas 79590 · 0.000000477540000095 ETH · 0x56777fdae228a080f3ec347203498f6b0e6ea3d1f30116ce669cb2cb7473d48d
+[2026-10-13T21:10:05.316Z]   Y · registro · publishCountryRoot (conjunto admitido) · success · gas 69478 · 0.000000416868000162 ETH · 0x6ceceaa18656faac676a133076547ab1f2ff59c315e12e591cf2761c21d767ea
+[2026-10-13T21:10:05.316Z]   Y · registro · publishCredentialRoot (activación A) · success · gas 54553 · 0.000000327318000127 ETH · 0x65b826b092e18403bcb298c22b7465eb8708839698228eb574f0aff2ba9475a0
+[2026-10-13T21:10:05.316Z]   Y · registro · publishCredentialRoot (activación B) · success · gas 59672 · 0.00000035803200013 ETH · 0xa53d59a6d36833df1b959691730eac5a9fe655b101b4009c0e191ed2211612cf
+[2026-10-13T21:10:05.317Z]   Y · atestador · attestFor(A) · success · gas 345229 · 0.000002071374000426 ETH · 0xcee4d8adf46e97a74e4c4028eb88a6ff75d59b1a99bf87d89be2d227b62b9860
+[2026-10-13T21:10:05.317Z]   Y · atestador · attestFor(B) · success · gas 345229 · 0.00000207137400072 ETH · 0x3becdb531aa7784db689368f906874eca5253e9f2e493054189b201ad4c037f0
+[2026-10-13T21:10:05.317Z]   Y · token · mint(A, 1000 ZKCTA) por Y (agente) · success · gas 263773 · 0.000001582638000095 ETH · 0x8374d95335ec5199dd63087ed1a31a81edd645c838f0fb51ed5a80c284ff7869
+[2026-10-13T21:10:05.317Z]   Y · fondeo · Y → A (ETH para el gas de A) · success · gas 21000 · 0.000000126000000586 ETH · 0x679ab99aef0624f5c541d1976e1f0cd71522db5b355f68b1c07fa5aa3136994a
+[2026-10-13T21:10:05.317Z]   A · token · transfer(A → B, 250 ZKCTA) · success · gas 252000 · 0.000001512000000095 ETH · 0x652e8f9f7c968f12c7d3e75d15b09295deffe18faa01cea0d89a5b39e8c4a983
+[2026-10-13T21:10:05.317Z]   Y · registro · publishCredentialRoot (revocación de B, hoja retirada) · success · gas 57660 · 0.000000345960000129 ETH · 0xaa9f2c42324665a09824321cbd2935dc7844a8329b5316d7a3b7e262dd3364f6
+[2026-10-13T21:10:05.317Z]   Y · registro · invalidateCredentialRoot (cierra la ventana de la raíz anterior) · success · gas 28005 · 0.000000168030000095 ETH · 0x784c1d5e1e0b6887bc98744fb00f21a8f814c80c3146f635a984415856cb0fc8
+[2026-10-13T21:10:05.317Z]   Y · atestador · revokeAttestation(84532001, B) · success · gas 29476 · 0.000000176856000161 ETH · 0xe3549ccbb30a3ba6c5bb32c46f58617a9bb3b2e22b59c463a74c9376845e5b3b
+[2026-10-13T21:10:05.317Z]   A · token · transfer(A → B, 100 ZKCTA) rechazada · reverted · gas 214984 · 0.000001289904001143 ETH · 0xa59b8ff33ea41ba500a90c579fd4da80378073681b03b45058eb00cfb95ad2b6
+[2026-10-13T21:10:05.317Z]   Y · identidad C · IdFactory.createIdentityWithManagementKeys · success · gas 451825 · 0.000002710950000384 ETH · 0x80b2e0715715e9880a5dc7df9833702b41d14eb7bf5b7b9389fca177234c31a2
+[2026-10-13T21:10:05.317Z]   Y · identidad C · addKey(ClaimIssuer, CLAIM) · success · gas 179071 · 0.000001074426000095 ETH · 0xc0fdb054cf40791ad757a6cb2038636445bd44764a4f22b33004e620a68c799a
+[2026-10-13T21:10:05.318Z]   Y · identidad C · addClaim(tópico 1, firmado por Y) · success · gas 299779 · 0.000001798674000095 ETH · 0xd0b3e602d9c3d21cb0c0077a5c194b2c88e0cd1403cde183b4851f8c7b8374b0
+[2026-10-13T21:10:05.318Z]   Y · IR del activo ZK · registerIdentity(C, país 840) · success · gas 79590 · 0.00000047754000054 ETH · 0xa2cfcb78f744a7630ec307fc230768ec1de595d9b88f75cb36310619da605683
+[2026-10-13T21:10:05.318Z]   Y · registro · publishCredentialRoot (activación C) · success · gas 59672 · 0.000000358032000219 ETH · 0x145a2b0479edac75ed56000b53ea2f1287c639a9a8c22f9c0c773019bfd1fb95
+[2026-10-13T21:10:05.318Z] ##### corrida 4a4df531 completa
+
+[2026-10-13T21:10:47.145Z] ##### corrida E2E en Base Sepolia · id 4a4df531 · retoma tras: partners, investors, jurisdictions, credentials, proofs, attestations, compliance, transfer, revocation, disclosure, rebuild, outsider-setup, outsider, reasons, closing
+
+[2026-10-13T21:10:47.145Z] === 0 · Comprobaciones previas (solo lectura)
+[2026-10-13T21:10:47.465Z] zk-api /health {"status":"ok","service":"zk-api"}
+[2026-10-13T21:10:48.459Z] hechos {"registry.ISSUER_ROLE(Y)":true,"registry.JURISDICTION_ROLE(Y)":true,"attestor.ATTESTATION_MANAGER_ROLE(Y)":true,"IR.isAgent(Y)":true,"token.isAgent(Y)":true,"IdFactory.owner == Y":true,"ClaimIssuer: Y con propósito CLAIM (3)":true,"MC.getModules == [módulo ZK]":true}
+[2026-10-13T21:10:48.459Z] saldos de partida {"X":"0.049805848021301816 ETH","Y":"0.049888311078083844 ETH","A":"0 ETH","B":"0 ETH","C":"0 ETH"}
+[2026-10-13T21:10:48.651Z] precio del gas 6000000 wei · bloque 48078780
+[2026-10-13T21:10:48.652Z] inversor A: 0xCD724691C8de3C3962925BFEa34d95d1A8F64C96 (EOA nueva, país 170)
+[2026-10-13T21:10:48.652Z] inversor B: 0x1eCC66B9C3Fa2BcCAB22dDc02850E9eB3EDf57A0 (EOA nueva, país 484)
+[2026-10-13T21:10:48.653Z] inversor C: 0x546fed1362A9fc69aE4666a3375859AeeAebfA15 (EOA nueva, país 840)
+[2026-10-13T21:10:48.653Z] 1 · socios ya registrados (se retoma)
+
+[2026-10-13T21:10:48.653Z] === Resumen de gasto
+[2026-10-13T21:10:49.151Z] X: saldo 0.049805848021301816 ETH → 0.049805848021301816 ETH · diferencia 0 ETH · comisiones de sus transacciones 0 ETH
+[2026-10-13T21:10:49.152Z] Y: saldo 0.049888311078083844 ETH → 0.049852278938079214 ETH · diferencia 0.00003603214000463 ETH · comisiones de sus transacciones 0.000026187108006287 ETH
+[2026-10-13T21:10:49.152Z] A: saldo 0 ETH → 0.000007043127999744 ETH · diferencia -0.000007043127999744 ETH · comisiones de sus transacciones 0.000002801904001238 ETH
+[2026-10-13T21:10:49.152Z] B: saldo 0 ETH → 0 ETH · diferencia 0 ETH · comisiones de sus transacciones 0 ETH
+[2026-10-13T21:10:49.153Z] C: saldo 0 ETH → 0 ETH · diferencia 0 ETH · comisiones de sus transacciones 0 ETH
+[2026-10-13T21:10:49.153Z] transacciones registradas: 25
+[2026-10-13T21:10:49.153Z]   Y · identidad A · IdFactory.createIdentityWithManagementKeys · success · gas 451825 · 0.00000271095000017 ETH · 0xc1d94697e228f994b428631849f8ffea735dcc7acc474cefa10e9af898d78d7d
+[2026-10-13T21:10:49.153Z]   Y · identidad A · addKey(ClaimIssuer, CLAIM) · success · gas 179071 · 0.000001074426000161 ETH · 0x25e1205cd20db2a141ee6c625673dd5e99201f9bca89154d5f1cbbfc1ff16e1e
+[2026-10-13T21:10:49.153Z]   Y · identidad A · addClaim(tópico 1, firmado por Y) · success · gas 299779 · 0.000001798674000161 ETH · 0x8cc51729f4c470496520f41f3022040bcb1b0248b6aee645a08804da027588ea
+[2026-10-13T21:10:49.153Z]   Y · IR del activo ZK · registerIdentity(A, país 170) · success · gas 79566 · 0.000000477396000199 ETH · 0x02b686cad524eec71816a262d04774107a1600fda736a3af854b1d537f5c22af
+[2026-10-13T21:10:49.153Z]   Y · identidad B · IdFactory.createIdentityWithManagementKeys · success · gas 451825 · 0.000002710950000211 ETH · 0xda5a170d9d5aa0bd34486293c526c3c79a71cdd189476928ba8289ba2e552a71
+[2026-10-13T21:10:49.153Z]   Y · identidad B · addKey(ClaimIssuer, CLAIM) · success · gas 179071 · 0.000001074426000243 ETH · 0xf5c2ed16654c3596c674d66651be7d084495e3a5f06c99b668b0a173e66f39a6
+[2026-10-13T21:10:49.153Z]   Y · identidad B · addClaim(tópico 1, firmado por Y) · success · gas 299779 · 0.000001798674001083 ETH · 0x0284fd19982d81666088651ac1445297b1a33f9ce039a23ac637fd7dd338c6ef
+[2026-10-13T21:10:49.154Z]   Y · IR del activo ZK · registerIdentity(B, país 484) · success · gas 79590 · 0.000000477540000095 ETH · 0x56777fdae228a080f3ec347203498f6b0e6ea3d1f30116ce669cb2cb7473d48d
+[2026-10-13T21:10:49.154Z]   Y · registro · publishCountryRoot (conjunto admitido) · success · gas 69478 · 0.000000416868000162 ETH · 0x6ceceaa18656faac676a133076547ab1f2ff59c315e12e591cf2761c21d767ea
+[2026-10-13T21:10:49.154Z]   Y · registro · publishCredentialRoot (activación A) · success · gas 54553 · 0.000000327318000127 ETH · 0x65b826b092e18403bcb298c22b7465eb8708839698228eb574f0aff2ba9475a0
+[2026-10-13T21:10:49.154Z]   Y · registro · publishCredentialRoot (activación B) · success · gas 59672 · 0.00000035803200013 ETH · 0xa53d59a6d36833df1b959691730eac5a9fe655b101b4009c0e191ed2211612cf
+[2026-10-13T21:10:49.154Z]   Y · atestador · attestFor(A) · success · gas 345229 · 0.000002071374000426 ETH · 0xcee4d8adf46e97a74e4c4028eb88a6ff75d59b1a99bf87d89be2d227b62b9860
+[2026-10-13T21:10:49.154Z]   Y · atestador · attestFor(B) · success · gas 345229 · 0.00000207137400072 ETH · 0x3becdb531aa7784db689368f906874eca5253e9f2e493054189b201ad4c037f0
+[2026-10-13T21:10:49.154Z]   Y · token · mint(A, 1000 ZKCTA) por Y (agente) · success · gas 263773 · 0.000001582638000095 ETH · 0x8374d95335ec5199dd63087ed1a31a81edd645c838f0fb51ed5a80c284ff7869
+[2026-10-13T21:10:49.154Z]   Y · fondeo · Y → A (ETH para el gas de A) · success · gas 21000 · 0.000000126000000586 ETH · 0x679ab99aef0624f5c541d1976e1f0cd71522db5b355f68b1c07fa5aa3136994a
+[2026-10-13T21:10:49.154Z]   A · token · transfer(A → B, 250 ZKCTA) · success · gas 252000 · 0.000001512000000095 ETH · 0x652e8f9f7c968f12c7d3e75d15b09295deffe18faa01cea0d89a5b39e8c4a983
+[2026-10-13T21:10:49.154Z]   Y · registro · publishCredentialRoot (revocación de B, hoja retirada) · success · gas 57660 · 0.000000345960000129 ETH · 0xaa9f2c42324665a09824321cbd2935dc7844a8329b5316d7a3b7e262dd3364f6
+[2026-10-13T21:10:49.154Z]   Y · registro · invalidateCredentialRoot (cierra la ventana de la raíz anterior) · success · gas 28005 · 0.000000168030000095 ETH · 0x784c1d5e1e0b6887bc98744fb00f21a8f814c80c3146f635a984415856cb0fc8
+[2026-10-13T21:10:49.154Z]   Y · atestador · revokeAttestation(84532001, B) · success · gas 29476 · 0.000000176856000161 ETH · 0xe3549ccbb30a3ba6c5bb32c46f58617a9bb3b2e22b59c463a74c9376845e5b3b
+[2026-10-13T21:10:49.155Z]   A · token · transfer(A → B, 100 ZKCTA) rechazada · reverted · gas 214984 · 0.000001289904001143 ETH · 0xa59b8ff33ea41ba500a90c579fd4da80378073681b03b45058eb00cfb95ad2b6
+[2026-10-13T21:10:49.155Z]   Y · identidad C · IdFactory.createIdentityWithManagementKeys · success · gas 451825 · 0.000002710950000384 ETH · 0x80b2e0715715e9880a5dc7df9833702b41d14eb7bf5b7b9389fca177234c31a2
+[2026-10-13T21:10:49.155Z]   Y · identidad C · addKey(ClaimIssuer, CLAIM) · success · gas 179071 · 0.000001074426000095 ETH · 0xc0fdb054cf40791ad757a6cb2038636445bd44764a4f22b33004e620a68c799a
+[2026-10-13T21:10:49.155Z]   Y · identidad C · addClaim(tópico 1, firmado por Y) · success · gas 299779 · 0.000001798674000095 ETH · 0xd0b3e602d9c3d21cb0c0077a5c194b2c88e0cd1403cde183b4851f8c7b8374b0
+[2026-10-13T21:10:49.155Z]   Y · IR del activo ZK · registerIdentity(C, país 840) · success · gas 79590 · 0.00000047754000054 ETH · 0xa2cfcb78f744a7630ec307fc230768ec1de595d9b88f75cb36310619da605683
+[2026-10-13T21:10:49.155Z]   Y · registro · publishCredentialRoot (activación C) · success · gas 59672 · 0.000000358032000219 ETH · 0x145a2b0479edac75ed56000b53ea2f1287c639a9a8c22f9c0c773019bfd1fb95
+[2026-10-13T21:10:49.155Z] ##### corrida 4a4df531 completa

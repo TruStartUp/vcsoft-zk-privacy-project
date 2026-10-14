@@ -1,0 +1,52 @@
+X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2 balance 0.049834948045314055 ETH
+Y 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337 balance 0.049911712248084237 ETH
+
+1. Confidentiality layer (signed by X)
+  resuming deploy:groth16Verifier tx 0x61fdef52cfb91b7f7b1dae692dd5de77dc5513fbb3d834d849ad99a2a8f79f26
+  confirmed deploy:groth16Verifier block 48076942 gas 450287 fee 0.000002701722001343 ETH
+  groth16Verifier 0xD5417e562083DB6ef071489f2d1A8C0d8d36784d
+  sent deploy:groth16VerifierAdapter tx 0xca69156573076ba612b484e9c43d95017fc50a15a3da8505c46d0b75608cf001 from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed deploy:groth16VerifierAdapter block 48076951 gas 316959 fee 0.000001901754000919 ETH
+  groth16VerifierAdapter 0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA
+  sent deploy:credentialRegistry tx 0xb1a628e198247a140311056dcf3c3a2847f0092dec4460366ded4b07b064e38a from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed deploy:credentialRegistry block 48076954 gas 1189339 fee 0.000007136034002961 ETH
+  credentialRegistry 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA
+  sent deploy:complianceAttestor tx 0x0f089bcbc6894296f484b5a6cc7f901f881431fa3b2379256194315b8abb0239 from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed deploy:complianceAttestor block 48076957 gas 1456240 fee 0.000008737440003804 ETH
+  complianceAttestor 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09
+  sent deploy:zkComplianceModuleImplementation tx 0x5de75140e61de803d135023851349bf35dbe29181b5f83befcd6fecfa7145577 from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed deploy:zkComplianceModuleImplementation block 48076960 gas 1410208 fee 0.000008461248003136 ETH
+  zkComplianceModuleImplementation 0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf
+  sent deploy:zkComplianceModule tx 0x98bb233d70cf59b6446b87d466141af46f67cb553dc91f6b3e69252169b8e5aa from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed deploy:zkComplianceModule block 48076962 gas 322783 fee 0.000001936698001128 ETH
+  zkComplianceModule 0x80929BFc966888fa24710F177F594F377A64A925
+
+2. Roles for the platform (signed by X)
+  sent role:registry.ISSUER_ROLE tx 0x97ff3d84662144c0752e3d678e9606e9a94ae8069d12ec188eb4bf49141263fe from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed role:registry.ISSUER_ROLE block 48076964 gas 51523 fee 0.000000309138000097 ETH
+  sent role:registry.JURISDICTION_ROLE tx 0xdbdab6ec42fdc9895df5c413458e1479321c13dc11bb437485716d5804b2f878 from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed role:registry.JURISDICTION_ROLE block 48076967 gas 51523 fee 0.000000309138000097 ETH
+  sent role:attestor.ATTESTATION_MANAGER_ROLE tx 0x6389a4f80d1497f527da6a6b27ebf6d86c38eccb6b6e5ec2bc242c934571cff5 from X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+  confirmed role:attestor.ATTESTATION_MANAGER_ROLE block 48076970 gas 51429 fee 0.000000308574000097 ETH
+
+PLATFORM_PRIVATE_KEY is not set: stopping before the T-REX suite, which only the factory owner can deploy.
+
+Contracts
+  groth16Verifier                    0xD5417e562083DB6ef071489f2d1A8C0d8d36784d  block 48076942
+  groth16VerifierAdapter             0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA  block 48076951
+  credentialRegistry                 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA  block 48076954
+  complianceAttestor                 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09  block 48076957
+  zkComplianceModuleImplementation   0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf  block 48076960
+  zkComplianceModule                 0x80929BFc966888fa24710F177F594F377A64A925  block 48076962
+
+REGISTRY_DEPLOYMENT_BLOCK=48076954
+ASSET_ID=84532001  salt ZKCONF-20261013
+
+Fees recorded per signer (all runs)
+  X 0.000031801746013582 ETH
+
+Balances (this run)
+  0xb44703b4D47Fd595f6383909aCF424cA6612A5C2 0.049834948045314055 -> 0.049805848021301816 ETH
+  0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337 0.049911712248084237 -> 0.049911712248084237 ETH
+
+Record: deployments/baseSepolia.json

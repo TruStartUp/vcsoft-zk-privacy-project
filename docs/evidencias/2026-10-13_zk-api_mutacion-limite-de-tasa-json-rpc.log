@@ -1,0 +1,31 @@
+
+ RUN  v2.1.9 <repo>/zk-api
+
+ ❯ test/chain-rpc.test.ts (31 tests | 1 failed) 1406ms
+   × retrying a public endpoint > retries a rate limit that arrives as a JSON-RPC error instead of an HTTP status 4ms
+     → CredentialLeafUpdated logs failed on chain
+   ✓ reading the event log in windows > rebuilds the same tree from a split log as from a whole one 436ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chain-rpc.test.ts > retrying a public endpoint > retries a rate limit that arrives as a JSON-RPC error instead of an HTTP status
+Error: CredentialLeafUpdated logs failed on chain
+ ❯ Object.failedDependency src/lib/errors.ts:32:19
+     30|     decorate(Boom.tooManyRequests(message), code, details),
+     31|   failedDependency: (code: string, message: string, details?: ApiError…
+     32|     decorate(Boom.failedDependency(message), code, details),
+       |                   ^
+     33|   internal: (code: string, message: string, details?: ApiErrorDetails)…
+     34|     decorate(Boom.internal(message), code, details),
+ ❯ chainFailure src/services/registry.service.ts:109:19
+ ❯ read src/services/registry.service.ts:126:11
+ ❯ Module.fetchCredentialLeafEvents src/services/registry.service.ts:386:16
+ ❯ test/chain-rpc.test.ts:80:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 30 passed (31)
+   Start at  18:32:29
+   Duration  1.88s (transform 69ms, setup 97ms, collect 243ms, tests 1.41s, environment 0ms, prepare 27ms)
+

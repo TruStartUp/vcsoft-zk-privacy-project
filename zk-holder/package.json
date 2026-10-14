@@ -1,0 +1,27 @@
+{
+  "name": "zk-holder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reference holder client for the confidentiality layer: secret, backup, activation, witness and proof",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e:base-sepolia": "tsx e2e/base-sepolia.ts"
+  },
+  "dependencies": {
+    "circomlibjs": "0.1.7",
+    "snarkjs": "0.7.6",
+    "viem": "2.56.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,1932 @@
+openapi: 3.1.0
+
+info:
+  title: VCSoft confidentiality layer — verification API
+  version: "1.0.0"
+  summary: Credential issuance, authorized disclosure and zero-knowledge proof verification.
+  description: |
+    The HTTP contract of `zk-api`, the service that issues confidentiality credentials,
+    releases identity under an approved disclosure request, and answers whether a
+    zero-knowledge proof of compliance holds.
+
+    This document is served by the service it describes, at `/api/docs`, and a test in the
+    suite fails if a route registered in the application is missing from it, if an error
+    code the code can emit is missing from the catalog, or if an operation declares a scope
+    other than the one the route enforces.
+
+    ## Authentication
+
+    Every `/v1` route is authenticated by an HMAC-SHA256 signature over the request, not by
+    a bearer token: a leaked token is a standing grant, whereas a signature covers one
+    method, one path, one body and one moment, and the nonce makes it single-use even
+    inside its window.
+
+    Four headers carry it, and all four are required:
+
+    | Header | Content |
+    |---|---|
+    | `X-Partner-Key` | The partner's key id |
+    | `X-Partner-Timestamp` | Unix seconds. Outside `PARTNER_SIGNATURE_WINDOW_SECONDS` the request is refused. |
+    | `X-Partner-Nonce` | 8–128 characters, single-use inside the window |
+    | `X-Partner-Signature` | Lowercase hex HMAC-SHA256 over the canonical request |
+
+    A fifth, `X-Partner-Actor`, is optional: it names the person the partner is acting for
+    and reaches the access log. It is not covered by the signature.
+
+    The canonical request is six lines joined by `\n`:
+
+    ```
+    VCSOFT-HMAC-SHA256
+    <METHOD>
+    <path, including its query string>
+    <timestamp>
+    <nonce>
+    <lowercase hex sha256 of the raw request body>
+    ```
+
+    The body digest is taken over the bytes that arrived, not over the object they parsed
+    into. An empty body hashes the empty string.
+
+    ## Authorization
+
+    Each operation names the single scope it requires in `x-required-scope`. A partner
+    holding the key but not the scope is refused with `insufficient_scope`, and the refusal
+    is recorded in the access log naming the scope that was reached for.
+
+    `credentials:issue` and `credentials:activate` are deliberately separate: the desk that
+    records the bank's identity verdict must not be able to complete a credential in the
+    holder's place.
+
+    `credentials:opening` is read-only and is what the platform acting for the holder needs
+    to build a proof. `issuer:admin` does not include it: the scopes are not hierarchical,
+    and the administrator who rebuilds state and rotates viewing keys has no reason to read
+    openings.
+
+    A disclosure request is decided by a partner other than the one that made it, whatever
+    scopes either holds (`disclosure_self_decision`), and only the partner that made it can
+    release it (`disclosure_not_requester`). Who decided is recorded from the authenticated
+    request, not from the body.
+
+    ## Errors
+
+    Every error carries a stable `snake_case` `code` next to the HTTP status, so a caller
+    branches on the code and not on prose. The complete catalog is `x-error-catalog` at the
+    root of this document, and `ErrorCode` in the schemas.
+
+    ## Proving scheme
+
+    A deployment verifies proofs under one scheme, `groth16` or `plonk`, and it is the one
+    the compliance attestor has an adapter mounted for. `POST /v1/verifications` accepts
+    the calldata shape of either and refuses the one this deployment does not verify with
+    `proof_scheme_mismatch`, rather than calling a perfectly good proof invalid.
+  contact:
+    name: TRU Web3
+  license:
+    name: Proprietary — VCSoft S.A.S.
+
+servers:
+  - url: http://127.0.0.1:3060
+    description: Local development
+  - url: https://{host}
+    description: Deployment
+    variables:
+      host:
+        default: zk-api.example
+        description: Host the client's platform publishes the service at.
+
+tags:
+  - name: Service
+    description: Liveness and the specification itself. Public, unauthenticated.
+  - name: Credentials
+    description: Issuance in two steps, status, openings, revocation and suspension.
+  - name: Jurisdictions
+    description: The set of countries an asset admits, and the openings against it.
+  - name: Verification
+    description: Validating a proof, its standing afterwards, and the compliance state of a position.
+  - name: Disclosure
+    description: Requesting, deciding and releasing identity under an authorized disclosure.
+  - name: Audit
+    description: The append-only access log and its integrity.
+  - name: Issuer
+    description: Rebuilding the issuer's off-chain state from the registry's own event log.
+
+security:
+  - partnerKey: []
+    partnerTimestamp: []
+    partnerNonce: []
+    partnerSignature: []
+
+paths:
+  /health:
+    get:
+      tags: [Service]
+      operationId: health
+      summary: Liveness
+      description: Answers without touching the database, Redis or the chain.
+      security: []
+      responses:
+        "200":
+          description: The process is up.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, service]
+                properties:
+                  status: { type: string, const: ok }
+                  service: { type: string, const: zk-api }
+
+  /api/docs:
+    get:
+      tags: [Service]
+      operationId: apiDocs
+      summary: This specification, rendered
+      description: |
+        The browsable reference, rendered from `/api/openapi.yaml`. Public and
+        unauthenticated: an integrator has to be able to read the contract before they hold
+        a partner key.
+      security: []
+      responses:
+        "200":
+          description: The rendered reference.
+          content:
+            text/html:
+              schema: { type: string }
+
+  /api/openapi.yaml:
+    get:
+      tags: [Service]
+      operationId: openapiDocument
+      summary: This specification, as a document
+      security: []
+      responses:
+        "200":
+          description: The OpenAPI document.
+          content:
+            application/yaml:
+              schema: { type: string }
+
+  /v1/credentials:
+    post:
+      tags: [Credentials]
+      operationId: registerVerification
+      summary: Record an identity verdict and open a pending credential
+      description: |
+        Issuance, first step. The identity check itself is the bank's and arrives here as a
+        verdict. The row is created `PENDING`: no commitment, no leaf position, nothing
+        published, because the value at the heart of a credential belongs to the holder and
+        has not been supplied yet.
+
+        The identity is sealed against the active viewing key in this step, bound to the
+        credential's identifier. The response carries the two EIP-712 messages the holder's
+        wallet will be asked to sign, so the client application does not invent them.
+      x-required-scope: credentials:issue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/IssueCredentialRequest" }
+      responses:
+        "201":
+          description: A pending credential, with the messages the holder's wallet must sign.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PendingCredential" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "409":
+          description: This subject already holds a live credential (`credential_already_issued`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "422":
+          description: The verdict was not an approval (`verification_not_approved`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/credentials/{credentialId}/activation:
+    post:
+      tags: [Credentials]
+      operationId: activateCredential
+      summary: Complete a credential with the holder's secret hash
+      description: |
+        Issuance, second step. The holder's wallet supplies `Poseidon(secret)` and a
+        signature over a different message proving it is the wallet the identity check was
+        performed against. Only now is the leaf built and the root published.
+
+        The signature that derives the secret never travels; whoever held it would hold the
+        credential for good.
+      x-required-scope: credentials:activate
+      parameters:
+        - $ref: "#/components/parameters/credentialId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ActivateCredentialRequest" }
+      responses:
+        "201":
+          description: The credential is active and its root is published.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/IssuedCredential" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403":
+          description: |
+            The scope is missing, or the activation was not signed by the holder's wallet
+            (`activation_signature_mismatch`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: |
+            The credential is not waiting for activation (`credential_not_pending`), the
+            verification behind it has expired (`credential_expired`), or that wallet
+            secret already stands behind another credential (`secret_hash_already_used`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "422":
+          description: |
+            The holder address is a contract account, whose signature is not reproducible
+            (`holder_is_contract_account`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/credentials/{credentialId}/cancellation:
+    post:
+      tags: [Credentials]
+      operationId: cancelPendingCredential
+      summary: Retire an enrolment the holder never completed
+      description: |
+        Nothing was ever published for a pending credential, so there is no root to move
+        and no window to close. What the row was doing was holding the subject's one live
+        slot, and an abandoned enrolment must not lock a person out for good.
+      x-required-scope: credentials:revoke
+      parameters:
+        - $ref: "#/components/parameters/credentialId"
+      responses:
+        "200":
+          description: The enrolment is retired.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [credentialId, status]
+                properties:
+                  credentialId: { type: string, format: uuid }
+                  status: { type: string, const: REVOKED }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: The credential was not pending (`credential_not_pending`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/credentials/{commitment}:
+    get:
+      tags: [Credentials]
+      operationId: credentialStanding
+      summary: The state of a credential, from its commitment alone
+      description: |
+        The lifecycle state and nothing that identifies the holder. `inRegistry` is the one
+        that decides whether a proof can still be produced against it.
+
+        A pending credential has no commitment yet and is never returned here.
+      x-required-scope: credentials:read
+      parameters:
+        - $ref: "#/components/parameters/commitment"
+      responses:
+        "200":
+          description: The credential's standing.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CredentialStanding" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/credentials/{commitment}/opening:
+    get:
+      tags: [Credentials]
+      operationId: credentialOpening
+      summary: The Merkle opening a wallet needs to prove
+      description: |
+        It changes on every publication, so it is fetched rather than stored. Served under
+        its own read-only scope to the platform that builds proofs for the holder;
+        `issuer:admin` alone does not reach it.
+      x-required-scope: credentials:opening
+      parameters:
+        - $ref: "#/components/parameters/commitment"
+      responses:
+        "200":
+          description: The opening against the current credential root.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CredentialOpening" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: The credential is not in the registry (`credential_not_in_tree`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/credentials/{commitment}/revocation:
+    post:
+      tags: [Credentials]
+      operationId: revokeCredential
+      summary: Remove the leaf and republish
+      description: |
+        Removing a leaf is not by itself immediate: the superseded root stays acceptable to
+        the registry for its validity window, and against it the revoked commitment still
+        proves membership. `closeRootWindow` also invalidates the superseded root, which
+        drops that window to zero. The cost is real and is reported as
+        `previousRootInvalidated`: proofs other holders built against that root in the last
+        minutes are refused too, and they re-prove.
+
+        This closes one of the two windows. An attestation already granted lives until the
+        end of the period it claimed; cutting that one is `ComplianceAttestor.revokeAttestation`,
+        on chain.
+
+        If the publication goes through and only the closure fails, the revocation stands and
+        the answer is `424 root_invalidation_pending`; the same request repeated closes the
+        window and answers `200`. A publication whose receipt timed out and was mined later
+        is recognised on the retry and recorded, instead of being refused as unchanged.
+
+        A suspended credential is already out of the tree: revoking it retires it for good,
+        expired or not, without publishing anything, and frees its subject for a new
+        credential.
+      x-required-scope: credentials:revoke
+      parameters:
+        - $ref: "#/components/parameters/commitment"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RemoveCredentialRequest" }
+      responses:
+        "200":
+          description: The leaf is out and the new root is published, or a suspended credential is retired.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TreeChange" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: |
+            The credential was already revoked and has no window left to close
+            (`credential_not_in_tree`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/credentials/{commitment}/suspension:
+    post:
+      tags: [Credentials]
+      operationId: suspendCredential
+      summary: Remove the leaf, reversibly
+      description: |
+        Same as revocation, and the leaf can be put back. A suspension whose window closure
+        failed answers `424 root_invalidation_pending`; repeating it closes the window.
+      x-required-scope: credentials:revoke
+      parameters:
+        - $ref: "#/components/parameters/commitment"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RemoveCredentialRequest" }
+      responses:
+        "200":
+          description: The leaf is out and the new root is published.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TreeChange" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: The credential is not in the registry (`credential_not_in_tree`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+    delete:
+      tags: [Credentials]
+      operationId: reinstateCredential
+      summary: Put a suspended leaf back
+      x-required-scope: credentials:revoke
+      parameters:
+        - $ref: "#/components/parameters/commitment"
+      responses:
+        "200":
+          description: The leaf is back and the new root is published.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TreeChange" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: |
+            The credential is not suspended (`credential_not_suspended`), or its
+            verification has since expired (`credential_expired`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/assets/{assetId}/jurisdictions:
+    put:
+      tags: [Jurisdictions]
+      operationId: setAdmittedJurisdictions
+      summary: Replace the set of jurisdictions an asset admits
+      description: |
+        Leaf positions are stable across updates, so a country that stays admitted keeps
+        its opening and only the codes that actually changed are emitted on chain.
+
+        Withdrawing a country also invalidates the superseded country root by default, so a
+        holder from that country stops proving at once instead of when the window runs out;
+        proofs other holders built against that root in the last minutes are refused too.
+        Adding countries closes nothing. If only the closure fails, the answer is
+        `424 root_invalidation_pending` and the same set sent again closes it.
+      x-required-scope: jurisdictions:write
+      parameters:
+        - $ref: "#/components/parameters/assetId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SetJurisdictionsRequest" }
+      responses:
+        "200":
+          description: The admitted set and the published country root.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/JurisdictionUpdate" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "409":
+          description: |
+            The requested set is the one already published and has no window left to close
+            (`jurisdiction_set_unchanged`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/assets/{assetId}/jurisdictions/{countryCode}/opening:
+    get:
+      tags: [Jurisdictions]
+      operationId: jurisdictionOpening
+      summary: The opening of an admitted jurisdiction
+      description: |
+        Served under the same read-only scope as the credential opening; `issuer:admin`
+        alone does not reach it.
+      x-required-scope: credentials:opening
+      parameters:
+        - $ref: "#/components/parameters/assetId"
+        - $ref: "#/components/parameters/countryCode"
+      responses:
+        "200":
+          description: The opening against the asset's current country root.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/JurisdictionOpening" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404":
+          description: The asset does not admit that jurisdiction (`jurisdiction_not_admitted`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/verifications:
+    post:
+      tags: [Verification]
+      operationId: verifyProof
+      summary: Validate a compliance proof against the current chain state
+      description: |
+        Two questions are answered at once and the response keeps them apart: whether the
+        proof is cryptographically sound, and whether the state it was built against still
+        holds. A sound proof against a superseded root is not a compliant operation, and
+        `rejectionCode` says which of the two failed.
+
+        The checks mirror, in the same order, what `ComplianceAttestor` refuses before it
+        reaches the pairing check, through either `attestFor` or `attest`. The one check not
+        mirrored is the anchor, which binds the proof to a subject this request does not
+        name. Every read is made at a single block, never earlier than this service's own
+        last confirmed publication.
+
+        The `proof` field carries the calldata of whichever scheme this deployment
+        verifies; the other shape is refused with `proof_scheme_mismatch`.
+
+        Every verdict is recorded, refusals included.
+      x-required-scope: proofs:verify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VerifyProofRequest" }
+      responses:
+        "201":
+          description: |
+            The verdict. `valid` is true only when the proof verifies **and** every
+            precondition the attestor imposes holds.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/VerificationOutcome" }
+        "400":
+          description: |
+            The payload did not match the contract (`validation_failed`), it is written in
+            a scheme this deployment does not verify (`proof_scheme_mismatch`), or a public
+            signal is not an integer (`public_signal_malformed`) or is not one of six
+            (`public_signal_count`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "424":
+          description: |
+            The verifying key could not be read (`verification_key_unavailable`), it belongs
+            to another proving scheme (`verification_key_scheme_mismatch`), or the chain
+            could not be reached (`chain_call_failed`). No verdict is invented.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/verifications/{verificationId}:
+    get:
+      tags: [Verification]
+      operationId: verificationStanding
+      summary: Whether a proof already validated still stands
+      description: |
+        A proof does not expire on its own. The attestation it earns does, when the period
+        it claimed ends or the root it was built against is dropped.
+      x-required-scope: proofs:read
+      parameters:
+        - $ref: "#/components/parameters/verificationId"
+      responses:
+        "200":
+          description: The standing of that verdict, now.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/VerificationStanding" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/compliance/assets/{assetId}/subjects/{subject}:
+    get:
+      tags: [Verification]
+      operationId: complianceState
+      summary: The compliance state of a position, with no personal data
+      description: |
+        What the bank is allowed to learn about a position: whether it is compliant and
+        until when. Not who holds it, not where they live, not when their credential runs
+        out — none of which this answer touches.
+      x-required-scope: compliance:read
+      parameters:
+        - $ref: "#/components/parameters/assetId"
+        - $ref: "#/components/parameters/subject"
+      responses:
+        "200":
+          description: The compliance state read off the attestor.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ComplianceState" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404":
+          description: No jurisdiction root is published for that asset (`asset_not_registered`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/disclosures:
+    post:
+      tags: [Disclosure]
+      operationId: createDisclosureRequest
+      summary: Open a disclosure request
+      description: |
+        A request is evidence before it is a query: it names who asked, on whose behalf,
+        under what legal basis, over which attributes and when, and it carries the
+        partner's own signature over those bytes. Nothing here can be edited afterwards — a
+        change of mind is a second request.
+      x-required-scope: disclosures:request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DisclosureRequestBody" }
+      responses:
+        "201":
+          description: The request, recorded and pending a decision.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DisclosureRequest" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/disclosures/{disclosureId}:
+    get:
+      tags: [Disclosure]
+      operationId: disclosureRequest
+      summary: The state of a disclosure request
+      x-required-scope: disclosures:read
+      parameters:
+        - $ref: "#/components/parameters/disclosureId"
+      responses:
+        "200":
+          description: The request and where it stands.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DisclosureRequest" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/disclosures/{disclosureId}/decision:
+    post:
+      tags: [Disclosure]
+      operationId: decideDisclosureRequest
+      summary: Approve or deny a disclosure request
+      description: |
+        A decided request is never decided again, and the partner that made the request
+        cannot decide it, approving or denying, whatever scopes it holds. The decision is
+        recorded against the authenticated partner (`decidedByPartnerKey`) and the
+        `X-Partner-Actor` it named (`decidedByActor`); `decidedBy` in the body is optional
+        and kept only as what the partner declared.
+      x-required-scope: disclosures:approve
+      parameters:
+        - $ref: "#/components/parameters/disclosureId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DisclosureDecisionRequest" }
+      responses:
+        "200":
+          description: The request, decided.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DisclosureRequest" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403":
+          description: |
+            The scope is missing, or this partner made the request and so cannot decide it
+            (`disclosure_self_decision`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: The request was already decided (`disclosure_request_already_decided`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/disclosures/{disclosureId}/release:
+    post:
+      tags: [Disclosure]
+      operationId: releaseDisclosure
+      summary: Release the approved attributes
+      description: |
+        The only route in the service that returns personal data, and the only one that
+        needs a viewing key to answer. It releases the attributes the approved request
+        names, to the partner that made the request, and nothing else.
+      x-required-scope: disclosures:read
+      parameters:
+        - $ref: "#/components/parameters/disclosureId"
+      responses:
+        "200":
+          description: The attributes the request was approved for.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DisclosureRelease" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403":
+          description: |
+            The scope is missing, the request was made by another partner
+            (`disclosure_not_requester`), or it has not been approved
+            (`disclosure_not_approved`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "404":
+          description: |
+            No such request (`disclosure_request_not_found`), or no sealed identity for
+            that commitment (`identity_envelope_not_found`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/disclosures/viewing-keys/rotation:
+    post:
+      tags: [Disclosure]
+      operationId: rotateViewingKeys
+      summary: Re-seal identity envelopes onto the active viewing key
+      description: |
+        Each envelope is opened with its own key and re-sealed under a fresh ephemeral key,
+        so the new ciphertext shares nothing with the old one. A call re-seals up to
+        `batchSize` envelopes and walks past those it cannot open, so they never hide the
+        rest. Call it until `remaining` is `0`, and only then drop the superseded key from
+        the secret manager; `rotated: 0` with `remaining` equal to the length of `failed`
+        means only envelopes no configured key opens are left. Nothing about a rotation
+        touches the chain.
+      x-required-scope: issuer:admin
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RotateViewingKeyRequest" }
+      responses:
+        "200":
+          description: How many envelopes moved, how many were already current, and which failed.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ViewingKeyRotation" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "424":
+          description: No material is configured for that viewing key (`viewing_key_unavailable`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/access-log:
+    get:
+      tags: [Audit]
+      operationId: accessLog
+      summary: Who reached which resource, when, under which scope, and whether they were granted it
+      description: |
+        Every authenticated request lands here whatever its outcome: a refused disclosure is
+        exactly as interesting to an auditor as a granted one, and a run of refusals is what
+        an intrusion looks like. Requests that never reach a route — a bad signature, an
+        expired window, an unknown path — are recorded too.
+
+        Newest first. `nextCursor` is the sequence to pass back as `cursor`.
+      x-required-scope: audit:read
+      parameters:
+        - { name: partnerKey, in: query, required: false, schema: { type: string, maxLength: 128 } }
+        - { name: resourceType, in: query, required: false, schema: { type: string, maxLength: 64 } }
+        - { name: resourceId, in: query, required: false, schema: { type: string, maxLength: 256 } }
+        - { name: from, in: query, required: false, schema: { type: string, format: date-time } }
+        - { name: to, in: query, required: false, schema: { type: string, format: date-time } }
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 200, default: 50 } }
+        - name: cursor
+          in: query
+          required: false
+          description: The `nextCursor` of the previous page.
+          schema: { type: string, pattern: "^[0-9]{1,20}$" }
+      responses:
+        "200":
+          description: A page of the log.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AccessLogPage" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/access-log/integrity:
+    get:
+      tags: [Audit]
+      operationId: accessLogIntegrity
+      summary: Verify the log's hash chain and name the first break
+      description: |
+        Lets an auditor check the chain rather than trust that it was checked. A row edited
+        in place, a row removed, or a row inserted without the key all show up here.
+      x-required-scope: audit:read
+      responses:
+        "200":
+          description: Whether the chain is intact, and where it is not.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AccessLogIntegrity" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/issuer/state/rebuild:
+    post:
+      tags: [Issuer]
+      operationId: rebuildIssuerState
+      summary: Replay the registry's leaf events and reconcile the credential tree
+      description: |
+        The recovery path, exposed rather than buried in a script. Disagreements are named,
+        never repaired silently: a commitment the chain carries and the database does not is
+        a lost identity envelope, which is an incident.
+      x-required-scope: issuer:admin
+      responses:
+        "200":
+          description: The replayed root, the on-chain root, and every disagreement between them.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CredentialReconciliation" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+  /v1/issuer/assets/{assetId}/state/rebuild:
+    post:
+      tags: [Issuer]
+      operationId: rebuildJurisdictionState
+      summary: Replay the registry's leaf events for one asset's jurisdiction tree
+      x-required-scope: issuer:admin
+      parameters:
+        - $ref: "#/components/parameters/assetId"
+      responses:
+        "200":
+          description: The replayed root, the on-chain root, and every disagreement with the database for that asset.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/JurisdictionReconciliation" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "424": { $ref: "#/components/responses/FailedDependency" }
+        default: { $ref: "#/components/responses/Error" }
+
+components:
+  securitySchemes:
+    partnerKey:
+      type: apiKey
+      in: header
+      name: X-Partner-Key
+      description: The partner's key id. All four schemes are required together.
+    partnerTimestamp:
+      type: apiKey
+      in: header
+      name: X-Partner-Timestamp
+      description: Unix seconds. Outside the configured window the request is refused.
+    partnerNonce:
+      type: apiKey
+      in: header
+      name: X-Partner-Nonce
+      description: 8–128 characters, single-use inside the window.
+    partnerSignature:
+      type: apiKey
+      in: header
+      name: X-Partner-Signature
+      description: Lowercase hex HMAC-SHA256 over the canonical request.
+
+  parameters:
+    credentialId:
+      name: credentialId
+      in: path
+      required: true
+      description: Identifier of the credential row, handed back by the first issuance step.
+      schema: { type: string, format: uuid }
+    commitment:
+      name: commitment
+      in: path
+      required: true
+      description: The credential's commitment, as a decimal field element.
+      schema: { $ref: "#/components/schemas/FieldElement" }
+    assetId:
+      name: assetId
+      in: path
+      required: true
+      description: The tokenized asset, as a decimal integer.
+      schema: { $ref: "#/components/schemas/FieldElement" }
+    countryCode:
+      name: countryCode
+      in: path
+      required: true
+      description: ISO 3166-1 numeric.
+      schema: { type: integer, minimum: 1, maximum: 65535 }
+    subject:
+      name: subject
+      in: path
+      required: true
+      description: The address holding the position.
+      schema: { $ref: "#/components/schemas/Address" }
+    disclosureId:
+      name: disclosureId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    verificationId:
+      name: verificationId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+
+  responses:
+    BadRequest:
+      description: The request did not match the contract (`validation_failed`, among others).
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unauthorized:
+      description: |
+        The signed request was not accepted: credentials missing
+        (`missing_partner_credentials`), timestamp malformed (`malformed_timestamp`) or
+        outside the window (`signature_window_expired`), nonce malformed (`malformed_nonce`)
+        or already used (`replayed_nonce`), partner unknown (`unknown_partner`), or the
+        signature does not match the request (`invalid_signature`).
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Forbidden:
+      description: |
+        The partner does not hold the scope this route needs (`insufficient_scope`), or the
+        partner is suspended (`partner_suspended`).
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NotFound:
+      description: No such resource.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    FailedDependency:
+      description: |
+        Something the answer depends on was unreachable — the chain (`chain_call_failed`), a
+        transaction whose receipt did not arrive in time (`chain_receipt_timeout`), a
+        publication that reverted (`root_publication_reverted`,
+        `root_invalidation_reverted`, with the decoded contract error in `details.revert`
+        when there is one), a change published while its window closure failed
+        (`root_invalidation_pending`: the change stands, and repeating the request closes
+        the window), a verifying key (`verification_key_unavailable`,
+        `verification_key_scheme_mismatch`) or a viewing key (`viewing_key_unavailable`).
+        Nothing is answered with a value that could not be computed.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Error:
+      description: An error, carrying its stable code.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    FieldElement:
+      type: string
+      pattern: "^[0-9]{1,78}$"
+      description: A decimal integer below the BN254 scalar field order.
+      examples: ["12985431562589719130140117974642064340408642754579220842836775686129104534659"]
+
+    HexWord:
+      type: string
+      pattern: "^0x[0-9a-fA-F]{1,64}$"
+      description: A 256-bit value in hexadecimal, as the Solidity calldata prints it.
+
+    Address:
+      type: string
+      pattern: "^0x[0-9a-fA-F]{40}$"
+
+    Scope:
+      type: string
+      description: The authorization scopes a partner can hold.
+      enum:
+        - proofs:verify
+        - proofs:read
+        - compliance:read
+        - credentials:read
+        - credentials:issue
+        - credentials:activate
+        - credentials:revoke
+        - credentials:opening
+        - jurisdictions:write
+        - disclosures:request
+        - disclosures:read
+        - disclosures:approve
+        - audit:read
+        - issuer:admin
+
+    DisclosureScope:
+      type: string
+      description: The identity attributes a disclosure request can name.
+      enum:
+        - identity.legalName
+        - identity.documentType
+        - identity.documentNumber
+        - identity.countryCode
+        - identity.dateOfBirth
+        - identity.residenceAddress
+        - identity.kycProvider
+        - identity.kycReference
+
+    ProofScheme:
+      type: string
+      description: The proving schemes a deployment can verify under.
+      enum: [groth16, plonk]
+
+    ErrorCode:
+      type: string
+      description: |
+        Every code this API can return. The complete catalog, with the status each is
+        returned under and what it means, is `x-error-catalog` at the root of this document.
+      enum:
+        - activation_signature_malformed
+        - activation_signature_mismatch
+        - asset_not_registered
+        - chain_call_failed
+        - chain_receipt_timeout
+        - commitment_already_issued
+        - country_code_out_of_range
+        - credential_already_issued
+        - credential_expired
+        - credential_not_found
+        - credential_not_in_tree
+        - credential_not_pending
+        - credential_not_suspended
+        - credential_tree_full
+        - disclosure_not_approved
+        - disclosure_not_requester
+        - disclosure_request_already_decided
+        - disclosure_request_not_found
+        - disclosure_self_decision
+        - envelope_authentication_failed
+        - expiry_in_the_past
+        - holder_address_invalid
+        - holder_is_contract_account
+        - identity_envelope_not_found
+        - insufficient_scope
+        - internal_error
+        - invalid_signature
+        - jurisdiction_not_admitted
+        - jurisdiction_set_unchanged
+        - jurisdiction_tree_full
+        - malformed_nonce
+        - malformed_timestamp
+        - missing_partner_credentials
+        - missing_path_parameter
+        - partner_secret_unreadable
+        - partner_suspended
+        - proof_scheme_mismatch
+        - public_signal_count
+        - public_signal_malformed
+        - replayed_nonce
+        - root_invalidation_pending
+        - root_invalidation_reverted
+        - root_publication_reverted
+        - route_not_found
+        - secret_hash_already_used
+        - secret_hash_invalid
+        - service_busy
+        - signature_window_expired
+        - unknown_partner
+        - validation_failed
+        - verification_key_scheme_mismatch
+        - verification_key_unavailable
+        - verification_not_approved
+        - verification_not_found
+        - viewing_key_unavailable
+
+    RejectionCode:
+      type: string
+      description: |
+        Why a proof was not turned into an attestation. It is not an error: the request
+        succeeded and the answer is that the proof does not stand.
+      enum:
+        - public_signal_out_of_field
+        - invalid_proof
+        - credential_root_not_valid
+        - country_root_not_valid
+        - asset_not_registered
+        - epoch_end_not_claimable
+        - nullifier_already_spent
+
+    Error:
+      type: object
+      required: [statusCode, error, message, code]
+      properties:
+        statusCode: { type: integer }
+        error: { type: string, description: The HTTP reason phrase. }
+        message: { type: string, description: Human-readable, and not to be branched on. }
+        code: { $ref: "#/components/schemas/ErrorCode" }
+        details:
+          type: object
+          additionalProperties: true
+          description: Fields specific to the code, when there are any.
+      examples:
+        - statusCode: 403
+          error: Forbidden
+          message: this partner does not hold the scope this route needs
+          code: insufficient_scope
+          details: { required: "audit:read", granted: ["proofs:verify"] }
+
+    MerkleOpening:
+      type: object
+      required: [pathElements, pathIndices]
+      properties:
+        pathElements:
+          type: array
+          items: { $ref: "#/components/schemas/FieldElement" }
+        pathIndices:
+          type: array
+          items: { type: string, enum: ["0", "1"] }
+
+    Eip712Domain:
+      type: object
+      required: [name, version, chainId, verifyingContract]
+      properties:
+        name: { type: string, const: VCSoft Confidentiality Layer }
+        version: { type: string, const: "1" }
+        chainId: { type: integer }
+        verifyingContract:
+          allOf: [{ $ref: "#/components/schemas/Address" }]
+          description: The credential registry of this deployment.
+
+    Eip712Type:
+      type: array
+      items:
+        type: object
+        required: [name, type]
+        properties:
+          name: { type: string }
+          type: { type: string }
+
+    IssueCredentialRequest:
+      type: object
+      required: [kycSubjectId, holderAddress, verification, identity]
+      properties:
+        kycSubjectId:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: |
+            The bank's own identifier for the person. It is never stored: what is kept is
+            an HMAC of it, so the database can refuse a second live credential for the same
+            person without holding the identifier.
+        holderAddress:
+          allOf: [{ $ref: "#/components/schemas/Address" }]
+          description: The wallet the identity check was performed against.
+        verification:
+          type: object
+          required: [approved, countryCode, expiresAt, reference]
+          properties:
+            approved: { type: boolean }
+            countryCode: { type: integer, minimum: 1, maximum: 65535 }
+            expiresAt:
+              type: string
+              format: date-time
+              description: Must be in the future. It becomes the credential's expiry.
+            reference: { type: string, minLength: 1, maxLength: 256 }
+        identity:
+          type: object
+          description: |
+            Sealed against the active viewing key and never stored in the clear. Unknown
+            attributes are kept; only the ones a disclosure request can name are ever
+            released.
+          required: [legalName, documentType, documentNumber, countryCode]
+          additionalProperties: true
+          properties:
+            legalName: { type: string, minLength: 1, maxLength: 512 }
+            documentType: { type: string, minLength: 1, maxLength: 64 }
+            documentNumber: { type: string, minLength: 1, maxLength: 128 }
+            countryCode: { type: integer, minimum: 1, maximum: 65535 }
+            dateOfBirth: { type: string, format: date }
+            residenceAddress: { type: string, maxLength: 1024 }
+            kycProvider: { type: string, maxLength: 256 }
+            kycReference: { type: string, maxLength: 256 }
+
+    PendingCredential:
+      type: object
+      required: [credentialId, status, countryCode, expiresAt, holderAddress, activation]
+      properties:
+        credentialId: { type: string, format: uuid }
+        status: { type: string, const: PENDING }
+        countryCode: { type: integer }
+        expiresAt: { type: string, format: date-time }
+        holderAddress: { $ref: "#/components/schemas/Address" }
+        activation:
+          type: object
+          description: |
+            The two EIP-712 messages the holder's wallet will be asked to sign, over
+            `eth_signTypedData_v4`. They are different messages on purpose: the first
+            derives the secret and never travels, the second proves possession of the
+            wallet and is what the second issuance step carries.
+          required: [secretDerivation, possession]
+          properties:
+            secretDerivation:
+              type: object
+              required: [domain, types, primaryType, message]
+              properties:
+                domain: { $ref: "#/components/schemas/Eip712Domain" }
+                types:
+                  type: object
+                  required: [CredentialSecret]
+                  properties:
+                    CredentialSecret: { $ref: "#/components/schemas/Eip712Type" }
+                primaryType: { type: string, const: CredentialSecret }
+                message:
+                  type: object
+                  required: [statement]
+                  properties:
+                    statement: { type: string }
+            possession:
+              type: object
+              required: [domain, types, primaryType]
+              properties:
+                domain: { $ref: "#/components/schemas/Eip712Domain" }
+                types:
+                  type: object
+                  required: [CredentialActivation]
+                  properties:
+                    CredentialActivation: { $ref: "#/components/schemas/Eip712Type" }
+                primaryType: { type: string, const: CredentialActivation }
+
+    ActivateCredentialRequest:
+      type: object
+      required: [secretHash, signature]
+      properties:
+        secretHash:
+          allOf: [{ $ref: "#/components/schemas/FieldElement" }]
+          description: |
+            `Poseidon(secret)`, computed in the holder's wallet. The secret itself never
+            reaches this service.
+        signature:
+          type: string
+          pattern: "^0x[0-9a-fA-F]{130}$"
+          description: |
+            The holder's EIP-712 signature over `CredentialActivation(credentialId,
+            secretHash)`. Never the signature the secret was derived from.
+
+    IssuedCredential:
+      type: object
+      required: [credentialId, commitment, leafIndex, countryCode, expiresAt, status, credentialRoot, txHash]
+      properties:
+        credentialId: { type: string, format: uuid }
+        commitment: { $ref: "#/components/schemas/FieldElement" }
+        leafIndex: { type: integer, minimum: 0 }
+        countryCode: { type: integer }
+        expiresAt: { type: string, format: date-time }
+        status: { type: string, const: ACTIVE }
+        credentialRoot: { $ref: "#/components/schemas/FieldElement" }
+        txHash: { type: string, description: The publication of the new root. }
+
+    CredentialStanding:
+      type: object
+      required: [commitment, status, inRegistry, issuedAt, expiresAt, suspendedAt, revokedAt, credentialRoot]
+      properties:
+        commitment: { $ref: "#/components/schemas/FieldElement" }
+        status:
+          type: string
+          enum: [PENDING, ACTIVE, SUSPENDED, EXPIRED, REVOKED]
+        inRegistry:
+          type: boolean
+          description: Whether the leaf is in the tree. This is what decides whether a proof can still be produced.
+        issuedAt: { type: string, format: date-time }
+        expiresAt: { type: string, format: date-time }
+        suspendedAt: { type: [string, "null"], format: date-time }
+        revokedAt: { type: [string, "null"], format: date-time }
+        credentialRoot: { $ref: "#/components/schemas/FieldElement" }
+
+    CredentialOpening:
+      type: object
+      required: [commitment, leafIndex, credentialRoot, opening]
+      properties:
+        commitment: { $ref: "#/components/schemas/FieldElement" }
+        leafIndex: { type: integer, minimum: 0 }
+        credentialRoot: { $ref: "#/components/schemas/FieldElement" }
+        opening: { $ref: "#/components/schemas/MerkleOpening" }
+
+    RemoveCredentialRequest:
+      type: object
+      properties:
+        closeRootWindow:
+          type: boolean
+          default: true
+          description: |
+            Also invalidate the superseded root, so the removal takes effect immediately.
+            Set it to false to leave in-flight proofs alone and accept the latency instead.
+
+    TreeChange:
+      type: object
+      required: [commitment, status, previousRoot, credentialRoot, txHash, previousRootInvalidated]
+      properties:
+        commitment: { $ref: "#/components/schemas/FieldElement" }
+        status: { type: string, enum: [ACTIVE, SUSPENDED, REVOKED] }
+        previousRoot:
+          $ref: "#/components/schemas/FieldElement"
+          description: The root this publication replaced, as the registry reported it in the receipt.
+        credentialRoot: { $ref: "#/components/schemas/FieldElement" }
+        txHash:
+          type: [string, "null"]
+          description: |
+            The publication that moved the leaf. Null only when a suspended credential is
+            retired and no publication of this service is linked to it.
+        previousRootInvalidated:
+          type: boolean
+          description: Whether the superseded root's validity window was dropped to zero.
+
+    SetJurisdictionsRequest:
+      type: object
+      required: [admitted]
+      properties:
+        admitted:
+          type: array
+          minItems: 1
+          maxItems: 256
+          items: { type: integer, minimum: 1, maximum: 65535 }
+          description: ISO 3166-1 numeric codes. The set replaces whatever was admitted before.
+        closeRootWindow:
+          type: boolean
+          default: true
+          description: |
+            When the change withdraws a country, also invalidate the superseded country root.
+            Set it to false to leave in-flight proofs alone and accept the latency instead.
+
+    JurisdictionUpdate:
+      type: object
+      required: [assetId, admitted, countryRoot, txHash, leafCount, previousRootInvalidated]
+      properties:
+        assetId: { type: string }
+        admitted:
+          type: array
+          items: { type: integer }
+        countryRoot: { $ref: "#/components/schemas/FieldElement" }
+        txHash:
+          type: string
+          description: The publication; on a retry that only closed a pending window, the publication that window belongs to.
+        leafCount: { type: integer, minimum: 0 }
+        previousRootInvalidated:
+          type: boolean
+          description: Whether the superseded country root's validity window was dropped to zero.
+
+    JurisdictionOpening:
+      type: object
+      required: [assetId, countryCode, leafIndex, countryRoot, opening]
+      properties:
+        assetId: { type: string }
+        countryCode: { type: integer }
+        leafIndex: { type: integer, minimum: 0 }
+        countryRoot: { $ref: "#/components/schemas/FieldElement" }
+        opening: { $ref: "#/components/schemas/MerkleOpening" }
+
+    PublicSignals:
+      type: array
+      minItems: 6
+      maxItems: 6
+      description: |
+        The circuit's six public signals, in the order it declares them:
+        `credentialRoot`, `countryRoot`, `assetId`, `epochEnd`, `nullifier`, `anchor`.
+      items:
+        anyOf:
+          - { $ref: "#/components/schemas/HexWord" }
+          - { $ref: "#/components/schemas/FieldElement" }
+
+    Groth16CallData:
+      type: object
+      description: |
+        The Groth16 proof as `snarkjs exportSolidityCallData` prints it, which is the
+        artefact the platform submits on chain. Note that the encoding swaps the two
+        coordinates of each Fp2 element of `B`; this API expects it in exactly that form
+        and undoes the swap itself.
+      required: [a, b, c, signals]
+      properties:
+        a:
+          type: array
+          minItems: 2
+          maxItems: 2
+          items: { $ref: "#/components/schemas/HexWord" }
+        b:
+          type: array
+          minItems: 2
+          maxItems: 2
+          items:
+            type: array
+            minItems: 2
+            maxItems: 2
+            items: { $ref: "#/components/schemas/HexWord" }
+        c:
+          type: array
+          minItems: 2
+          maxItems: 2
+          items: { $ref: "#/components/schemas/HexWord" }
+        signals: { $ref: "#/components/schemas/PublicSignals" }
+
+    PlonkCallData:
+      type: object
+      description: |
+        The PLONK proof as `snarkjs exportSolidityCallData` prints it: twenty-four words,
+        nine G1 commitments followed by six evaluations, in the order the generated verifier
+        reads them. Nothing is reordered, because PLONK commits to nothing over Fp2.
+      required: [proof, signals]
+      properties:
+        proof:
+          type: array
+          minItems: 24
+          maxItems: 24
+          items: { $ref: "#/components/schemas/HexWord" }
+        signals: { $ref: "#/components/schemas/PublicSignals" }
+
+    VerifyProofRequest:
+      type: object
+      required: [proof]
+      properties:
+        proof:
+          description: |
+            The calldata of whichever scheme this deployment verifies. The other shape
+            parses but is refused with `proof_scheme_mismatch`.
+          oneOf:
+            - { $ref: "#/components/schemas/Groth16CallData" }
+            - { $ref: "#/components/schemas/PlonkCallData" }
+
+    VerificationOutcome:
+      type: object
+      required: [id, scheme, valid, rejectionCode, publicSignals, proofDigest, verifiedAt]
+      properties:
+        id: { type: string, format: uuid }
+        scheme: { $ref: "#/components/schemas/ProofScheme" }
+        valid: { type: boolean }
+        rejectionCode:
+          oneOf:
+            - { $ref: "#/components/schemas/RejectionCode" }
+            - { type: "null" }
+        publicSignals:
+          type: object
+          required: [credentialRoot, countryRoot, assetId, epochEnd, nullifier, anchor]
+          properties:
+            credentialRoot: { $ref: "#/components/schemas/FieldElement" }
+            countryRoot: { $ref: "#/components/schemas/FieldElement" }
+            assetId: { $ref: "#/components/schemas/FieldElement" }
+            epochEnd: { $ref: "#/components/schemas/FieldElement" }
+            nullifier: { $ref: "#/components/schemas/FieldElement" }
+            anchor: { $ref: "#/components/schemas/FieldElement" }
+        proofDigest:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+          description: SHA-256 over the calldata, so a caller can tell two verdicts on the same bytes apart.
+        verifiedAt: { type: string, format: date-time }
+
+    VerificationStanding:
+      type: object
+      required:
+        [id, scheme, valid, rejectionCode, verifiedAt, assetId, nullifier, epochEnd, standing,
+         credentialRootStillValid, nullifierSpent, epochEndsAt]
+      properties:
+        id: { type: string, format: uuid }
+        scheme: { $ref: "#/components/schemas/ProofScheme" }
+        valid: { type: boolean }
+        rejectionCode:
+          oneOf:
+            - { $ref: "#/components/schemas/RejectionCode" }
+            - { type: "null" }
+        verifiedAt: { type: string, format: date-time }
+        assetId: { type: string }
+        nullifier: { $ref: "#/components/schemas/FieldElement" }
+        epochEnd: { type: string, description: Unix seconds. }
+        standing:
+          type: string
+          enum: [live, expired, superseded_root, never_valid]
+        credentialRootStillValid: { type: boolean }
+        nullifierSpent:
+          type: boolean
+          description: Whether the attestor has already spent it, which is what a presented proof does.
+        epochEndsAt: { type: string, format: date-time }
+
+    ComplianceState:
+      type: object
+      required: [assetId, subject, compliant, attestation, epoch, checkedAt]
+      properties:
+        assetId: { type: string }
+        subject: { $ref: "#/components/schemas/Address" }
+        compliant: { type: boolean }
+        attestation:
+          type: object
+          required: [issuedAt, expiresAt, nullifier]
+          properties:
+            issuedAt: { type: [string, "null"], format: date-time }
+            expiresAt: { type: [string, "null"], format: date-time }
+            nullifier:
+              oneOf:
+                - { $ref: "#/components/schemas/FieldElement" }
+                - { type: "null" }
+        epoch:
+          type: object
+          required: [currentEpochEnd, epochLength]
+          properties:
+            currentEpochEnd: { type: string, description: Unix seconds. }
+            epochLength: { type: string, description: Seconds. }
+        checkedAt: { type: string, format: date-time }
+
+    DisclosureRequestBody:
+      type: object
+      required: [targetCommitment, requesterRef, justification, legalBasis, scope]
+      properties:
+        targetCommitment: { $ref: "#/components/schemas/FieldElement" }
+        requesterRef: { type: string, minLength: 1, maxLength: 256 }
+        justification: { type: string, minLength: 20, maxLength: 4096 }
+        legalBasis: { type: string, minLength: 1, maxLength: 512 }
+        scope:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/DisclosureScope" }
+
+    DisclosureRequest:
+      type: object
+      required:
+        [id, status, requesterRef, justification, legalBasis, scope, targetCommitment,
+         requestDigest, requestedAt, decidedAt, decidedBy, decidedByPartnerKey,
+         decidedByActor, releasedAt]
+      properties:
+        id: { type: string, format: uuid }
+        status: { type: string, enum: [PENDING, APPROVED, DENIED, RELEASED] }
+        requesterRef: { type: string }
+        justification: { type: string }
+        legalBasis: { type: string }
+        scope:
+          type: array
+          items: { $ref: "#/components/schemas/DisclosureScope" }
+        targetCommitment: { $ref: "#/components/schemas/FieldElement" }
+        requestDigest:
+          type: string
+          description: Digest over the request as it was made, so it cannot be edited afterwards.
+        requestedAt: { type: string, format: date-time }
+        decidedAt: { type: [string, "null"], format: date-time }
+        decidedBy:
+          type: [string, "null"]
+          description: What the deciding partner declared. Not authoritative.
+        decidedByPartnerKey:
+          type: [string, "null"]
+          description: The authenticated partner that decided. Never the one that asked.
+        decidedByActor:
+          type: [string, "null"]
+          description: The `X-Partner-Actor` the deciding request named, if any.
+        releasedAt: { type: [string, "null"], format: date-time }
+
+    DisclosureDecisionRequest:
+      type: object
+      required: [decision]
+      properties:
+        decision: { type: string, enum: [APPROVED, DENIED] }
+        decidedBy:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: |
+            Optional reference to the officer, as the partner declares it. Who decided is
+            taken from the authenticated request, not from this field.
+        note: { type: string, maxLength: 2048 }
+
+    DisclosureRelease:
+      type: object
+      required: [scope, released, releasedAt]
+      properties:
+        scope:
+          type: array
+          items: { $ref: "#/components/schemas/DisclosureScope" }
+        released:
+          type: object
+          additionalProperties: true
+          description: |
+            The approved attributes, keyed without the `identity.` prefix. Nothing outside
+            the approved scope appears.
+        releasedAt: { type: string, format: date-time }
+
+    RotateViewingKeyRequest:
+      type: object
+      properties:
+        toViewingKeyId:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Defaults to the active viewing key.
+        batchSize: { type: integer, minimum: 1, maximum: 1000, default: 200 }
+
+    ViewingKeyRotation:
+      type: object
+      required: [rotated, alreadyCurrent, failed, remaining]
+      properties:
+        rotated: { type: integer, minimum: 0 }
+        alreadyCurrent: { type: integer, minimum: 0, description: Envelopes already on the target key before this call. }
+        failed:
+          type: array
+          items: { type: string, format: uuid }
+          description: Credentials whose envelope this call could not open with any configured key.
+        remaining:
+          type: integer
+          minimum: 0
+          description: Envelopes still not on the target key after this call.
+
+    AccessLogEntry:
+      type: object
+      required:
+        [sequence, occurredAt, partnerKey, actorRef, method, path, scope, resourceType,
+         resourceId, outcome, statusCode, requestDigest, previousHash, entryHash]
+      properties:
+        sequence: { type: string, description: Monotonic, with no gaps. }
+        occurredAt: { type: string, format: date-time }
+        partnerKey: { type: string }
+        actorRef: { type: [string, "null"] }
+        method: { type: string }
+        path: { type: string }
+        scope:
+          oneOf:
+            - { $ref: "#/components/schemas/Scope" }
+            - { type: "null" }
+        resourceType: { type: string }
+        resourceId: { type: [string, "null"] }
+        outcome:
+          type: string
+          enum: [granted, refused, aborted]
+          description: |
+            `aborted` when the caller closed the connection before the response was sent.
+            The request was still processed, and `statusCode` is then 499.
+        statusCode: { type: integer }
+        requestDigest: { type: string }
+        previousHash: { type: string }
+        entryHash: { type: string }
+
+    AccessLogPage:
+      type: object
+      required: [entries, nextCursor]
+      properties:
+        entries:
+          type: array
+          items: { $ref: "#/components/schemas/AccessLogEntry" }
+        nextCursor: { type: [string, "null"] }
+
+    AccessLogIntegrity:
+      type: object
+      required: [intact, entries, checked, brokenAtSequence, reason]
+      properties:
+        intact: { type: boolean }
+        entries: { type: integer, minimum: 0 }
+        checked: { type: integer, minimum: 0, description: How many entries verified before the first break. }
+        brokenAtSequence: { type: [string, "null"] }
+        reason:
+          type: [string, "null"]
+          enum: [hash_mismatch, predecessor_mismatch, sequence_gap, null]
+
+    RebuildReport:
+      type: object
+      required: [source, events, leafCount, replayedRoot, onChainRoot, matchesChain, throughBlock]
+      properties:
+        source: { type: string, const: chain-events }
+        events: { type: integer, minimum: 0 }
+        leafCount: { type: integer, minimum: 0 }
+        replayedRoot: { $ref: "#/components/schemas/FieldElement" }
+        onChainRoot: { $ref: "#/components/schemas/FieldElement" }
+        matchesChain: { type: boolean }
+        throughBlock:
+          type: string
+          description: The block the events were replayed through and the on-chain root was read at.
+
+    CredentialReconciliation:
+      allOf:
+        - { $ref: "#/components/schemas/RebuildReport" }
+        - type: object
+          required: [missingFromDatabase, missingFromChain, pendingRootInvalidations]
+          properties:
+            missingFromDatabase:
+              type: array
+              items: { $ref: "#/components/schemas/FieldElement" }
+              description: |
+                Commitments the chain carries and the database does not. Each one is a lost
+                identity envelope, and an incident.
+            missingFromChain:
+              type: array
+              items: { $ref: "#/components/schemas/FieldElement" }
+            pendingRootInvalidations:
+              type: array
+              items: { $ref: "#/components/schemas/FieldElement" }
+              description: |
+                Commitments whose removal is published and whose superseded root's window is
+                still open. Repeating the revocation or suspension closes it.
+
+    JurisdictionReconciliation:
+      allOf:
+        - { $ref: "#/components/schemas/RebuildReport" }
+        - type: object
+          required: [missingFromDatabase, missingFromChain, pendingRootInvalidations]
+          properties:
+            missingFromDatabase:
+              type: array
+              items: { type: integer }
+              description: Country codes the chain admits and the database does not, at that position.
+            missingFromChain:
+              type: array
+              items: { type: integer }
+              description: Country codes the database admits and the chain does not, at that position.
+            pendingRootInvalidations:
+              type: array
+              items: { $ref: "#/components/schemas/FieldElement" }
+              description: |
+                Superseded country roots this service was asked to close and has not closed.
+                Sending the same set again closes them.
+
+x-error-catalog:
+  - code: activation_signature_malformed
+    status: 400
+    meaning: "The activation signature could not be read as a signature."
+  - code: activation_signature_mismatch
+    status: 403
+    meaning: "The activation was not signed by the wallet the identity check was performed against."
+  - code: asset_not_registered
+    status: 404
+    meaning: "No jurisdiction root has been published for that asset."
+  - code: chain_call_failed
+    status: 424
+    meaning: "The chain could not be reached after the configured retries. No verdict is invented in its place."
+  - code: chain_receipt_timeout
+    status: 424
+    meaning: "A transaction was sent and its receipt did not arrive in time. It may still be mined: reconcile before writing again."
+  - code: commitment_already_issued
+    status: 409
+    meaning: "Another credential already stands behind that commitment."
+  - code: country_code_out_of_range
+    status: 400
+    meaning: "A country code is outside [1, 65536)."
+  - code: credential_already_issued
+    status: 409
+    meaning: "The subject already holds a live credential."
+  - code: credential_expired
+    status: 409
+    meaning: "The identity verification behind the credential has expired."
+  - code: credential_not_found
+    status: 404
+    meaning: "No credential with that identifier or commitment."
+  - code: credential_not_in_tree
+    status: 409
+    meaning: "The credential's leaf is not in the registry, so it has no opening and cannot be removed."
+  - code: credential_not_pending
+    status: 409
+    meaning: "The credential is not waiting for activation."
+  - code: credential_not_suspended
+    status: 409
+    meaning: "The credential is not suspended, so there is nothing to reinstate."
+  - code: credential_tree_full
+    status: 409
+    meaning: "The credential tree has no free leaf at its configured depth."
+  - code: disclosure_not_approved
+    status: 403
+    meaning: "The disclosure request has not been approved, so nothing is released."
+  - code: disclosure_not_requester
+    status: 403
+    meaning: "Only the partner that made the disclosure request can release it."
+  - code: disclosure_request_already_decided
+    status: 409
+    meaning: "The request was already approved or denied; a change of mind is a second request."
+  - code: disclosure_request_not_found
+    status: 404
+    meaning: "No disclosure request with that identifier."
+  - code: disclosure_self_decision
+    status: 403
+    meaning: "The partner that made a disclosure request cannot approve or deny it."
+  - code: envelope_authentication_failed
+    status: 500
+    meaning: "A sealed identity did not authenticate against the credential it belongs to."
+  - code: expiry_in_the_past
+    status: 400
+    meaning: "The verification's expiry is not in the future."
+  - code: holder_address_invalid
+    status: 400
+    meaning: "The holder address is not a well-formed address."
+  - code: holder_is_contract_account
+    status: 422
+    meaning: "A secret derived from a contract account is not reproducible; activation is refused."
+  - code: identity_envelope_not_found
+    status: 404
+    meaning: "No sealed identity exists for that commitment."
+  - code: insufficient_scope
+    status: 403
+    meaning: "The partner does not hold the scope this route requires."
+  - code: internal_error
+    status: 500
+    meaning: "An unhandled failure. Nothing about it is guessed at in the response."
+  - code: invalid_signature
+    status: 401
+    meaning: "The request signature does not match the request."
+  - code: jurisdiction_not_admitted
+    status: 404
+    meaning: "The asset does not admit that jurisdiction, so it has no opening."
+  - code: jurisdiction_set_unchanged
+    status: 409
+    meaning: "The requested set is the one already published."
+  - code: jurisdiction_tree_full
+    status: 400
+    meaning: "The jurisdiction tree has no free leaf at its configured depth."
+  - code: malformed_nonce
+    status: 401
+    meaning: "The nonce is not between 8 and 128 characters."
+  - code: malformed_timestamp
+    status: 401
+    meaning: "The timestamp is not an integer number of unix seconds."
+  - code: missing_partner_credentials
+    status: 401
+    meaning: "One of the four signing headers is missing."
+  - code: missing_path_parameter
+    status: 400
+    meaning: "A path parameter did not arrive as a single value."
+  - code: partner_secret_unreadable
+    status: 500
+    meaning: "The stored partner secret did not authenticate against the partner it belongs to."
+  - code: partner_suspended
+    status: 403
+    meaning: "The partner exists but is suspended."
+  - code: proof_scheme_mismatch
+    status: 400
+    meaning: "The proof is written in a scheme this deployment does not verify."
+  - code: public_signal_count
+    status: 400
+    meaning: "The proof does not carry the circuit's six public signals."
+  - code: public_signal_malformed
+    status: 400
+    meaning: "A public signal is not an integer."
+  - code: replayed_nonce
+    status: 401
+    meaning: "That nonce was already used inside its window."
+  - code: root_invalidation_pending
+    status: 424
+    meaning: "The change was published and recorded, but closing the superseded root's window failed. `details` describes the change and `details.cause` the failure; repeating the same request closes it."
+  - code: root_invalidation_reverted
+    status: 424
+    meaning: "Invalidating the superseded root reverted on chain. `details.revert` names the contract error when it could be decoded."
+  - code: root_publication_reverted
+    status: 424
+    meaning: "Publishing the new root reverted on chain. `details.revert` names the contract error when it could be decoded."
+  - code: route_not_found
+    status: 404
+    meaning: "No route for that method and path."
+  - code: secret_hash_already_used
+    status: 409
+    meaning: "Another credential already stands behind that wallet secret."
+  - code: secret_hash_invalid
+    status: 400
+    meaning: "The secret hash is not a canonical field element."
+  - code: service_busy
+    status: 503
+    meaning: "The service is at capacity: too many tree changes already queued (`issuer_write_queue_full`) or no database connection free in time (`database_saturated`). Nothing was changed; retry after the `Retry-After` interval."
+  - code: signature_window_expired
+    status: 401
+    meaning: "The timestamp falls outside the accepted window."
+  - code: unknown_partner
+    status: 401
+    meaning: "No partner holds that key."
+  - code: validation_failed
+    status: 400
+    meaning: "The request did not match the contract. `details.issues` names each field."
+  - code: verification_key_scheme_mismatch
+    status: 424
+    meaning: "The configured verifying key belongs to the other proving scheme."
+  - code: verification_key_unavailable
+    status: 424
+    meaning: "The verifying key could not be read, so no verdict can be reached."
+  - code: verification_not_approved
+    status: 422
+    meaning: "The identity verdict was not an approval, so no credential is opened."
+  - code: verification_not_found
+    status: 404
+    meaning: "No proof verification with that identifier."
+  - code: viewing_key_unavailable
+    status: 424
+    meaning: "No material is configured for the viewing key an envelope names."

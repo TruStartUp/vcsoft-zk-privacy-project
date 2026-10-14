@@ -1,0 +1,43 @@
+
+
+  Integración con la suite T-REX real
+    el despliegue
+      ✔ es la suite del estándar y no un doble
+      ✔ engancha el módulo ZK a la ModularCompliance del token, ligado al activo
+      ✔ los inversores están verificados por el estándar antes de que la capa diga nada
+    el ciclo, paso a paso
+      ✔ 1 · la emisión en dos tiempos no publica nada hasta que el titular aporta su hash
+      ✔ 2 · la activación exige la firma de posesión del titular, no la de la mesa
+      ✔ 3 · la raíz de jurisdicciones del activo está publicada y es la que la prueba usa
+      ✔ 4 · el titular presenta su prueba y obtiene atestación; nadie puede presentarla por él (866ms)
+      ✔ 5 · el token T-REX acuña al titular porque moduleCheck encuentra la atestación (684ms)
+      ✔ 6 · una transferencia entre titulares atestados atraviesa el módulo y se completa (1338ms)
+      ✔ 7 · revocar la credencial cierra la emisión de atestaciones nuevas (1464ms)
+      ✔ 8 · cortar la atestación viva bloquea la entrega, y el rechazo es del módulo (1362ms)
+    el cumplimiento no se relaja
+      ✔ un titular sin atestación no recibe
+      ✔ un titular cuya atestación caducó tampoco recibe (684ms)
+      ✔ una jurisdicción no admitida no llega ni a obtener atestación (62ms)
+      ✔ una atestación no sustituye a la identidad verificada que exige el estándar (676ms)
+      ✔ el módulo condiciona a quien recibe, no a quien envía (1390ms)
+    la prueba no se engaña a sí misma
+      ✔ desenganchar el módulo deja pasar lo que la suite afirma bloqueado
+      ✔ con el módulo enganchado y sin atestación, la misma operación no pasa
+      ✔ el módulo apuntado a otro activo deja de reconocer la atestación (665ms)
+
+  Gas de las operaciones del ciclo
+  enganche · compliance.addModule                         137708
+  enganche · compliance.callModuleFunction(setAssetId)     97839
+  jurisdicciones · publishCountryRoot                      58963
+  emisión · publishCredentialRoot (activación)             59672
+  atestación · attest                                     343565
+  token T-REX · mint                                      258122
+  token T-REX · transfer                                  246349
+  revocación · publishCredentialRoot                       59636
+  revocación · invalidateCredentialRoot                    28005
+  atestación · revokeAttestation                           29484
+
+
+
+  19 passing (12s)
+

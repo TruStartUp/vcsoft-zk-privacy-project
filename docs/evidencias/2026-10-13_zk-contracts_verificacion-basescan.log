@@ -1,0 +1,55 @@
+Network: baseSepolia (chainId 84532)
+
+- groth16Verifier 0xD5417e562083DB6ef071489f2d1A8C0d8d36784d
+Successfully submitted source code for contract
+contracts/verifiers/Groth16Verifier.sol:Groth16Verifier at 0xD5417e562083DB6ef071489f2d1A8C0d8d36784d
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract Groth16Verifier on the block explorer.
+https://sepolia.basescan.org/address/0xD5417e562083DB6ef071489f2d1A8C0d8d36784d#code
+
+- groth16VerifierAdapter 0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA
+Successfully submitted source code for contract
+contracts/verifiers/Groth16VerifierAdapter.sol:Groth16VerifierAdapter at 0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract Groth16VerifierAdapter on the block explorer.
+https://sepolia.basescan.org/address/0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA#code
+
+- credentialRegistry 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA
+Successfully submitted source code for contract
+contracts/CredentialRegistry.sol:CredentialRegistry at 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract CredentialRegistry on the block explorer.
+https://sepolia.basescan.org/address/0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA#code
+
+- complianceAttestor 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09
+Successfully submitted source code for contract
+contracts/ComplianceAttestor.sol:ComplianceAttestor at 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract ComplianceAttestor on the block explorer.
+https://sepolia.basescan.org/address/0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09#code
+
+- zkComplianceModuleImplementation 0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf
+Successfully submitted source code for contract
+contracts/ZKComplianceModule.sol:ZKComplianceModule at 0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract ZKComplianceModule on the block explorer.
+https://sepolia.basescan.org/address/0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf#code
+
+- zkComplianceModule 0x80929BFc966888fa24710F177F594F377A64A925
+  submitted, guid ea3b1zgxftpxxbkxl5vqff4zdg9bgcfthvjdu9bpjw5c7f7wqb
+  Pass - Verified
+
+Verified:
+  groth16Verifier                    https://sepolia.basescan.org/address/0xD5417e562083DB6ef071489f2d1A8C0d8d36784d#code
+  groth16VerifierAdapter             https://sepolia.basescan.org/address/0xC2e0400Fedbbb9D200228cFf3D5e95dB26dcbbaA#code
+  credentialRegistry                 https://sepolia.basescan.org/address/0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA#code
+  complianceAttestor                 https://sepolia.basescan.org/address/0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09#code
+  zkComplianceModuleImplementation   https://sepolia.basescan.org/address/0x7d818cDE9804F0A9311321720D1aE5cCe8c4abCf#code
+  zkComplianceModule                 https://sepolia.basescan.org/address/0x80929BFc966888fa24710F177F594F377A64A925#code
+
+6 verified, 0 failed

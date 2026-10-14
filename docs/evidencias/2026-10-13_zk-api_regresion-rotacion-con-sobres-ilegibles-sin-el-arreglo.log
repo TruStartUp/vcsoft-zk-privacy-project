@@ -1,0 +1,66 @@
+
+ RUN  v2.1.9 <repo>/zk-api
+
+{"level":30,"time":1791938791686,"service":"zk-api","req":{"id":1,"method":"POST","url":"/v1/disclosures/viewing-keys/rotation","query":{},"params":{},"headers":{"host":"127.0.0.1:60905","accept-encoding":"gzip, deflate","x-partner-key":"pk_a004e8fb64dcb056ee7dd254","x-partner-timestamp":"1791938791","x-partner-nonce":"c23704846cb0c55c6e9240bc","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"15","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":60906},"res":{"statusCode":200,"headers":{"content-type":"application/json; charset=utf-8","content-length":"160","etag":"W/\"a0-OdK6I9KrIpy0y9qYgYroBmq/jK4\""}},"responseTime":11,"msg":"request completed"}
+{"level":30,"time":1791938791764,"service":"zk-api","req":{"id":2,"method":"POST","url":"/v1/disclosures/viewing-keys/rotation","query":{},"params":{},"headers":{"host":"127.0.0.1:60907","accept-encoding":"gzip, deflate","x-partner-key":"pk_55aae35d1f54091f09218bc3","x-partner-timestamp":"1791938791","x-partner-nonce":"690700e99b7738433ca2c96b","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"15","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":60908},"res":{"statusCode":200,"headers":{"content-type":"application/json; charset=utf-8","content-length":"44","etag":"W/\"2c-oAZD81DIfA0ZCc/MgnUcwjrhNSU\""}},"responseTime":8,"msg":"request completed"}
+ ❯ test/operator-paths.test.ts (12 tests | 2 failed | 10 skipped) 226ms
+   × rotating viewing keys past envelopes that cannot be opened > moves every envelope it can open, and says how many are left 150ms
+     → expected { rotated: +0, …(2) } to match object { rotated: 2, remaining: 3 }
+(2 matching properties omitted from actual)
+   × rotating viewing keys past envelopes that cannot be opened > stops at the batch size when everything can be opened 72ms
+     → expected { Object (rotated, alreadyCurrent, ...) } to match object { Object (rotated, failed, ...) }
+(1 matching property omitted from actual)
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/operator-paths.test.ts > rotating viewing keys past envelopes that cannot be opened > moves every envelope it can open, and says how many are left
+AssertionError: expected { rotated: +0, …(2) } to match object { rotated: 2, remaining: 3 }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  Object {
+-   "remaining": 3,
+-   "rotated": 2,
++   "rotated": 0,
+  }
+
+ ❯ test/operator-paths.test.ts:266:24
+    264|     const first = await as(operator, "post", "/v1/disclosures/viewing-…
+    265|     expect(first.status).toBe(200);
+    266|     expect(first.body).toMatchObject({ rotated: 2, remaining: 3 });
+       |                        ^
+    267|     expect([...first.body.failed].sort()).toEqual([...unopenable].sort…
+    268| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/operator-paths.test.ts > rotating viewing keys past envelopes that cannot be opened > stops at the batch size when everything can be opened
+AssertionError: expected { Object (rotated, alreadyCurrent, ...) } to match object { Object (rotated, failed, ...) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  Object {
+    "failed": Array [],
+-   "remaining": 3,
+    "rotated": 2,
+  }
+
+ ❯ test/operator-paths.test.ts:281:24
+    279| 
+    280|     const first = await as(operator, "post", "/v1/disclosures/viewing-…
+    281|     expect(first.body).toMatchObject({ rotated: 2, failed: [], remaini…
+       |                        ^
+    282|     const second = await as(operator, "post", "/v1/disclosures/viewing…
+    283|     expect(second.body).toMatchObject({ rotated: 2, remaining: 1 });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 10 skipped (12)
+   Start at  19:46:30
+   Duration  886ms (transform 127ms, setup 107ms, collect 409ms, tests 226ms, environment 0ms, prepare 27ms)
+

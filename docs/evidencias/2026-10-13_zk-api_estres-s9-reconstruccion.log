@@ -1,0 +1,47 @@
+
+> zk-api@0.1.0 stress:s9
+> DOTENV_CONFIG_PATH=.env.stress tsx stress/s9-rebuild.ts
+
+
+[2026-10-13T22:55:39.314Z] === Máquina
+[2026-10-13T22:55:39.319Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T22:55:39.319Z] Memoria: 32 GiB
+[2026-10-13T22:55:39.338Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T22:55:39.355Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+
+[2026-10-13T22:55:39.402Z] === Registro propio para la reconstrucción
+[2026-10-13T22:55:39.446Z] registro 0x663f3ad617193148711d28f5334ee4ed07016602 en el bloque 2612
+
+[2026-10-13T22:55:39.916Z] === Publicación hasta 1000 hojas (100 cambios por transacción, 99 bloques vacíos entre transacciones)
+[2026-10-13T22:55:42.060Z] 10 transacciones, 5 retiradas intercaladas, 995 hojas vivas, 2143.9 ms
+
+[2026-10-13T22:55:42.060Z] === Reconstrucción desde los eventos con 995 hojas
+[2026-10-13T22:55:43.999Z] CHAIN_LOG_BLOCK_RANGE=200: 1937.4 ms · eth_getLogs 6 · eventos 1005 · hojas 995 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 1001
+[2026-10-13T22:55:45.928Z] CHAIN_LOG_BLOCK_RANGE=2000: 1929.0 ms · eth_getLogs 1 · eventos 1005 · hojas 995 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 1001
+[2026-10-13T22:55:47.852Z] CHAIN_LOG_BLOCK_RANGE=10000: 1923.8 ms · eth_getLogs 1 · eventos 1005 · hojas 995 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 1001
+[2026-10-13T22:55:49.933Z] proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=2000: 2076.4 ms · eth_getLogs 151 · eventos 1005 · hojas 995 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 1001
+[2026-10-13T22:55:51.932Z] proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=10: 1999.1 ms · eth_getLogs 101 · eventos 1005 · hojas 995 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 1001
+[2026-10-13T22:55:51.932Z] rechazos por rango del proveedor {"logRange":7}
+
+[2026-10-13T22:55:51.932Z] === Publicación hasta 10000 hojas (100 cambios por transacción, 99 bloques vacíos entre transacciones)
+[2026-10-13T22:56:11.243Z] 100 transacciones, 50 retiradas intercaladas, 9950 hojas vivas, 19310.9 ms
+
+[2026-10-13T22:56:11.243Z] === Reconstrucción desde los eventos con 9950 hojas
+[2026-10-13T22:56:30.747Z] CHAIN_LOG_BLOCK_RANGE=200: 19502.2 ms · eth_getLogs 51 · eventos 10050 · hojas 9950 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 10001
+[2026-10-13T22:56:50.114Z] CHAIN_LOG_BLOCK_RANGE=2000: 19363.3 ms · eth_getLogs 6 · eventos 10050 · hojas 9950 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 10001
+[2026-10-13T22:57:09.554Z] CHAIN_LOG_BLOCK_RANGE=10000: 19439.0 ms · eth_getLogs 2 · eventos 10050 · hojas 9950 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 10001
+[2026-10-13T22:57:29.768Z] proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=2000: 20211.6 ms · eth_getLogs 1437 · eventos 10050 · hojas 9950 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 10001
+[2026-10-13T22:57:49.419Z] proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=10: 19650.3 ms · eth_getLogs 1001 · eventos 10050 · hojas 9950 · matchesChain=true · raíz igual a la del árbol en memoria=true · bloques recorridos 10001
+[2026-10-13T22:57:49.419Z] rechazos por rango del proveedor {"logRange":8}
+
+[2026-10-13T22:57:49.419Z] === Resumen S9
+[2026-10-13T22:57:49.419Z] 995 hojas · CHAIN_LOG_BLOCK_RANGE=200: 1937.4 ms · 6 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 995 hojas · CHAIN_LOG_BLOCK_RANGE=2000: 1929.0 ms · 1 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 995 hojas · CHAIN_LOG_BLOCK_RANGE=10000: 1923.8 ms · 1 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 995 hojas · proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=2000: 2076.4 ms · 151 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 995 hojas · proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=10: 1999.1 ms · 101 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 9950 hojas · CHAIN_LOG_BLOCK_RANGE=200: 19502.2 ms · 51 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 9950 hojas · CHAIN_LOG_BLOCK_RANGE=2000: 19363.3 ms · 6 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 9950 hojas · CHAIN_LOG_BLOCK_RANGE=10000: 19439.0 ms · 2 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 9950 hojas · proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=2000: 20211.6 ms · 1437 eth_getLogs · matchesChain=true
+[2026-10-13T22:57:49.419Z] 9950 hojas · proveedor limitado a 10 bloques, CHAIN_LOG_BLOCK_RANGE=10: 19650.3 ms · 1001 eth_getLogs · matchesChain=true

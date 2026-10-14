@@ -1,0 +1,79 @@
+
+> zk-api@0.1.0 stress:s13
+> DOTENV_CONFIG_PATH=.env.testnet tsx stress/s13-base-sepolia.ts
+
+
+[2026-10-13T23:22:55.498Z] === Máquina
+[2026-10-13T23:22:55.503Z] CPU: Apple M2 Max · 12 núcleos lógicos
+[2026-10-13T23:22:55.503Z] Memoria: 32 GiB
+[2026-10-13T23:22:55.524Z] Sistema: macOS 26.6.2 (Darwin 25.6.0)
+[2026-10-13T23:22:55.539Z] Node v22.13.1 · Docker 29.8.0, build 88096ef
+
+[2026-10-13T23:22:55.539Z] === 0 · Comprobaciones previas
+[2026-10-13T23:22:55.973Z] red 84532 (Base Sepolia) · registro 0xA3fcAb3e8da5546BeBE66A88E581621a8b27B8AA · atestador 0x83C0429F5b15CBC5d4eE0Fc7e74b23A23daB9D09 · activo 84532001 · Y 0xbddD8970657eb2B08f6E6bc78abB3f5c2B8d4337 · X 0xb44703b4D47Fd595f6383909aCF424cA6612A5C2
+[2026-10-13T23:22:56.521Z] saldos de partida: X 0.049805848021301816 ETH · Y 0.049852278938079214 ETH · tope de gasto 0.0005 ETH
+[2026-10-13T23:22:56.649Z] precio del gas 6000000 wei · bloque 48082744
+[2026-10-13T23:22:58.295Z] zk-api (s13) escuchando en http://127.0.0.1:3073 · pid 19058
+
+[2026-10-13T23:22:58.295Z] === 1 · Lecturas contra la cadena pública (20 de cada, en serie)
+[2026-10-13T23:23:05.300Z] GET /v1/compliance/assets/:asset/subjects/:A: n=20 mean=350.1 ms p50=306.2 ms p95=388.9 ms p99=1024.2 ms min=297.5 ms max=1024.2 ms · {"200":20}
+[2026-10-13T23:23:09.480Z] GET /v1/credentials/:commitmentA: n=20 mean=208.9 ms p50=206.2 ms p95=217.6 ms p99=228.9 ms min=201.6 ms max=228.9 ms · {"200":20}
+[2026-10-13T23:23:13.280Z] POST /v1/verifications (prueba ya presentada de A): n=10 mean=379.9 ms p50=331.6 ms p95=773.2 ms p99=773.2 ms min=323.8 ms max=773.2 ms · {"201 valid=false credential_root_not_valid":10}
+
+[2026-10-13T23:23:13.280Z] === 2 · 3 titulares nuevos: emisión en dos tiempos (Y paga cada publicación)
+[2026-10-13T23:23:18.662Z] activación 1: alta 20.0 ms · activación 4511.6 ms · posición 3
+[2026-10-13T23:23:19.040Z] tx publishCredentialRoot (activación 1) · Y vía zk-api · success · gas 59672 · 0.000000358032000122 ETH · https://sepolia.basescan.org/tx/0xd43fecd926cfe50bb19858698857574477aa3ab208662375a439e7ec6bb49fef
+[2026-10-13T23:23:23.978Z] activación 2: alta 14.3 ms · activación 4495.1 ms · posición 4
+[2026-10-13T23:23:24.424Z] tx publishCredentialRoot (activación 2) · Y vía zk-api · success · gas 59672 · 0.000000358032000122 ETH · https://sepolia.basescan.org/tx/0x6062e4f1dd695cddb9788d5e8c2bb7fa2aa3a8792d0e0347994b5d070e83726f
+[2026-10-13T23:23:30.451Z] activación 3: alta 31.8 ms · activación 5615.7 ms · posición 5
+[2026-10-13T23:23:30.870Z] tx publishCredentialRoot (activación 3) · Y vía zk-api · success · gas 59672 · 0.000000358032000122 ETH · https://sepolia.basescan.org/tx/0x7d95d64985ff0e28d1cf8ce034e363ba9b9e703d2cf85d7edf834498dd412a91
+
+[2026-10-13T23:23:30.870Z] === 3 · Prueba local de cada titular y attestFor presentado y pagado por Y
+[2026-10-13T23:23:33.469Z] titular 1: prueba en 2152.9 ms · el banco la comprueba: 201 valid=true 
+[2026-10-13T23:23:38.928Z] tx attestFor (titular 1) · Y · success · gas 345217 · 0.000002071302000403 ETH · https://sepolia.basescan.org/tx/0x61c9401441a6fcaf0f98705cf0cb0b8c3ef3b2e6c364e38ad444a671165c77ad
+[2026-10-13T23:23:41.198Z] titular 2: prueba en 2063.0 ms · el banco la comprueba: 201 valid=true 
+[2026-10-13T23:23:46.585Z] tx attestFor (titular 2) · Y · success · gas 345229 · 0.000002071374000403 ETH · https://sepolia.basescan.org/tx/0xad0c8de043d96904ab15f3168245d75656e749e20dbbfed559e250695d26859b
+[2026-10-13T23:23:48.835Z] titular 3: prueba en 2045.4 ms · el banco la comprueba: 201 valid=true 
+[2026-10-13T23:23:52.915Z] tx attestFor (titular 3) · Y · success · gas 345217 · 0.000002071302000402 ETH · https://sepolia.basescan.org/tx/0x8c951fee76973095e402b1f802af7a6c2b487d1d47c0f5d6d87fabf25975d0f1
+
+[2026-10-13T23:23:52.916Z] === 4 · Limpieza: revokeAttestation (Y) y revocación de las credenciales cerrando la ventana (zk-api)
+[2026-10-13T23:23:58.225Z] tx revokeAttestation (titular 1) · Y · success · gas 29476 · 0.00000017685600009 ETH · https://sepolia.basescan.org/tx/0xb89ca0145aeda2ff57dcd6829674630cbd16e1ec6f51503cc06d2ff3a0016c31
+[2026-10-13T23:24:02.620Z] tx revokeAttestation (titular 2) · Y · success · gas 29476 · 0.000000176856000326 ETH · https://sepolia.basescan.org/tx/0xe422202a03d770f1c29f4f4758b43ac3daa673a3c355b6a1414ffb0db964d939
+[2026-10-13T23:24:06.772Z] tx revokeAttestation (titular 3) · Y · success · gas 29476 · 0.000000176856000144 ETH · https://sepolia.basescan.org/tx/0x5308d5808bc29fb45dea698cc6750d8e265235d870a0b8c39909a92cd370571a
+[2026-10-13T23:24:18.095Z] revocación 1: 11118.5 ms · ventana cerrada true
+[2026-10-13T23:24:18.508Z] tx publishCredentialRoot (revocación 1) · Y vía zk-api · success · gas 59660 · 0.000000357960000122 ETH · https://sepolia.basescan.org/tx/0x0b500f3a2a9cbf40e0091a681a2b1db91c2645636ade5f6c5ff4844aefc54978
+[2026-10-13T23:24:19.120Z] tx invalidateCredentialRoot (revocación 1) · Y vía zk-api · success · gas 28005 · 0.00000016803000009 ETH · https://sepolia.basescan.org/tx/0x83f5cbd1f41ebc803028675d0b63571c4c40e8717f3c03c6cc530d4d4d5fb9a6
+[2026-10-13T23:24:30.260Z] revocación 2: 10949.7 ms · ventana cerrada true
+[2026-10-13T23:24:30.633Z] tx publishCredentialRoot (revocación 2) · Y vía zk-api · success · gas 59660 · 0.000000357960000122 ETH · https://sepolia.basescan.org/tx/0x578759fd7102d7154d04cdcfafdbad084c9dfc549b951d38747a805a7bdb7569
+[2026-10-13T23:24:31.215Z] tx invalidateCredentialRoot (revocación 2) · Y vía zk-api · success · gas 28005 · 0.00000016803000009 ETH · https://sepolia.basescan.org/tx/0x5791c31167498a05a54d6fdd2785cc1e03f49b7bacf185a653b3f5ed7e80a621
+[2026-10-13T23:24:42.346Z] revocación 3: 10938.2 ms · ventana cerrada true
+[2026-10-13T23:24:42.782Z] tx publishCredentialRoot (revocación 3) · Y vía zk-api · success · gas 57660 · 0.000000345960000122 ETH · https://sepolia.basescan.org/tx/0x88eec612b038c777204c016252371427b9a872a4dd8dbc8689c01405f3ee7d74
+[2026-10-13T23:24:43.413Z] tx invalidateCredentialRoot (revocación 3) · Y vía zk-api · success · gas 28005 · 0.00000016803000009 ETH · https://sepolia.basescan.org/tx/0x79ddeff9773e26ff10862bc9fe1f60b7b394ff5a309e568c21592f8b64780789
+
+[2026-10-13T23:24:43.413Z] === 5 · Reconstrucción, reconciliación e integridad (eth_getLogs en ventanas)
+[2026-10-13T23:25:42.286Z] credenciales: 424 · matchesChain=undefined · eventos undefined · hojas undefined · faltan en BD undefined · faltan en cadena undefined · 58873.2 ms
+[2026-10-13T23:25:42.490Z] jurisdicciones: 424 · matchesChain=undefined · 203.3 ms
+[2026-10-13T23:25:42.503Z] registro de accesos: 200 · intact=true · entradas 117
+
+[2026-10-13T23:25:42.790Z] === 6 · Gas frente a Hardhat y gasto
+[2026-10-13T23:25:42.790Z] publishCredentialRoot (activación 1): Base Sepolia 59672 · Hardhat 59660 · diferencia 0.02 %
+[2026-10-13T23:25:42.790Z] publishCredentialRoot (activación 2): Base Sepolia 59672 · Hardhat 59660 · diferencia 0.02 %
+[2026-10-13T23:25:42.790Z] publishCredentialRoot (activación 3): Base Sepolia 59672 · Hardhat 59660 · diferencia 0.02 %
+[2026-10-13T23:25:42.790Z] publishCredentialRoot (revocación 1): Base Sepolia 59660 · Hardhat 59660 · diferencia 0.00 %
+[2026-10-13T23:25:42.790Z] publishCredentialRoot (revocación 2): Base Sepolia 59660 · Hardhat 59660 · diferencia 0.00 %
+[2026-10-13T23:25:42.790Z] publishCredentialRoot (revocación 3): Base Sepolia 57660 · Hardhat 59660 · diferencia -3.35 %
+[2026-10-13T23:25:42.790Z] invalidateCredentialRoot (revocación 1): Base Sepolia 28005 · Hardhat 28005 · diferencia 0.00 %
+[2026-10-13T23:25:42.790Z] invalidateCredentialRoot (revocación 2): Base Sepolia 28005 · Hardhat 28005 · diferencia 0.00 %
+[2026-10-13T23:25:42.790Z] invalidateCredentialRoot (revocación 3): Base Sepolia 28005 · Hardhat 28005 · diferencia 0.00 %
+[2026-10-13T23:25:42.790Z] attestFor (titular 1): Base Sepolia 345217 · Hardhat 344971 · diferencia 0.07 %
+[2026-10-13T23:25:42.790Z] attestFor (titular 2): Base Sepolia 345229 · Hardhat 344971 · diferencia 0.07 %
+[2026-10-13T23:25:42.790Z] attestFor (titular 3): Base Sepolia 345217 · Hardhat 344971 · diferencia 0.07 %
+[2026-10-13T23:25:42.790Z] revokeAttestation (titular 1): Base Sepolia 29476 · Hardhat 29447 · diferencia 0.10 %
+[2026-10-13T23:25:42.790Z] revokeAttestation (titular 2): Base Sepolia 29476 · Hardhat 29447 · diferencia 0.10 %
+[2026-10-13T23:25:42.790Z] revokeAttestation (titular 3): Base Sepolia 29476 · Hardhat 29447 · diferencia 0.10 %
+[2026-10-13T23:25:43.370Z] saldos finales: X 0.049805848021301816 ETH · Y 0.049842894326076734 ETH
+[2026-10-13T23:25:43.370Z] gasto por saldo: X 0 ETH · Y 0.00000938461200248 ETH · total 0.00000938461200248 ETH (tope 0.0005)
+[2026-10-13T23:25:43.370Z] suma de comisiones de las 15 transacciones registradas: 0.00000938461200277 ETH
+
+[2026-10-13T23:25:43.370Z] === Registro del servicio
+[2026-10-13T23:25:43.372Z] resumen {"lines":76,"byLevel":{"info":74,"warn":2},"errors":{},"statusCodes":{"200":51,"201":19,"424":2}}

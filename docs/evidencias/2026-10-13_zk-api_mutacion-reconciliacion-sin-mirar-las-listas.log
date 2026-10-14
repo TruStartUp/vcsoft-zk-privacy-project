@@ -1,0 +1,74 @@
+
+ RUN  v2.1.9 <repo>/zk-api
+
+{"level":30,"time":1791938809624,"service":"zk-api","req":{"id":1,"method":"POST","url":"/v1/credentials","query":{},"params":{},"headers":{"host":"127.0.0.1:60992","accept-encoding":"gzip, deflate","x-partner-key":"pk_7e65eb911c886f70657bc58c","x-partner-timestamp":"1791938809","x-partner-nonce":"72e56b28690e5e5d08acd1a2","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"317","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":60993},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"1000","etag":"W/\"3e8-pofxh5iHB2XSv9o3lVzcZVb48Fk\""}},"responseTime":17,"msg":"request completed"}
+{"level":30,"time":1791938809857,"service":"zk-api","req":{"id":2,"method":"POST","url":"/v1/credentials/b9d66666-aca5-42c7-97c0-0dce419a6564/activation","query":{},"params":{},"headers":{"host":"127.0.0.1:60995","accept-encoding":"gzip, deflate","x-partner-key":"pk_8935f94ec28d97549f9a28bf","x-partner-timestamp":"1791938809","x-partner-nonce":"3c68574ee0b464575c31e65e","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"240","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":60996},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"412","etag":"W/\"19c-+zVxvRZydhd7fV9NQFBvBwH08qg\""}},"responseTime":33,"msg":"request completed"}
+{"level":30,"time":1791938809871,"service":"zk-api","req":{"id":3,"method":"PUT","url":"/v1/assets/42/jurisdictions","query":{},"params":{},"headers":{"host":"127.0.0.1:60998","accept-encoding":"gzip, deflate","x-partner-key":"pk_7e65eb911c886f70657bc58c","x-partner-timestamp":"1791938809","x-partner-nonce":"9224f36d3a1fcdc2f4462163","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"22","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":60999},"res":{"statusCode":200,"headers":{"content-type":"application/json; charset=utf-8","content-length":"254","etag":"W/\"fe-0TEHBv286R9qSQRYoY0mn5iqfeo\""}},"responseTime":12,"msg":"request completed"}
+{"level":30,"time":1791938809935,"service":"zk-api","req":{"id":4,"method":"POST","url":"/v1/credentials","query":{},"params":{},"headers":{"host":"127.0.0.1:61000","accept-encoding":"gzip, deflate","x-partner-key":"pk_e65f3e0734be8efc06a09af3","x-partner-timestamp":"1791938809","x-partner-nonce":"db69cbf006bdad2878b28445","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"317","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61001},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"1000","etag":"W/\"3e8-MOWjv5q46VwE+nKZe99hQBjW3OY\""}},"responseTime":8,"msg":"request completed"}
+{"level":30,"time":1791938809957,"service":"zk-api","req":{"id":5,"method":"POST","url":"/v1/credentials/b1f63d82-a3ec-4740-983e-4b7ea1def2cf/activation","query":{},"params":{},"headers":{"host":"127.0.0.1:61002","accept-encoding":"gzip, deflate","x-partner-key":"pk_74bb885481d19d06f3a6652d","x-partner-timestamp":"1791938809","x-partner-nonce":"f59c7ef9fe5ea8a9ec36924a","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"240","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61003},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"412","etag":"W/\"19c-tumDAcOn10kWNordbeIwWRRuwGI\""}},"responseTime":19,"msg":"request completed"}
+{"level":30,"time":1791938810025,"service":"zk-api","req":{"id":6,"method":"PUT","url":"/v1/assets/42/jurisdictions","query":{},"params":{},"headers":{"host":"127.0.0.1:61004","accept-encoding":"gzip, deflate","x-partner-key":"pk_cedb234a104da351ef0e7f4f","x-partner-timestamp":"1791938810","x-partner-nonce":"b52d8dcb3ce0470c9eea03a4","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"22","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61005},"res":{"statusCode":200,"headers":{"content-type":"application/json; charset=utf-8","content-length":"254","etag":"W/\"fe-7IuolYaaplOV32xhEISnbYGbv7E\""}},"responseTime":11,"msg":"request completed"}
+{"level":30,"time":1791938810083,"service":"zk-api","req":{"id":7,"method":"POST","url":"/v1/credentials","query":{},"params":{},"headers":{"host":"127.0.0.1:61006","accept-encoding":"gzip, deflate","x-partner-key":"pk_1647c09193e93b0b230e615c","x-partner-timestamp":"1791938810","x-partner-nonce":"ef756d062e7c853234ce8dd6","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"317","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61007},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"1000","etag":"W/\"3e8-h8CjLtPbOgRT0HWfXaNoeXJCcxQ\""}},"responseTime":5,"msg":"request completed"}
+{"level":30,"time":1791938810099,"service":"zk-api","req":{"id":8,"method":"POST","url":"/v1/credentials/8bbec59f-c51a-4bfa-82be-b94829efdfb2/activation","query":{},"params":{},"headers":{"host":"127.0.0.1:61008","accept-encoding":"gzip, deflate","x-partner-key":"pk_e624b9d1cfa142a34f78c991","x-partner-timestamp":"1791938810","x-partner-nonce":"5901b8cbaeff1e43eae8a201","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"240","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61009},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"412","etag":"W/\"19c-4h8BKL81bpxaerTjG69HzoRWGGU\""}},"responseTime":13,"msg":"request completed"}
+{"level":30,"time":1791938810106,"service":"zk-api","req":{"id":9,"method":"POST","url":"/v1/credentials","query":{},"params":{},"headers":{"host":"127.0.0.1:61010","accept-encoding":"gzip, deflate","x-partner-key":"pk_1647c09193e93b0b230e615c","x-partner-timestamp":"1791938810","x-partner-nonce":"e4433f7db59b0178f34d24d4","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"317","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61011},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"1000","etag":"W/\"3e8-Q1d1eLawEQogYduBHAfBtiRyzU8\""}},"responseTime":5,"msg":"request completed"}
+{"level":30,"time":1791938810124,"service":"zk-api","req":{"id":10,"method":"POST","url":"/v1/credentials/38edc2c2-4627-4a10-9ef0-ad84208ea03b/activation","query":{},"params":{},"headers":{"host":"127.0.0.1:61012","accept-encoding":"gzip, deflate","x-partner-key":"pk_e624b9d1cfa142a34f78c991","x-partner-timestamp":"1791938810","x-partner-nonce":"2e7b89af460e75c8d361837a","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"240","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61013},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"410","etag":"W/\"19a-K/hXpjdeQCVozndgcAs63Z45YIw\""}},"responseTime":15,"msg":"request completed"}
+{"level":40,"time":1791938810134,"service":"zk-api","txHash":"0x0000000000000000000000000000000000000000000000000000000000000003","root":"2412192669050830123038014531334296922537367460130546839315965613902858180909","code":"chain_call_failed","msg":"the superseded root's window could not be closed; the closure is pending"}
+{"level":40,"time":1791938810135,"service":"zk-api","code":"root_invalidation_pending","path":"/v1/credentials/1763769012880058774833735299431459108953311253918941685018768971932424872027/revocation","msg":"request refused"}
+{"level":30,"time":1791938810135,"service":"zk-api","req":{"id":11,"method":"POST","url":"/v1/credentials/1763769012880058774833735299431459108953311253918941685018768971932424872027/revocation","query":{},"params":{},"headers":{"host":"127.0.0.1:61014","accept-encoding":"gzip, deflate","x-partner-key":"pk_1647c09193e93b0b230e615c","x-partner-timestamp":"1791938810","x-partner-nonce":"a69b469499b50e46f820a4b7","x-partner-signature":"[redacted]","connection":"close","content-length":"0"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61015},"res":{"statusCode":424,"headers":{"content-type":"application/json; charset=utf-8","content-length":"703","etag":"W/\"2bf-P/gwQY5JurRug+1Kcz76YHN9dzI\""}},"responseTime":10,"msg":"request completed"}
+{"level":30,"time":1791938810191,"service":"zk-api","req":{"id":12,"method":"POST","url":"/v1/credentials","query":{},"params":{},"headers":{"host":"127.0.0.1:61016","accept-encoding":"gzip, deflate","x-partner-key":"pk_b0b97f701b1bad28e73c8c70","x-partner-timestamp":"1791938810","x-partner-nonce":"e7bf5876e96d2e572a1e8d22","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"317","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61017},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"1000","etag":"W/\"3e8-04rliaevBU+BT89CdSHw79V62/k\""}},"responseTime":5,"msg":"request completed"}
+{"level":30,"time":1791938810206,"service":"zk-api","req":{"id":13,"method":"POST","url":"/v1/credentials/0b506aa3-4efd-43ed-a75d-fe57ce8f88c3/activation","query":{},"params":{},"headers":{"host":"127.0.0.1:61018","accept-encoding":"gzip, deflate","x-partner-key":"pk_202f2b696b5b410f58d4d35d","x-partner-timestamp":"1791938810","x-partner-nonce":"fd0be95129513347be6ea6e7","x-partner-signature":"[redacted]","content-type":"application/json","content-length":"240","connection":"close"},"remoteAddress":"::ffff:127.0.0.1","remotePort":61019},"res":{"statusCode":201,"headers":{"content-type":"application/json; charset=utf-8","content-length":"412","etag":"W/\"19c-q9g/j/QCBr+EnxM0Iofa9kao7/U\""}},"responseTime":13,"msg":"request completed"}
+ ❯ test/chain-divergence.test.ts (18 tests | 2 failed | 13 skipped) 708ms
+   ✓ reconciling the whole issuer state > finds nothing to report on a healthy state 377ms
+   × reconciling the whole issuer state > names a commitment the database holds and the chain does not 88ms
+     → expected [] to deeply equal [ Array(1) ]
+   × reconciling the whole issuer state > names a jurisdiction tree that disagrees with the database even when the chain agrees with itself 65ms
+     → expected [] to deeply equal [ Array(1) ]
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chain-divergence.test.ts > reconciling the whole issuer state > names a commitment the database holds and the chain does not
+AssertionError: expected [] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+- Array [
+-   "credentialTree: 1 in the database and missing from the chain",
+- ]
++ Array []
+
+ ❯ test/chain-divergence.test.ts:358:29
+    356|     const result = await reconcileIssuerState([]);
+    357|     expect(result.credentialTree.matchesChain).toBe(true);
+    358|     expect(result.problems).toEqual(["credentialTree: 1 in the databas…
+       |                             ^
+    359|   });
+    360| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/chain-divergence.test.ts > reconciling the whole issuer state > names a jurisdiction tree that disagrees with the database even when the chain agrees with itself
+AssertionError: expected [] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+- Array [
+-   "jurisdictionTree 42: 1 on chain and missing from the database",
+- ]
++ Array []
+
+ ❯ test/chain-divergence.test.ts:368:29
+    366|     const jurisdictionTree = result.jurisdictionTrees[0]?.jurisdiction…
+    367|     expect(jurisdictionTree).toMatchObject({ matchesChain: true, missi…
+    368|     expect(result.problems).toEqual([`jurisdictionTree ${ASSET}: 1 on …
+       |                             ^
+    369|   });
+    370| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed | 13 skipped (18)
+   Start at  19:46:48
+   Duration  1.37s (transform 132ms, setup 96ms, collect 422ms, tests 708ms, environment 0ms, prepare 27ms)
+

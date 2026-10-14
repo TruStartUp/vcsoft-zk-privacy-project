@@ -1,0 +1,33 @@
+
+> zk-contracts@0.1.0 stress:gas
+> hardhat run stress/gas-scaling.ts
+
+[2026-10-13T23:20:28.353Z] Hardhat Network en proceso · chainId 31337 · límite de gas por bloque 60000000
+
+[2026-10-13T23:20:28.356Z] === publishCredentialRoot frente al número de cambios de hoja
+[2026-10-13T23:20:28.358Z]     1 cambios: 59660 gas · 59660 por cambio
+[2026-10-13T23:20:28.361Z]    10 cambios: 90068 gas · 9007 por cambio
+[2026-10-13T23:20:28.370Z]    50 cambios: 225256 gas · 4505 por cambio
+[2026-10-13T23:20:28.388Z]   100 cambios: 394136 gas · 3941 por cambio
+[2026-10-13T23:20:28.430Z]   250 cambios: 900896 gas · 3604 por cambio
+[2026-10-13T23:20:28.510Z]   500 cambios: 1748344 gas · 3497 por cambio
+[2026-10-13T23:20:29.159Z]  1000 cambios: 3443492 gas · 3443 por cambio
+[2026-10-13T23:20:29.621Z]  2000 cambios: 6832960 gas · 3416 por cambio
+[2026-10-13T23:20:29.621Z] ajuste: 55289 gas + 3388.5 gas por cambio (R² 1.000000)
+[2026-10-13T23:20:29.621Z] cambios que caben en un bloque de 60000000 gas: 17690
+[2026-10-13T23:20:29.628Z] invalidateCredentialRoot: 28005 gas
+
+[2026-10-13T23:20:29.629Z] === publishCountryRoot frente al número de cambios
+[2026-10-13T23:20:29.631Z]    1 países: 55462 gas
+[2026-10-13T23:20:29.641Z]   10 países: 86863 gas
+[2026-10-13T23:20:29.724Z]  100 países: 400873 gas
+[2026-10-13T23:20:30.607Z]  256 países: 945157 gas
+
+[2026-10-13T23:20:30.607Z] === attestFor frente al tamaño del árbol de credenciales (prueba Groth16 real en cada caso)
+[2026-10-13T23:20:32.801Z] 1 hojas, titular en la última: attestFor 344981 gas · árbol en 4 ms · bytes nulos en la prueba 0 · atestado true
+[2026-10-13T23:20:32.801Z] revokeAttestation: 29447 gas
+[2026-10-13T23:20:33.740Z] 100 hojas, titular en la última: attestFor 344981 gas · árbol en 203 ms · bytes nulos en la prueba 0 · atestado true
+[2026-10-13T23:20:36.474Z] 1000 hojas, titular en la última: attestFor 344957 gas · árbol en 2034 ms · bytes nulos en la prueba 1 · atestado true
+[2026-10-13T23:20:57.325Z] 10000 hojas, titular en la última: attestFor 344969 gas · árbol en 20114 ms · bytes nulos en la prueba 1 · atestado true
+[2026-10-13T23:20:58.094Z] titular en el índice 2^20 − 1 (1048575): attestFor 344969 gas · árbol en 8 ms · bytes nulos en la prueba 0 · atestado true
+[2026-10-13T23:20:58.094Z] attestFor: media 344971 gas · desviación máxima respecto de la media 0.004 % · mínimo 344957 · máximo 344981
